@@ -2,7 +2,7 @@
 
 # Godot TDS
 
-Godot plugin for TapTap Developer Services support
+Godot plugin for supporting TapTap Developer Services
 
 在 Godot 中使用 TapTap 开发者服务
 
