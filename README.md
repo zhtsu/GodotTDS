@@ -1,6 +1,4 @@
-<img src="docs/logo.svg" width="128" height="128">
-
-
+<img src="icon.svg" width="128" height="128">
 
 # Godot TDS
 
