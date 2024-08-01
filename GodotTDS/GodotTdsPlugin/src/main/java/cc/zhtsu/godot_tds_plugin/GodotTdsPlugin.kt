@@ -2,7 +2,6 @@ package cc.zhtsu.godot_tds_plugin
 
 import android.util.Log
 import android.widget.Toast
-import org.godotengine.godot.BuildConfig
 import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.UsedByGodot
