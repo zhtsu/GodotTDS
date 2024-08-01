@@ -10,10 +10,14 @@ config_version=5
 
 [application]
 
-config/name="GodotTDS"
+config/name="GodotTDS Example"
 run/main_scene="res://scenes/main.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+GodotTDS="*res://addons/GodotTDS/GodotTDS.gd"
 
 [display]
 
@@ -21,6 +25,14 @@ window/size/viewport_width=750
 window/size/viewport_height=1624
 window/size/window_width_override=375
 window/size/window_height_override=812
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/GodotTDS/plugin.cfg")
+
+[filesystem]
+
+import/blender/enabled=false
 
 [rendering]
 
