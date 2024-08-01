@@ -17,7 +17,7 @@ func _exit_tree():
 
 
 class AndroidExportPlugin extends EditorExportPlugin:
-	var _plugin_name = "GodotTDS"
+	var _plugin_name = "GodotTdsPlugin"
 
 	func _supports_platform(platform):
 		if platform is EditorExportPlatformAndroid:
