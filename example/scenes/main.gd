@@ -1,9 +1,14 @@
 extends CanvasLayer
 
 
+func _ready() -> void:
+	GodotTDS.on_login_success.connect(_on_login_success)
+
+
 func _on_button_button_down() -> void:
-	if Engine.has_singleton("GodotTdsPlugin"):
-		$Label.text = GodotTDS.get_hello()
-	else:
-		$Label.text = "Failed to get singleton of the GodotTdsPlugin!"
+	GodotTDS.login()
+	
+	
+func _on_login_success(user_profile : Dictionary):
+	$Label.text = user_profile["nickName"]
 	
