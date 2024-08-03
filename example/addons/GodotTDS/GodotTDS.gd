@@ -42,7 +42,6 @@ func get_user_profile() -> String:
 		return ""
 	
 	
-# For debug
 func set_show_popup_tips(enabled : bool) -> void:
 	_plugin_singleton.setShowPopupTips(enabled)
 	
