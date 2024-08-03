@@ -8,6 +8,7 @@ Godot plugin for supporting TapTap Developer Services
 
 # Version
 
+- OpenJDK 17.0.11
 - TapSDK Android 3.29.2
 - TapADN Android SDK 3.16.3.31
 - Godot 4.2.2
