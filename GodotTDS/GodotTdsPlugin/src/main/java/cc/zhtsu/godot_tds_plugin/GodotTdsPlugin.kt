@@ -1,24 +1,67 @@
 package cc.zhtsu.godot_tds_plugin
 
-import android.util.Log
-import android.widget.Toast
 import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
+import org.godotengine.godot.plugin.SignalInfo
 import org.godotengine.godot.plugin.UsedByGodot
 
 class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
 
     override fun getPluginName() = "GodotTdsPlugin"
 
-    @UsedByGodot
-    private fun helloGodotPlugin() : String
+    override fun getPluginSignals() : MutableSet<SignalInfo>
     {
-        runOnUiThread {
-            Toast.makeText(activity, "Hello World", Toast.LENGTH_LONG).show()
-            Log.v(pluginName, "Hello World")
-        }
-
-        return "Hello! Godot plugin!"
+        return mutableSetOf(
+            SignalInfo("onLoginSuccess", String::class.java),
+            SignalInfo("onLoginFail", Int::class.java, String::class.java)
+        )
     }
 
+    private var tapSDK : TapSDK = TapSDK()
+    private var showPopupTips : Boolean = true
+
+    @UsedByGodot
+    fun init(clientId : String, clientToken : String, serverUrl : String)
+    {
+        activity?.let { tapSDK.init(it, clientId, clientToken, serverUrl, this) }
+    }
+
+    @UsedByGodot
+    fun login()
+    {
+        tapSDK.login()
+    }
+
+    @UsedByGodot
+    fun getUserProfile() : String
+    {
+        return tapSDK.getCurrentProfile()
+    }
+
+    @UsedByGodot
+    fun isLoggedIn() : Boolean
+    {
+        return tapSDK.isLoggedIn()
+    }
+
+    @UsedByGodot
+    fun setShowPopupTips(enabled : Boolean)
+    {
+        showPopupTips = enabled
+    }
+
+    fun getShowPopupTips() : Boolean { return showPopupTips }
+
+    // Useful for emit signal
+    fun emitPluginSignal(signal : String, message : String, code : Int)
+    {
+        if (code == 0)
+        {
+            emitSignal(signal, message)
+        }
+        else
+        {
+            emitSignal(signal, code, message)
+        }
+    }
 }

@@ -25,6 +25,7 @@ window/size/viewport_width=750
 window/size/viewport_height=1624
 window/size/window_width_override=375
 window/size/window_height_override=812
+window/handheld/orientation=1
 
 [editor_plugins]
 

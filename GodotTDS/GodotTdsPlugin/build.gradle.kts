@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
 }
 
-val tapSDKVersion = "3.92.2"
+val tapSDKVersion = "3.29.2"
 val tapADVersion = "3.16.3.31"
 
 android {
@@ -38,15 +38,18 @@ android {
 dependencies {
 
     implementation(libs.godot)
-    compileOnly(files("libs/AntiAddiction_${tapSDKVersion}.arr"))
-    compileOnly(files("libs/AntiAddictionUI_${tapSDKVersion}.arr"))
-    compileOnly(files("libs/TapAD_${tapADVersion}.arr"))
-    compileOnly(files("libs/TapBootstrap_${tapSDKVersion}.arr"))
-    compileOnly(files("libs/TapCommon_${tapSDKVersion}.arr"))
-    compileOnly(files("libs/TapConnect_${tapSDKVersion}.arr"))
-    compileOnly(files("libs/TapDB_${tapSDKVersion}.arr"))
-    compileOnly(files("libs/TapLogin_${tapSDKVersion}.arr"))
-    compileOnly(files("libs/TapMoment_${tapSDKVersion}.arr"))
+    implementation(libs.lc.storage.android)
+    implementation(libs.lc.realtime.android)
+    implementation(libs.okhttp)
+    compileOnly(files("libs/AntiAddiction_${tapSDKVersion}.aar"))
+    compileOnly(files("libs/AntiAddictionUI_${tapSDKVersion}.aar"))
+    compileOnly(files("libs/TapAD_${tapADVersion}.aar"))
+    compileOnly(files("libs/TapBootstrap_${tapSDKVersion}.aar"))
+    compileOnly(files("libs/TapCommon_${tapSDKVersion}.aar"))
+    compileOnly(files("libs/TapConnect_${tapSDKVersion}.aar"))
+    compileOnly(files("libs/TapDB_${tapSDKVersion}.aar"))
+    compileOnly(files("libs/TapLogin_${tapSDKVersion}.aar"))
+    compileOnly(files("libs/TapMoment_${tapSDKVersion}.aar"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
