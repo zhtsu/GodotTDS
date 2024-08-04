@@ -24,3 +24,17 @@ Godot plugin for supporting TapTap Developer Services
 - [ ] 排行榜
 - [ ] 云存档
 - [ ] 激励广告
+
+# How to use
+
+[B站视频教程]()
+
+example 目录下存放的是用于展示插件功能的 Godot 项目
+
+GodotTDS 目录下存放的是用于生成**安卓导出插件**的安卓项目
+
+# Thanks
+
+[B站咲夜大佬](https://space.bilibili.com/2706229)
+
+[B站岩岩bi大佬](https://space.bilibili.com/55245483)
