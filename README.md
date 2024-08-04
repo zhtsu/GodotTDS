@@ -37,4 +37,4 @@ GodotTDS 目录下存放的是用于生成**安卓导出插件**的安卓项目
 
 [B站咲夜大佬](https://space.bilibili.com/2706229)
 
-[B站岩岩bi大佬](https://space.bilibili.com/55245483)
+[B站岩岩大佬](https://space.bilibili.com/55245483)
