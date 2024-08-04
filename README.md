@@ -16,7 +16,7 @@ Godot plugin for supporting TapTap Developer Services
 # Feature
 
 - [x] 登录
-- [ ] 合规认证
+- [x] 合规认证
 - [ ] 内嵌动态
 - [ ] 悬浮窗
 - [ ] 成就系统
