@@ -8,6 +8,7 @@ Godot plugin for supporting TapTap Developer Services
 
 # Version
 
+- OpenJDK 17.0.11
 - TapSDK Android 3.29.2
 - TapADN Android SDK 3.16.3.31
 - Godot 4.2.2
@@ -16,5 +17,10 @@ Godot plugin for supporting TapTap Developer Services
 
 - [x] 登录
 - [ ] 合规认证
+- [ ] 内嵌动态
 - [ ] 悬浮窗
+- [ ] 成就系统
+- [ ] 礼包系统
 - [ ] 排行榜
+- [ ] 云存档
+- [ ] 激励广告
