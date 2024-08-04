@@ -12,8 +12,8 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
     override fun getPluginSignals() : MutableSet<SignalInfo>
     {
         return mutableSetOf(
-            SignalInfo("onLoginSuccess", String::class.java),
-            SignalInfo("onLoginFail", Int::class.java, String::class.java)
+            SignalInfo("onLoginReturn", Integer::class.java, String::class.java),
+            SignalInfo("onAntiAddictionReturn", Integer::class.java, String::class.java)
         )
     }
 
@@ -45,6 +45,12 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
     }
 
     @UsedByGodot
+    fun antiAddiction()
+    {
+        tapSDK.antiAddiction()
+    }
+
+    @UsedByGodot
     fun setShowPopupTips(enabled : Boolean)
     {
         showPopupTips = enabled
@@ -53,15 +59,8 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
     fun getShowPopupTips() : Boolean { return showPopupTips }
 
     // Useful for emit signal
-    fun emitPluginSignal(signal : String, message : String, code : Int)
+    fun emitPluginSignal(signal : String, code : Int, msg : String)
     {
-        if (code == 0)
-        {
-            emitSignal(signal, message)
-        }
-        else
-        {
-            emitSignal(signal, code, message)
-        }
+        emitSignal(signal, code, msg)
     }
 }

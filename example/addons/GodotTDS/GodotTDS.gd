@@ -1,14 +1,9 @@
 extends Node
 
 
-# user_profile
-# uuid
-# userName
-# shortId
-# nickName
-# avatar
-signal on_login_success(user_profile : Dictionary)
-signal on_login_fail(code : int, error : String)
+# Success code: 200
+signal on_login_return(code : int, msg : String)
+signal on_anti_addiction_return(code : int, msg : String)
 
 
 var _plugin_name : String = "GodotTdsPlugin"
@@ -23,13 +18,20 @@ func _ready() -> void:
 			"Ybw1yeEmPXCnbEu29oM1ffb5IKZAsY9bDKXHFQ1d",
 			"https://server.zhtsu.cn")
 			
-		_plugin_singleton.connect("onLoginSuccess", _on_login_success)
-		_plugin_singleton.connect("onLoginFail", _on_login_fail)
+		_plugin_singleton.connect("onLoginReturn", _on_login_return)
+		_plugin_singleton.connect("onAntiAddictionReturn", _on_anti_addiction_return)
 
 
 func login() -> void:
 	if OS.has_feature("android"):
 		_plugin_singleton.login()
+	else:
+		push_warning("Only work on Android")
+		
+		
+func anti_addiction() -> void:
+	if OS.has_feature("android"):
+		_plugin_singleton.antiAddiction()
 	else:
 		push_warning("Only work on Android")
 	
@@ -46,9 +48,10 @@ func set_show_popup_tips(enabled : bool) -> void:
 	_plugin_singleton.setShowPopupTips(enabled)
 	
 	
-func _on_login_success(user_profile_string : String) -> void:
-	on_login_success.emit(JSON.parse_string(user_profile_string))
+func _on_login_return(code : int, msg : String) -> void:
+	on_login_return.emit(code, msg)
 	
 	
-func _on_login_fail(code : int, error : String) -> void:
-	on_login_fail.emit(code, error)
+func _on_anti_addiction_return(code : int, msg : String) -> void:
+	on_anti_addiction_return.emit(code, msg)
+	
