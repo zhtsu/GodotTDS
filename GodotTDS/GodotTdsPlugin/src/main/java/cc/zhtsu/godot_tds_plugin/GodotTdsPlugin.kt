@@ -22,7 +22,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
     }
 
     private var _tapSDK : TapSDK = TapSDK()
-    private var _toastEnabled : Boolean = true
+    private var _showTipsToast : Boolean = true
 
     @UsedByGodot
     fun init(clientId : String, clientToken : String, serverUrl : String)
@@ -45,7 +45,13 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
     @UsedByGodot
     fun getUserProfile() : String
     {
-        return _tapSDK.getCurrentProfile()
+        return _tapSDK.getUserProfile()
+    }
+
+    @UsedByGodot
+    fun getUserObjectId() : String
+    {
+        return _tapSDK.getUserObjectId()
     }
 
     @UsedByGodot
@@ -61,15 +67,9 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
     }
 
     @UsedByGodot
-    fun getAgeRange() : Int
+    fun setShowTipsToast(show : Boolean)
     {
-        return _tapSDK.getAgeRange()
-    }
-
-    @UsedByGodot
-    fun setToastEnabled(enabled : Boolean)
-    {
-        _toastEnabled = enabled
+        _showTipsToast = show
     }
 
     @UsedByGodot
@@ -108,7 +108,37 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
         return jsonObject.toString()
     }
 
-    fun getToastEnabled() : Boolean { return _toastEnabled }
+    @UsedByGodot
+    fun showAchievementPage()
+    {
+        _tapSDK.showAchievementPage()
+    }
+
+    @UsedByGodot
+    fun reachAchievement(displayId : String)
+    {
+        _tapSDK.reachAchievement(displayId)
+    }
+
+    @UsedByGodot
+    fun growAchievementSteps(displayId : String, steps : Int)
+    {
+        _tapSDK.growAchievementSteps(displayId, steps)
+    }
+
+    @UsedByGodot
+    fun makeAchievementSteps(displayId : String, steps : Int)
+    {
+        _tapSDK.makeAchievementSteps(displayId, steps)
+    }
+
+    @UsedByGodot
+    fun setShowAchievementToast(show : Boolean)
+    {
+        _tapSDK.setShowAchievementToast(show)
+    }
+
+    fun getShowTipsToast() : Boolean { return _showTipsToast }
 
     // Useful for emit signal
     fun emitPluginSignal(signal : String, code : Int, msg : String)

@@ -35,7 +35,8 @@ class AndroidExportPlugin extends EditorExportPlugin:
 		"GodotTDS/bin/TapSDK/TapConnect_{0}.aar".format([tap_sdk_version]),
 		"GodotTDS/bin/TapSDK/TapDB_{0}.aar".format([tap_sdk_version]),
 		"GodotTDS/bin/TapSDK/TapLogin_{0}.aar".format([tap_sdk_version]),
-		"GodotTDS/bin/TapSDK/TapMoment_{0}.aar".format([tap_sdk_version])
+		"GodotTDS/bin/TapSDK/TapMoment_{0}.aar".format([tap_sdk_version]),
+		"GodotTDS/bin/TapSDK/TapAchievement_{0}.aar".format([tap_sdk_version])
 	]
 
 	func _get_android_libraries(platform, debug):

@@ -19,8 +19,8 @@ Godot plugin for supporting TapTap Developer Services
 - [x] 合规认证
 - [x] 内嵌动态
 - [x] 悬浮窗
-- [ ] 成就系统
-- [ ] 礼包系统
+- [x] 成就系统（测试中）
+- [ ] 礼包系统（开发中）
 - [ ] 排行榜
 - [ ] 云存档
 - [ ] 激励广告
