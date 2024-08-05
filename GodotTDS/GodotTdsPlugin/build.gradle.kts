@@ -50,6 +50,7 @@ dependencies {
     compileOnly(files("libs/TapDB_${tapSDKVersion}.aar"))
     compileOnly(files("libs/TapLogin_${tapSDKVersion}.aar"))
     compileOnly(files("libs/TapMoment_${tapSDKVersion}.aar"))
+    compileOnly(files("libs/TapAchievement_${tapSDKVersion}.aar"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

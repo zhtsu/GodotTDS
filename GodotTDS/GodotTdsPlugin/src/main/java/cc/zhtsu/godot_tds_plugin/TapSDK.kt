@@ -4,22 +4,23 @@ import android.widget.Toast
 import com.tapsdk.antiaddiction.Config
 import com.tapsdk.antiaddictionui.AntiAddictionUICallback
 import com.tapsdk.antiaddictionui.AntiAddictionUIKit
-import com.tapsdk.moment.TapMoment.TapMomentCallback
 import com.tapsdk.bootstrap.Callback
 import com.tapsdk.bootstrap.TapBootstrap
 import com.tapsdk.bootstrap.account.TDSUser
 import com.tapsdk.bootstrap.exceptions.TapError
 import com.tapsdk.moment.TapMoment
+import com.tapsdk.moment.TapMoment.TapMomentCallback
 import com.tapsdk.tapconnect.TapConnect
 import com.taptap.sdk.TapLoginHelper
+import com.tds.achievement.AchievementCallback
+import com.tds.achievement.AchievementException
+import com.tds.achievement.TapAchievement
+import com.tds.achievement.TapAchievementBean
 import com.tds.common.entities.TapConfig
 import com.tds.common.models.TapRegionType
 
 
 class TapSDK {
-
-    private val SUCCESS_CODE : Int = 200
-    private val EMPTY_MSG : String = "{}"
 
     private lateinit var _activity : android.app.Activity
     private lateinit var _clientId : String
@@ -27,12 +28,16 @@ class TapSDK {
     private lateinit var _godotTdsPlugin : GodotTdsPlugin
     private lateinit var _antiAddictionUICallback : AntiAddictionUICallback
     private lateinit var _tapMomentCallback : TapMomentCallback
+    private lateinit var _achievementCallback : AchievementCallback
+    private var _networkAllAchievementList : List<TapAchievementBean> = listOf()
 
-    fun init(activity : android.app.Activity,
-             clientId : String,
-             clientToken : String,
-             serverUrl : String,
-             godotTdsPlugin : GodotTdsPlugin)
+    fun init(
+        activity: android.app.Activity,
+        clientId: String,
+        clientToken: String,
+        serverUrl: String,
+        godotTdsPlugin: GodotTdsPlugin,
+    )
     {
         _activity = activity
         _clientId = clientId
@@ -40,11 +45,34 @@ class TapSDK {
         _godotTdsPlugin = godotTdsPlugin
 
         _antiAddictionUICallback = AntiAddictionUICallback { code, _ ->
-            godotTdsPlugin.emitPluginSignal("onAntiAddictionReturn", code, EMPTY_MSG)
+            godotTdsPlugin.emitPluginSignal("onAntiAddictionReturn", code, Code.EMPTY_MSG)
         }
 
         _tapMomentCallback = TapMomentCallback { code, msg ->
             godotTdsPlugin.emitPluginSignal("onTapMomentReturn", code, msg)
+        }
+
+        _achievementCallback = object : AchievementCallback {
+            override fun onAchievementSDKInitSuccess() {
+                godotTdsPlugin.emitPluginSignal("OnAchievementReturn", Code.ACHIEVEMENT_INIT_SUCCESS, Code.EMPTY_MSG)
+            }
+
+            override fun onAchievementSDKInitFail(exception: AchievementException) {
+                godotTdsPlugin.emitPluginSignal("OnAchievementReturn", Code.ACHIEVEMENT_INIT_ERROR, exception.message.toString())
+            }
+
+            override fun onAchievementStatusUpdate(
+                item: TapAchievementBean?,
+                exception: AchievementException?,
+            ) {
+                if (exception != null) {
+                    godotTdsPlugin.emitPluginSignal("OnAchievementReturn", Code.ACHIEVEMENT_UPDATE_ERROR, exception.message.toString())
+                }
+
+                if (item != null) {
+                    godotTdsPlugin.emitPluginSignal("OnAchievementReturn", Code.ACHIEVEMENT_UPDATE_SUCCESS, item.toJson().toString())
+                }
+            }
         }
 
         activity.let {
@@ -73,6 +101,9 @@ class TapSDK {
 
             // Initialize TapMoment
             TapMoment.setCallback(_tapMomentCallback)
+
+            // Initialize Achievement
+            TapAchievement.registerCallback(_achievementCallback)
         }
     }
 
@@ -82,8 +113,11 @@ class TapSDK {
             override fun onSuccess(user : TDSUser?) {
                 _showToast("Log in successful")
                 user?.let {
-                    _godotTdsPlugin.emitPluginSignal("onLogInReturn", SUCCESS_CODE, it.toJSONInfo())
+                    _godotTdsPlugin.emitPluginSignal("onLogInReturn", Code.LOG_IN_SUCCESS, it.toJSONInfo())
                 }
+
+                // Reinit achievement data
+                TapAchievement.initData()
             }
 
             override fun onFail(error : TapError?) {
@@ -119,7 +153,7 @@ class TapSDK {
         return if (TDSUser.currentUser() != null) {
             TapLoginHelper.getCurrentProfile().toJsonString()
         } else {
-            EMPTY_MSG
+            Code.EMPTY_MSG
         }
     }
 
@@ -167,6 +201,31 @@ class TapSDK {
         _activity.runOnUiThread {
             TapConnect.setEntryVisible(visible)
         }
+    }
+
+    fun fetchAllAchievementList()
+    {
+        TapAchievement.fetchAllAchievementList { achievementList, exception ->
+            if (exception != null)
+            {
+                _godotTdsPlugin.emitPluginSignal("OnAchievementReturn", exception.errorCode, exception.message.toString())
+            }
+            else
+            {
+                _godotTdsPlugin.emitPluginSignal("OnAchievementReturn", Code.ACHIEVEMENT_LIST_FETCH_SUCCESS, Code.EMPTY_MSG)
+                _networkAllAchievementList = achievementList
+            }
+        }
+    }
+
+    fun getLocalAllAchievementList() : List<TapAchievementBean>
+    {
+        return TapAchievement.getLocalAllAchievementList()
+    }
+
+    fun getNetworkAllAchievementList() : List<TapAchievementBean>
+    {
+        return _networkAllAchievementList
     }
 
     fun _showToast(msg : String)

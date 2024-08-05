@@ -1,10 +1,11 @@
 package cc.zhtsu.godot_tds_plugin
 
-import com.tapsdk.tapconnect.TapConnect
+import com.tds.achievement.TapAchievementBean
 import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.SignalInfo
 import org.godotengine.godot.plugin.UsedByGodot
+import org.json.JSONObject
 
 class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
 
@@ -15,7 +16,8 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
         return mutableSetOf(
             SignalInfo("onLogInReturn", Integer::class.java, String::class.java),
             SignalInfo("onAntiAddictionReturn", Integer::class.java, String::class.java),
-            SignalInfo("onTapMomentReturn", Integer::class.java, String::class.java)
+            SignalInfo("onTapMomentReturn", Integer::class.java, String::class.java),
+            SignalInfo("OnAchievementReturn", Integer::class.java, String::class.java)
         )
     }
 
@@ -80,6 +82,30 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
     fun setEntryVisible(visible : Boolean)
     {
         _tapSDK.setEntryVisible(visible)
+    }
+
+    @UsedByGodot
+    fun fetchAllAchievementList()
+    {
+        _tapSDK.fetchAllAchievementList()
+    }
+
+    @UsedByGodot
+    fun getLocalAllAchievementList() : String
+    {
+        val allAchievementList : List<TapAchievementBean> = _tapSDK.getLocalAllAchievementList()
+        val jsonObject = JSONObject()
+        jsonObject.put("list", allAchievementList)
+        return jsonObject.toString()
+    }
+
+    @UsedByGodot
+    fun getNetworkAllAchievementList() : String
+    {
+        val allAchievementList : List<TapAchievementBean> = _tapSDK.getNetworkAllAchievementList()
+        val jsonObject = JSONObject()
+        jsonObject.put("list", allAchievementList)
+        return jsonObject.toString()
     }
 
     fun getToastEnabled() : Boolean { return _toastEnabled }
