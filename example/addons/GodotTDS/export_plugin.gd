@@ -70,6 +70,8 @@ class AndroidExportPlugin extends EditorExportPlugin:
 		<uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
 		<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
 		<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+		<uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+		<uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
 		<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
 		<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
 		<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"></uses-permission>
