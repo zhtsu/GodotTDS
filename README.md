@@ -31,10 +31,10 @@ Godot plugin for supporting TapTap Developer Services
 
 example 目录下存放的是用于展示插件功能的 Godot 项目
 
-GodotTDS 目录下存放的是用于生成**安卓导出插件**的安卓项目
+GodotTDS 目录下存放的是用于生成***安卓导出插件***的安卓项目
 
 # Thanks
 
-[B站咲夜大佬](https://space.bilibili.com/2706229)
-
 [B站岩岩大佬](https://space.bilibili.com/55245483)
+
+[B站咲夜大佬](https://space.bilibili.com/2706229)
