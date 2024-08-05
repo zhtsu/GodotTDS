@@ -11,30 +11,92 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -307.0
-offset_top = -715.0
-offset_right = 341.0
-offset_bottom = 583.0
+offset_left = -320.0
+offset_top = -733.0
+offset_right = 328.0
+offset_bottom = -135.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/normal_font_size = 40
 text = "READY"
 
-[node name="Button" type="Button" parent="."]
-custom_minimum_size = Vector2(500, 0)
-anchors_preset = 8
+[node name="GridContainer" type="GridContainer" parent="."]
+anchors_preset = 7
 anchor_left = 0.5
-anchor_top = 0.5
+anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -250.0
-offset_top = 616.0
-offset_right = 250.0
-offset_bottom = 761.0
+anchor_bottom = 1.0
+offset_left = -324.0
+offset_top = -276.0
+offset_right = 324.0
+offset_bottom = -20.0
 grow_horizontal = 2
-grow_vertical = 2
-focus_mode = 0
-theme_override_font_sizes/font_size = 100
-text = "TEST"
+grow_vertical = 0
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 2
 
-[connection signal="button_down" from="Button" to="." method="_on_button_button_down"]
+[node name="Login" type="Button" parent="GridContainer"]
+custom_minimum_size = Vector2(300, 120)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 60
+text = "登录"
+
+[node name="Logout" type="Button" parent="GridContainer"]
+custom_minimum_size = Vector2(300, 120)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 60
+text = "退出登录"
+
+[node name="AntiAddiction" type="Button" parent="GridContainer"]
+custom_minimum_size = Vector2(300, 120)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 60
+text = "防沉迷"
+
+[node name="TapMoment" type="Button" parent="GridContainer"]
+custom_minimum_size = Vector2(300, 120)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 60
+text = "内嵌动态"
+
+[node name="ShowEntry" type="Button" parent="GridContainer"]
+custom_minimum_size = Vector2(300, 120)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 60
+text = "显示悬浮窗"
+
+[node name="HideEntry" type="Button" parent="GridContainer"]
+custom_minimum_size = Vector2(300, 120)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 60
+text = "隐藏悬浮窗"
+
+[node name="EnableToast" type="Button" parent="GridContainer"]
+custom_minimum_size = Vector2(300, 120)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 60
+text = "开启提示"
+
+[node name="DisableToast" type="Button" parent="GridContainer"]
+custom_minimum_size = Vector2(300, 120)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 60
+text = "关闭提示"
+
+[connection signal="button_down" from="GridContainer/Login" to="." method="_on_login_button_down"]
+[connection signal="button_down" from="GridContainer/Logout" to="." method="_on_logout_button_down"]
+[connection signal="button_down" from="GridContainer/AntiAddiction" to="." method="_on_anti_addiction_button_down"]
+[connection signal="button_down" from="GridContainer/TapMoment" to="." method="_on_tap_moment_button_down"]
+[connection signal="button_down" from="GridContainer/ShowEntry" to="." method="_on_show_entry_button_down"]
+[connection signal="button_down" from="GridContainer/HideEntry" to="." method="_on_hide_entry_button_down"]
+[connection signal="button_down" from="GridContainer/EnableToast" to="." method="_on_enable_toast_button_down"]
+[connection signal="button_down" from="GridContainer/DisableToast" to="." method="_on_disable_toast_button_down"]
