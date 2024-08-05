@@ -30,6 +30,7 @@ class TapSDK {
     private lateinit var _tapMomentCallback : TapMomentCallback
     private lateinit var _achievementCallback : AchievementCallback
     private var _networkAllAchievementList : List<TapAchievementBean> = listOf()
+    private var _objectId : String = ""
 
     fun init(
         activity: android.app.Activity,
@@ -87,13 +88,20 @@ class TapSDK {
                     .build()
 
                 TapBootstrap.init(activity, tdsConfig)
+
+                // Initialize Achievement if user is valid
+                if (TDSUser.currentUser() != null)
+                {
+                    TapAchievement.initData()
+                    _objectId = TDSUser.currentUser().objectId
+                }
             }
 
             // Initialize AntiAddiction
             val config = Config.Builder()
                 .withClientId(clientId)
                 .showSwitchAccount(false)
-                .useAgeRange(true)
+                .useAgeRange(false)
                 .build()
 
             AntiAddictionUIKit.init(activity, config)
@@ -113,6 +121,7 @@ class TapSDK {
             override fun onSuccess(user : TDSUser?) {
                 _showToast("Log in successful")
                 user?.let {
+                    _objectId = user.objectId
                     _godotTdsPlugin.emitPluginSignal("onLogInReturn", Code.LOG_IN_SUCCESS, it.toJSONInfo())
                 }
 
@@ -135,6 +144,7 @@ class TapSDK {
         {
             TDSUser.logOut()
             AntiAddictionUIKit.exit()
+            _objectId = ""
             _showToast("Log out successful")
         }
         else
@@ -148,13 +158,18 @@ class TapSDK {
         return TDSUser.currentUser() != null
     }
 
-    fun getCurrentProfile() : String
+    fun getUserProfile() : String
     {
         return if (TDSUser.currentUser() != null) {
             TapLoginHelper.getCurrentProfile().toJsonString()
         } else {
             Code.EMPTY_MSG
         }
+    }
+
+    fun getUserObjectId() : String
+    {
+        return _objectId
     }
 
     fun antiAddiction()
@@ -168,11 +183,6 @@ class TapSDK {
         {
             _showToast("Not log in")
         }
-    }
-
-    fun getAgeRange() : Int
-    {
-        return AntiAddictionUIKit.getAgeRange()
     }
 
     fun tapMoment(orientation : Int)
@@ -228,10 +238,42 @@ class TapSDK {
         return _networkAllAchievementList
     }
 
+    fun showAchievementPage()
+    {
+        if (TDSUser.currentUser() != null)
+        {
+            TapAchievement.showAchievementPage()
+        }
+        else
+        {
+            _showToast("Not log in")
+        }
+    }
+
+    fun reachAchievement(displayId : String)
+    {
+        TapAchievement.reach(displayId)
+    }
+
+    fun growAchievementSteps(displayId : String, steps : Int)
+    {
+        TapAchievement.growSteps(displayId, steps)
+    }
+
+    fun makeAchievementSteps(displayId : String, steps : Int)
+    {
+        TapAchievement.makeSteps(displayId, steps)
+    }
+
+    fun setShowAchievementToast(show : Boolean)
+    {
+        TapAchievement.setShowToast(show)
+    }
+
     fun _showToast(msg : String)
     {
         _activity.runOnUiThread {
-            if (_godotTdsPlugin.getToastEnabled())
+            if (_godotTdsPlugin.getShowTipsToast())
             {
                 Toast.makeText(_activity, msg, Toast.LENGTH_SHORT).show()
             }
