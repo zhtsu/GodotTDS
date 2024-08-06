@@ -15,6 +15,10 @@ class Code {
         @JvmStatic
         val ACHIEVEMENT_LIST_FETCH_SUCCESS : Int = 1006
         @JvmStatic
+        val GIFT_CODE_SUBMIT_SUCCESS : Int = 1007
+        @JvmStatic
+        val GIFT_CODE_SUBMIT_ERROR : Int = 1008
+        @JvmStatic
         val EMPTY_MSG : String = "{}"
     }
 }
