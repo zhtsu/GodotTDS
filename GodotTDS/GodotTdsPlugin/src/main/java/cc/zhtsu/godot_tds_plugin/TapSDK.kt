@@ -1,6 +1,8 @@
 package cc.zhtsu.godot_tds_plugin
 
+import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.tapsdk.antiaddiction.Config
 import com.tapsdk.antiaddictionui.AntiAddictionUICallback
 import com.tapsdk.antiaddictionui.AntiAddictionUIKit
@@ -8,6 +10,11 @@ import com.tapsdk.bootstrap.Callback
 import com.tapsdk.bootstrap.TapBootstrap
 import com.tapsdk.bootstrap.account.TDSUser
 import com.tapsdk.bootstrap.exceptions.TapError
+import com.tapsdk.lc.LCLeaderboard
+import com.tapsdk.lc.LCLeaderboardResult
+import com.tapsdk.lc.LCRanking
+import com.tapsdk.lc.LCStatisticResult
+import com.tapsdk.lc.LCUser
 import com.tapsdk.moment.TapMoment
 import com.tapsdk.moment.TapMoment.TapMomentCallback
 import com.tapsdk.tapconnect.TapConnect
@@ -18,6 +25,8 @@ import com.tds.achievement.TapAchievement
 import com.tds.achievement.TapAchievementBean
 import com.tds.common.entities.TapConfig
 import com.tds.common.models.TapRegionType
+import io.reactivex.Observer
+import io.reactivex.disposables.Disposable
 import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -37,10 +46,15 @@ class TapSDK {
     private lateinit var _clientId : String
     private lateinit var _clientToken : String
     private lateinit var _godotTdsPlugin : GodotTdsPlugin
+
     private lateinit var _antiAddictionUICallback : AntiAddictionUICallback
     private lateinit var _tapMomentCallback : TapMomentCallback
     private lateinit var _achievementCallback : AchievementCallback
     private lateinit var _okHttpCallback : okhttp3.Callback
+    private lateinit var _leaderboardSubmitObserver : Observer<LCStatisticResult>
+    private lateinit var _leaderboardSectionRankingsObserver : Observer<LCLeaderboardResult>
+    private lateinit var _leaderboardUserRankingObserver : Observer<LCLeaderboardResult>
+
     private var _networkAllAchievementList : List<TapAchievementBean> = listOf()
     private var _objectId : String = ""
 
@@ -57,54 +71,7 @@ class TapSDK {
         _clientToken = clientToken
         _godotTdsPlugin = godotTdsPlugin
 
-        _antiAddictionUICallback = AntiAddictionUICallback { code, _ ->
-            godotTdsPlugin.emitPluginSignal("onAntiAddictionReturn", code, Code.EMPTY_MSG)
-        }
-
-        _tapMomentCallback = TapMomentCallback { code, msg ->
-            godotTdsPlugin.emitPluginSignal("onTapMomentReturn", code, msg)
-        }
-
-        _achievementCallback = object : AchievementCallback {
-            override fun onAchievementSDKInitSuccess() {
-                godotTdsPlugin.emitPluginSignal("OnAchievementReturn", Code.ACHIEVEMENT_INIT_SUCCESS, Code.EMPTY_MSG)
-            }
-
-            override fun onAchievementSDKInitFail(exception: AchievementException) {
-                godotTdsPlugin.emitPluginSignal("OnAchievementReturn", Code.ACHIEVEMENT_INIT_ERROR, exception.message.toString())
-            }
-
-            override fun onAchievementStatusUpdate(
-                item: TapAchievementBean?,
-                exception: AchievementException?,
-            ) {
-                if (exception != null) {
-                    godotTdsPlugin.emitPluginSignal("OnAchievementReturn", Code.ACHIEVEMENT_UPDATE_ERROR, exception.message.toString())
-                }
-
-                if (item != null) {
-                    godotTdsPlugin.emitPluginSignal("OnAchievementReturn", Code.ACHIEVEMENT_UPDATE_SUCCESS, item.toJson().toString())
-                }
-            }
-        }
-
-        _okHttpCallback = object : okhttp3.Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                _godotTdsPlugin.emitPluginSignal("OnGiftReturn", Code.GIFT_CODE_SUBMIT_ERROR, e.message.toString())
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                var emptyBody : Boolean = true
-                response.body?.let {
-                    emptyBody = false
-                    _godotTdsPlugin.emitPluginSignal("OnGiftReturn", Code.GIFT_CODE_SUBMIT_SUCCESS, it.string())
-                }
-                if (emptyBody)
-                {
-                    _godotTdsPlugin.emitPluginSignal("OnGiftReturn", Code.GIFT_CODE_SUBMIT_ERROR, "Empty body")
-                }
-            }
-        }
+        _initAllCallback()
 
         activity.let {
             // Initialize Login
@@ -133,14 +100,11 @@ class TapSDK {
                 .showSwitchAccount(false)
                 .useAgeRange(false)
                 .build()
-
             AntiAddictionUIKit.init(activity, config)
+
+            // Register callbacks
             AntiAddictionUIKit.setAntiAddictionCallback(_antiAddictionUICallback)
-
-            // Initialize TapMoment
             TapMoment.setCallback(_tapMomentCallback)
-
-            // Initialize Achievement
             TapAchievement.registerCallback(_achievementCallback)
         }
     }
@@ -331,6 +295,26 @@ class TapSDK {
         okHttpClient.newCall(request).enqueue(_okHttpCallback)
     }
 
+    fun submitLeaderboardScore(leaderboardName : String, score : Double)
+    {
+        val statistic = HashMap<String, Double>()
+        statistic[leaderboardName] = score
+        LCLeaderboard.updateStatistic(LCUser.currentUser(), statistic).subscribe(_leaderboardSubmitObserver)
+    }
+
+    fun accessLeaderboardSectionRankings(leaderboardName : String, start : Int, end : Int)
+    {
+        val leaderboard = LCLeaderboard.createWithoutData(leaderboardName)
+        leaderboard.getResults(start, end, null, null).subscribe(_leaderboardSectionRankingsObserver)
+    }
+
+    fun accessLeaderboardUserRanking(leaderboardName : String)
+    {
+        val leaderboard = LCLeaderboard.createWithoutData(leaderboardName)
+        val selectKeys : List<String> = listOf("username")
+        leaderboard.getAroundResults(_objectId, 0, 1, selectKeys, null).subscribe(_leaderboardUserRankingObserver)
+    }
+
     private fun _showToast(msg : String)
     {
         _activity.runOnUiThread {
@@ -381,6 +365,107 @@ class TapSDK {
         catch (e: java.lang.Exception)
         {
             throw RuntimeException(e)
+        }
+    }
+
+    private fun _initAllCallback()
+    {
+        _antiAddictionUICallback = AntiAddictionUICallback { code, _ ->
+            _godotTdsPlugin.emitPluginSignal("onAntiAddictionReturn", code, Code.EMPTY_MSG)
+        }
+
+        _tapMomentCallback = TapMomentCallback { code, msg ->
+            _godotTdsPlugin.emitPluginSignal("onTapMomentReturn", code, msg)
+        }
+
+        _achievementCallback = object : AchievementCallback {
+            override fun onAchievementSDKInitSuccess() {
+                _godotTdsPlugin.emitPluginSignal("OnAchievementReturn", Code.ACHIEVEMENT_INIT_SUCCESS, Code.EMPTY_MSG)
+            }
+
+            override fun onAchievementSDKInitFail(exception: AchievementException) {
+                _godotTdsPlugin.emitPluginSignal("OnAchievementReturn", Code.ACHIEVEMENT_INIT_ERROR, exception.message.toString())
+            }
+
+            override fun onAchievementStatusUpdate(
+                item: TapAchievementBean?,
+                exception: AchievementException?,
+            ) {
+                if (exception != null) {
+                    _godotTdsPlugin.emitPluginSignal("OnAchievementReturn", Code.ACHIEVEMENT_UPDATE_ERROR, exception.message.toString())
+                }
+
+                if (item != null) {
+                    _godotTdsPlugin.emitPluginSignal("OnAchievementReturn", Code.ACHIEVEMENT_UPDATE_SUCCESS, item.toJson().toString())
+                }
+            }
+        }
+
+        _okHttpCallback = object : okhttp3.Callback {
+            override fun onFailure(call : Call, e : IOException) {
+                _godotTdsPlugin.emitPluginSignal("OnGiftReturn", Code.GIFT_CODE_SUBMIT_ERROR, e.message.toString())
+            }
+
+            override fun onResponse(call : Call, response : Response) {
+                var emptyBody : Boolean = true
+                response.body?.let {
+                    emptyBody = false
+                    _godotTdsPlugin.emitPluginSignal("OnGiftReturn", Code.GIFT_CODE_SUBMIT_SUCCESS, it.string())
+                }
+                if (emptyBody)
+                {
+                    _godotTdsPlugin.emitPluginSignal("OnGiftReturn", Code.GIFT_CODE_SUBMIT_ERROR, "Empty body")
+                }
+            }
+        }
+
+        _leaderboardSubmitObserver = object : Observer<LCStatisticResult> {
+            override fun onSubscribe(disposable : Disposable) {}
+
+            override fun onNext(jsonObject : LCStatisticResult) {
+                _godotTdsPlugin.emitPluginSignal("OnLeaderboardReturn", Code.LEADERBOARD_SUBMIT_SUCCESS, jsonObject.toString())
+            }
+
+            override fun onError(throwable : Throwable) {
+                _godotTdsPlugin.emitPluginSignal("OnLeaderboardReturn", Code.LEADERBOARD_SUBMIT_ERROR, throwable.message.toString())
+            }
+
+            override fun onComplete() {}
+        }
+
+        _leaderboardSectionRankingsObserver = object : Observer<LCLeaderboardResult> {
+            override fun onSubscribe(disposable : Disposable) {}
+
+            @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+            override fun onNext(leaderboardResult : LCLeaderboardResult) {
+                val rankingList : List<LCRanking> = leaderboardResult.results
+                val jsonObject = JSONObject()
+                for (ranking in rankingList)
+                {
+                    jsonObject.append("list", ranking.toString())
+                }
+                _godotTdsPlugin.emitPluginSignal("OnLeaderboardReturn", Code.LEADERBOARD_ACCESS_SECTION_RANKINGS_SUCCESS, jsonObject.toString())
+            }
+
+            override fun onError(throwable : Throwable) {
+                _godotTdsPlugin.emitPluginSignal("OnLeaderboardReturn", Code.LEADERBOARD_ACCESS_SECTION_RANKINGS_ERROR, throwable.message.toString())
+            }
+
+            override fun onComplete() {}
+        }
+
+        _leaderboardUserRankingObserver = object : Observer<LCLeaderboardResult> {
+            override fun onSubscribe(disposable : Disposable) {}
+
+            override fun onNext(leaderboardResult : LCLeaderboardResult) {
+                _godotTdsPlugin.emitPluginSignal("OnLeaderboardReturn", Code.LEADERBOARD_ACCESS_USER_RANKING_SUCCESS, leaderboardResult.toString())
+            }
+
+            override fun onError(throwable : Throwable) {
+                _godotTdsPlugin.emitPluginSignal("OnLeaderboardReturn", Code.LEADERBOARD_ACCESS_USER_RANKING_ERROR, throwable.message.toString())
+            }
+
+            override fun onComplete() {}
         }
     }
 }

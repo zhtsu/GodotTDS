@@ -19,6 +19,18 @@ class Code {
         @JvmStatic
         val GIFT_CODE_SUBMIT_ERROR : Int = 1008
         @JvmStatic
+        val LEADERBOARD_SUBMIT_SUCCESS : Int = 1009
+        @JvmStatic
+        val LEADERBOARD_SUBMIT_ERROR : Int = 1010
+        @JvmStatic
+        val LEADERBOARD_ACCESS_SECTION_RANKINGS_SUCCESS : Int = 1009
+        @JvmStatic
+        val LEADERBOARD_ACCESS_SECTION_RANKINGS_ERROR : Int = 1010
+        @JvmStatic
+        val LEADERBOARD_ACCESS_USER_RANKING_SUCCESS : Int = 1011
+        @JvmStatic
+        val LEADERBOARD_ACCESS_USER_RANKING_ERROR : Int = 1012
+        @JvmStatic
         val EMPTY_MSG : String = "{}"
     }
 }

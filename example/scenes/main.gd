@@ -7,6 +7,7 @@ func _ready() -> void:
 	GodotTDS.on_tap_moment_return.connect(_on_test_return)
 	GodotTDS.on_achievement_return.connect(_on_test_return)
 	GodotTDS.on_gift_return.connect(_on_test_return)
+	GodotTDS.on_leaderboard_return.connect(_on_test_return)
 	
 	
 func _on_test_return(code : int, msg : String):
@@ -89,3 +90,15 @@ func _on_submit_gift_code_button_down() -> void:
 
 func _on_sync_achievement_button_down() -> void:
 	$Text.text = str(GodotTDS.get_network_all_achievement_list())
+
+
+func _on_submit_leaderboard_score_button_down() -> void:
+	GodotTDS.submit_leaderboard_score("Score", 100)
+
+
+func _on_access_section_rankings_button_down() -> void:
+	GodotTDS.access_leaderboard_section_rankings("Score", 0, 10)
+
+
+func _on_access_user_ranking_button_down() -> void:
+	GodotTDS.access_leaderboard_user_ranking("Score")
