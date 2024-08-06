@@ -2,8 +2,6 @@ package cc.zhtsu.godot_tds_plugin
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.tapsdk.lc.LCLeaderboard
-import com.tapsdk.lc.LCUser
 import com.tds.achievement.TapAchievementBean
 import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
@@ -159,7 +157,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
     }
 
     @UsedByGodot
-    fun submitLeaderboardScore(leaderboardName : String, score : Double)
+    fun submitLeaderboardScore(leaderboardName : String, score : Long)
     {
         _tapSDK.submitLeaderboardScore(leaderboardName, score)
     }
@@ -171,9 +169,9 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
     }
 
     @UsedByGodot
-    fun accessLeaderboardUserRanking(leaderboardName : String)
+    fun accessLeaderboardUserAroundRankings(leaderboardName : String, count : Int)
     {
-        _tapSDK.accessLeaderboardUserRanking(leaderboardName)
+        _tapSDK.accessLeaderboardUserAroundRankings(leaderboardName, count)
     }
 
     fun getShowTipsToast() : Boolean { return _showTipsToast }

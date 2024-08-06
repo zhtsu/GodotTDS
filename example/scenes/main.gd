@@ -16,6 +16,8 @@ func _on_test_return(code : int, msg : String):
 		$Text.text = GodotTDS.get_network_all_achievement_list()
 	elif code == 1001:
 		$Text.text = str(JSON.parse_string(msg))
+	elif code == 1001:
+		$Text.text = str(JSON.parse_string(msg))
 	else:
 		$Text.text = msg
 	
@@ -101,4 +103,4 @@ func _on_access_section_rankings_button_down() -> void:
 
 
 func _on_access_user_ranking_button_down() -> void:
-	GodotTDS.access_leaderboard_user_ranking("Score")
+	GodotTDS.access_leaderboard_user_around_rankings("Score")

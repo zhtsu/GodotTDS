@@ -47,13 +47,14 @@ class TapSDK {
     private lateinit var _clientToken : String
     private lateinit var _godotTdsPlugin : GodotTdsPlugin
 
+    private lateinit var _logInCallback : Callback<TDSUser>
     private lateinit var _antiAddictionUICallback : AntiAddictionUICallback
     private lateinit var _tapMomentCallback : TapMomentCallback
     private lateinit var _achievementCallback : AchievementCallback
     private lateinit var _okHttpCallback : okhttp3.Callback
     private lateinit var _leaderboardSubmitObserver : Observer<LCStatisticResult>
     private lateinit var _leaderboardSectionRankingsObserver : Observer<LCLeaderboardResult>
-    private lateinit var _leaderboardUserRankingObserver : Observer<LCLeaderboardResult>
+    private lateinit var _leaderboardUserAroundRankingsObserver : Observer<LCLeaderboardResult>
 
     private var _networkAllAchievementList : List<TapAchievementBean> = listOf()
     private var _objectId : String = ""
@@ -111,25 +112,7 @@ class TapSDK {
 
     fun logIn()
     {
-        TDSUser.loginWithTapTap(_activity, object : Callback<TDSUser> {
-            override fun onSuccess(user : TDSUser?) {
-                _showToast("Log in successful")
-                user?.let {
-                    _objectId = user.objectId
-                    _godotTdsPlugin.emitPluginSignal("onLogInReturn", Code.LOG_IN_SUCCESS, it.toJSONInfo())
-                }
-
-                // Reinit achievement data
-                TapAchievement.initData()
-            }
-
-            override fun onFail(error : TapError?) {
-                _showToast("Log in failed")
-                error?.let {
-                    _godotTdsPlugin.emitPluginSignal("onLogInReturn", error.code, error.message.toString())
-                }
-            }
-        })
+        TDSUser.loginWithTapTap(_activity, _logInCallback)
     }
 
     fun logOut()
@@ -154,9 +137,12 @@ class TapSDK {
 
     fun getUserProfile() : String
     {
-        return if (TDSUser.currentUser() != null) {
+        return if (TDSUser.currentUser() != null)
+        {
             TapLoginHelper.getCurrentProfile().toJsonString()
-        } else {
+        }
+        else
+        {
             Code.EMPTY_MSG
         }
     }
@@ -181,7 +167,8 @@ class TapSDK {
 
     fun tapMoment(orientation : Int)
     {
-        when (orientation) {
+        when (orientation)
+        {
             0 -> {
                 TapMoment.open(TapMoment.ORIENTATION_DEFAULT)
             }
@@ -295,24 +282,25 @@ class TapSDK {
         okHttpClient.newCall(request).enqueue(_okHttpCallback)
     }
 
-    fun submitLeaderboardScore(leaderboardName : String, score : Double)
+    fun submitLeaderboardScore(leaderboardName : String, score : Long)
     {
         val statistic = HashMap<String, Double>()
-        statistic[leaderboardName] = score
-        LCLeaderboard.updateStatistic(LCUser.currentUser(), statistic).subscribe(_leaderboardSubmitObserver)
+        statistic[leaderboardName] = score.toDouble()
+        LCLeaderboard.updateStatistic(LCUser.currentUser(), statistic, true).subscribe(_leaderboardSubmitObserver)
     }
 
     fun accessLeaderboardSectionRankings(leaderboardName : String, start : Int, end : Int)
     {
         val leaderboard = LCLeaderboard.createWithoutData(leaderboardName)
-        leaderboard.getResults(start, end, null, null).subscribe(_leaderboardSectionRankingsObserver)
+        val selectKeys : List<String> = listOf("nickname")
+        leaderboard.getResults(start, end, selectKeys, null).subscribe(_leaderboardSectionRankingsObserver)
     }
 
-    fun accessLeaderboardUserRanking(leaderboardName : String)
+    fun accessLeaderboardUserAroundRankings(leaderboardName : String, count : Int)
     {
         val leaderboard = LCLeaderboard.createWithoutData(leaderboardName)
-        val selectKeys : List<String> = listOf("username")
-        leaderboard.getAroundResults(_objectId, 0, 1, selectKeys, null).subscribe(_leaderboardUserRankingObserver)
+        val selectKeys : List<String> = listOf("nickname")
+        leaderboard.getAroundResults(_objectId, 0, count, selectKeys, null).subscribe(_leaderboardUserAroundRankingsObserver)
     }
 
     private fun _showToast(msg : String)
@@ -320,7 +308,11 @@ class TapSDK {
         _activity.runOnUiThread {
             if (_godotTdsPlugin.getShowTipsToast())
             {
-                Toast.makeText(_activity, msg, Toast.LENGTH_SHORT).show()
+                try
+                {
+                    Toast.makeText(_activity, msg, Toast.LENGTH_SHORT).show()
+                }
+                catch (_ : Exception) {}
             }
         }
     }
@@ -368,8 +360,42 @@ class TapSDK {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun _rankingListToJsonObj(rankingList : List<LCRanking>) : JSONObject
+    {
+        val jsonObject = JSONObject()
+        for (ranking in rankingList)
+        {
+            val tempJsonObject = JSONObject()
+            tempJsonObject.put("rank", ranking.rank)
+            tempJsonObject.put("nickname", ranking.user.toJSONObject()["nickname"])
+            tempJsonObject.put("statisticValue", ranking.statisticValue)
+            jsonObject.append("list", tempJsonObject)
+        }
+        return jsonObject
+    }
+
     private fun _initAllCallback()
     {
+        _logInCallback = object : Callback<TDSUser>
+        {
+            override fun onSuccess(user : TDSUser)
+            {
+                _showToast("Log in successful")
+                _objectId = user.objectId
+                _godotTdsPlugin.emitPluginSignal("onLogInReturn", Code.LOG_IN_SUCCESS, user.toJSONInfo())
+
+                // Reinit achievement data
+                TapAchievement.initData()
+            }
+
+            override fun onFail(error : TapError)
+            {
+                _showToast("Log in failed")
+                _godotTdsPlugin.emitPluginSignal("onLogInReturn", error.code, error.message.toString())
+            }
+        }
+
         _antiAddictionUICallback = AntiAddictionUICallback { code, _ ->
             _godotTdsPlugin.emitPluginSignal("onAntiAddictionReturn", code, Code.EMPTY_MSG)
         }
@@ -378,35 +404,41 @@ class TapSDK {
             _godotTdsPlugin.emitPluginSignal("onTapMomentReturn", code, msg)
         }
 
-        _achievementCallback = object : AchievementCallback {
-            override fun onAchievementSDKInitSuccess() {
+        _achievementCallback = object : AchievementCallback
+        {
+            override fun onAchievementSDKInitSuccess()
+            {
                 _godotTdsPlugin.emitPluginSignal("OnAchievementReturn", Code.ACHIEVEMENT_INIT_SUCCESS, Code.EMPTY_MSG)
             }
 
-            override fun onAchievementSDKInitFail(exception: AchievementException) {
+            override fun onAchievementSDKInitFail(exception: AchievementException)
+            {
                 _godotTdsPlugin.emitPluginSignal("OnAchievementReturn", Code.ACHIEVEMENT_INIT_ERROR, exception.message.toString())
             }
 
-            override fun onAchievementStatusUpdate(
-                item: TapAchievementBean?,
-                exception: AchievementException?,
-            ) {
-                if (exception != null) {
+            override fun onAchievementStatusUpdate(item: TapAchievementBean?, exception: AchievementException?)
+            {
+                if (exception != null)
+                {
                     _godotTdsPlugin.emitPluginSignal("OnAchievementReturn", Code.ACHIEVEMENT_UPDATE_ERROR, exception.message.toString())
                 }
 
-                if (item != null) {
+                if (item != null)
+                {
                     _godotTdsPlugin.emitPluginSignal("OnAchievementReturn", Code.ACHIEVEMENT_UPDATE_SUCCESS, item.toJson().toString())
                 }
             }
         }
 
-        _okHttpCallback = object : okhttp3.Callback {
-            override fun onFailure(call : Call, e : IOException) {
+        _okHttpCallback = object : okhttp3.Callback
+        {
+            override fun onFailure(call : Call, e : IOException)
+            {
                 _godotTdsPlugin.emitPluginSignal("OnGiftReturn", Code.GIFT_CODE_SUBMIT_ERROR, e.message.toString())
             }
 
-            override fun onResponse(call : Call, response : Response) {
+            override fun onResponse(call : Call, response : Response)
+            {
                 var emptyBody : Boolean = true
                 response.body?.let {
                     emptyBody = false
@@ -419,49 +451,55 @@ class TapSDK {
             }
         }
 
-        _leaderboardSubmitObserver = object : Observer<LCStatisticResult> {
+        _leaderboardSubmitObserver = object : Observer<LCStatisticResult>
+        {
             override fun onSubscribe(disposable : Disposable) {}
 
-            override fun onNext(jsonObject : LCStatisticResult) {
-                _godotTdsPlugin.emitPluginSignal("OnLeaderboardReturn", Code.LEADERBOARD_SUBMIT_SUCCESS, jsonObject.toString())
+            override fun onNext(result : LCStatisticResult)
+            {
+                _godotTdsPlugin.emitPluginSignal("OnLeaderboardReturn", Code.LEADERBOARD_SUBMIT_SUCCESS, Code.EMPTY_MSG)
             }
 
-            override fun onError(throwable : Throwable) {
+            override fun onError(throwable : Throwable)
+            {
                 _godotTdsPlugin.emitPluginSignal("OnLeaderboardReturn", Code.LEADERBOARD_SUBMIT_ERROR, throwable.message.toString())
             }
 
             override fun onComplete() {}
         }
 
-        _leaderboardSectionRankingsObserver = object : Observer<LCLeaderboardResult> {
+        _leaderboardSectionRankingsObserver = object : Observer<LCLeaderboardResult>
+        {
             override fun onSubscribe(disposable : Disposable) {}
 
             @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-            override fun onNext(leaderboardResult : LCLeaderboardResult) {
-                val rankingList : List<LCRanking> = leaderboardResult.results
-                val jsonObject = JSONObject()
-                for (ranking in rankingList)
-                {
-                    jsonObject.append("list", ranking.toString())
-                }
-                _godotTdsPlugin.emitPluginSignal("OnLeaderboardReturn", Code.LEADERBOARD_ACCESS_SECTION_RANKINGS_SUCCESS, jsonObject.toString())
+            override fun onNext(leaderboardResult : LCLeaderboardResult)
+            {
+                val msg : String = _rankingListToJsonObj(leaderboardResult.results).toString()
+                _godotTdsPlugin.emitPluginSignal("OnLeaderboardReturn", Code.LEADERBOARD_ACCESS_SECTION_RANKINGS_SUCCESS, msg)
             }
 
-            override fun onError(throwable : Throwable) {
+            override fun onError(throwable : Throwable)
+            {
                 _godotTdsPlugin.emitPluginSignal("OnLeaderboardReturn", Code.LEADERBOARD_ACCESS_SECTION_RANKINGS_ERROR, throwable.message.toString())
             }
 
             override fun onComplete() {}
         }
 
-        _leaderboardUserRankingObserver = object : Observer<LCLeaderboardResult> {
+        _leaderboardUserAroundRankingsObserver = object : Observer<LCLeaderboardResult>
+        {
             override fun onSubscribe(disposable : Disposable) {}
 
-            override fun onNext(leaderboardResult : LCLeaderboardResult) {
-                _godotTdsPlugin.emitPluginSignal("OnLeaderboardReturn", Code.LEADERBOARD_ACCESS_USER_RANKING_SUCCESS, leaderboardResult.toString())
+            @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+            override fun onNext(leaderboardResult : LCLeaderboardResult)
+            {
+                val msg : String = _rankingListToJsonObj(leaderboardResult.results).toString()
+                _godotTdsPlugin.emitPluginSignal("OnLeaderboardReturn", Code.LEADERBOARD_ACCESS_USER_RANKING_SUCCESS, msg)
             }
 
-            override fun onError(throwable : Throwable) {
+            override fun onError(throwable : Throwable)
+            {
                 _godotTdsPlugin.emitPluginSignal("OnLeaderboardReturn", Code.LEADERBOARD_ACCESS_USER_RANKING_ERROR, throwable.message.toString())
             }
 

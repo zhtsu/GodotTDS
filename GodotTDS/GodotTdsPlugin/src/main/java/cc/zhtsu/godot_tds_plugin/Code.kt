@@ -23,13 +23,13 @@ class Code {
         @JvmStatic
         val LEADERBOARD_SUBMIT_ERROR : Int = 1010
         @JvmStatic
-        val LEADERBOARD_ACCESS_SECTION_RANKINGS_SUCCESS : Int = 1009
+        val LEADERBOARD_ACCESS_SECTION_RANKINGS_SUCCESS : Int = 1011
         @JvmStatic
-        val LEADERBOARD_ACCESS_SECTION_RANKINGS_ERROR : Int = 1010
+        val LEADERBOARD_ACCESS_SECTION_RANKINGS_ERROR : Int = 1012
         @JvmStatic
-        val LEADERBOARD_ACCESS_USER_RANKING_SUCCESS : Int = 1011
+        val LEADERBOARD_ACCESS_USER_RANKING_SUCCESS : Int = 1013
         @JvmStatic
-        val LEADERBOARD_ACCESS_USER_RANKING_ERROR : Int = 1012
+        val LEADERBOARD_ACCESS_USER_RANKING_ERROR : Int = 1014
         @JvmStatic
         val EMPTY_MSG : String = "{}"
     }
