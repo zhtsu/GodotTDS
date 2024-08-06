@@ -5,6 +5,17 @@
 [node name="Main" type="CanvasLayer"]
 script = ExtResource("1_t6b0v")
 
+[node name="Code" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -11.5
+offset_right = 11.5
+offset_bottom = 55.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 40
+text = "0"
+
 [node name="Text" type="TextEdit" parent="."]
 anchors_preset = 8
 anchor_left = 0.5
@@ -27,10 +38,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -257.0
-offset_top = -484.0
-offset_right = 259.0
-offset_bottom = 96.0
+offset_left = -269.0
+offset_top = -527.0
+offset_right = 277.0
+offset_bottom = 253.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/h_separation = 20
@@ -101,6 +112,13 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "用户信息"
 
+[node name="AchievementToast" type="Button" parent="GridContainer"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 48
+text = "成就弹窗(开)"
+
 [node name="FetchAchievement" type="Button" parent="GridContainer"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
@@ -114,13 +132,6 @@ layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "成就页面"
-
-[node name="AchievementToast" type="Button" parent="GridContainer"]
-custom_minimum_size = Vector2(200, 80)
-layout_mode = 2
-focus_mode = 0
-theme_override_font_sizes/font_size = 48
-text = "成就弹窗(开)"
 
 [node name="ReachAchievement" type="Button" parent="GridContainer"]
 custom_minimum_size = Vector2(200, 80)
@@ -136,6 +147,13 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "分步成就"
 
+[node name="SubmitGiftCode" type="Button" parent="GridContainer"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 48
+text = "提交礼品码"
+
 [connection signal="button_down" from="GridContainer/Login" to="." method="_on_login_button_down"]
 [connection signal="button_down" from="GridContainer/Logout" to="." method="_on_logout_button_down"]
 [connection signal="button_down" from="GridContainer/AntiAddiction" to="." method="_on_anti_addiction_button_down"]
@@ -145,8 +163,9 @@ text = "分步成就"
 [connection signal="button_down" from="GridContainer/ShowTipsToast" to="." method="_on_show_tips_toast_button_down"]
 [connection signal="button_down" from="GridContainer/HideTipsToast" to="." method="_on_hide_tips_toast_button_down"]
 [connection signal="button_down" from="GridContainer/GetUserProfile" to="." method="_on_get_user_profile_button_down"]
+[connection signal="button_down" from="GridContainer/AchievementToast" to="." method="_on_achievement_toast_button_down"]
 [connection signal="button_down" from="GridContainer/FetchAchievement" to="." method="_on_achievement_button_down"]
 [connection signal="button_down" from="GridContainer/AchievementPage" to="." method="_on_achievement_page_button_down"]
-[connection signal="button_down" from="GridContainer/AchievementToast" to="." method="_on_achievement_toast_button_down"]
 [connection signal="button_down" from="GridContainer/ReachAchievement" to="." method="_on_reach_achievement_button_down"]
 [connection signal="button_down" from="GridContainer/GrowAchievement" to="." method="_on_grow_achievement_button_down"]
+[connection signal="button_down" from="GridContainer/SubmitGiftCode" to="." method="_on_submit_gift_code_button_down"]

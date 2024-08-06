@@ -6,9 +6,11 @@ func _ready() -> void:
 	GodotTDS.on_anti_addiction_return.connect(_on_test_return)
 	GodotTDS.on_tap_moment_return.connect(_on_test_return)
 	GodotTDS.on_achievement_return.connect(_on_test_return)
+	GodotTDS.on_gift_return.connect(_on_test_return)
 	
 	
 func _on_test_return(code : int, msg : String):
+	$Code.text = str(code)
 	if code == 1006:
 		$Text.text = GodotTDS.get_network_all_achievement_list()
 	elif code == 1001:
@@ -79,3 +81,11 @@ func _on_achievement_toast_button_down() -> void:
 	else:
 		$GridContainer/AchievementToast.text = "成就弹窗(关)"
 		GodotTDS.set_show_achievement_toast(show_achievement_toast)
+
+
+func _on_submit_gift_code_button_down() -> void:
+	GodotTDS.submit_gift_code("114514")
+
+
+func _on_sync_achievement_button_down() -> void:
+	$Text.text = str(GodotTDS.get_network_all_achievement_list())

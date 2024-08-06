@@ -1,5 +1,7 @@
 package cc.zhtsu.godot_tds_plugin
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.tds.achievement.TapAchievementBean
 import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
@@ -17,7 +19,8 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
             SignalInfo("onLogInReturn", Integer::class.java, String::class.java),
             SignalInfo("onAntiAddictionReturn", Integer::class.java, String::class.java),
             SignalInfo("onTapMomentReturn", Integer::class.java, String::class.java),
-            SignalInfo("OnAchievementReturn", Integer::class.java, String::class.java)
+            SignalInfo("OnAchievementReturn", Integer::class.java, String::class.java),
+            SignalInfo("OnGiftReturn", Integer::class.java, String::class.java)
         )
     }
 
@@ -91,20 +94,28 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
     }
 
     @UsedByGodot
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun getLocalAllAchievementList() : String
     {
         val allAchievementList : List<TapAchievementBean> = _tapSDK.getLocalAllAchievementList()
         val jsonObject = JSONObject()
-        jsonObject.put("list", allAchievementList)
+        for (achievementBean in allAchievementList)
+        {
+            jsonObject.append("list", achievementBean.toJson())
+        }
         return jsonObject.toString()
     }
 
     @UsedByGodot
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun getNetworkAllAchievementList() : String
     {
         val allAchievementList : List<TapAchievementBean> = _tapSDK.getNetworkAllAchievementList()
         val jsonObject = JSONObject()
-        jsonObject.put("list", allAchievementList)
+        for (achievementBean in allAchievementList)
+        {
+            jsonObject.append("list", achievementBean.toJson())
+        }
         return jsonObject.toString()
     }
 
@@ -136,6 +147,12 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
     fun setShowAchievementToast(show : Boolean)
     {
         _tapSDK.setShowAchievementToast(show)
+    }
+
+    @UsedByGodot
+    fun submitGiftCode(giftCode : String)
+    {
+        _tapSDK.submitGiftCode(giftCode)
     }
 
     fun getShowTipsToast() : Boolean { return _showTipsToast }

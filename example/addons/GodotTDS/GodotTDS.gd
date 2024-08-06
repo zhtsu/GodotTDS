@@ -5,6 +5,7 @@ signal on_login_return(code : int, msg : String)
 signal on_anti_addiction_return(code : int, msg : String)
 signal on_tap_moment_return(code : int, msg : String)
 signal on_achievement_return(code : int, msg : String)
+signal on_gift_return(code : int, msg : String)
 
 
 var _plugin_name : String = "GodotTdsPlugin"
@@ -29,6 +30,7 @@ func _ready() -> void:
 		_plugin_singleton.connect("onAntiAddictionReturn", _dont_call_on_anti_addiction_return)
 		_plugin_singleton.connect("onTapMomentReturn", _dont_call_on_anti_addiction_return)
 		_plugin_singleton.connect("OnAchievementReturn", _dont_call_on_achievement_return)
+		_plugin_singleton.connect("OnGiftReturn", _dont_call_on_gift_return)
 
 
 func call_android_function(android_func : String, args : Array = []) -> Variant:
@@ -84,14 +86,14 @@ func fetch_all_achievement_list() -> void:
 	call_android_function("fetchAllAchievementList")
 	
 	
-func get_local_all_achievement_list() -> String:
+func get_local_all_achievement_list() -> Array:
 	var json_string : Variant = call_android_function("getLocalAllAchievementList")
-	return "null" if json_string == null else json_string
+	return _json_to_array(json_string)
 	
 	
-func get_network_all_achievement_list() -> String:
+func get_network_all_achievement_list() -> Array:
 	var json_string : Variant = call_android_function("getNetworkAllAchievementList")
-	return "null" if json_string == null else json_string
+	return _json_to_array(json_string)
 	
 	
 func show_achievement_page() -> void:
@@ -114,6 +116,10 @@ func set_show_achievement_toast(show : bool) -> void:
 	call_android_function("setShowAchievementToast", [show])
 	
 	
+func submit_gift_code(gift_code : String) -> void:
+	call_android_function("submitGiftCode", [gift_code])
+	
+	
 # Dont call these functions from outside
 func _dont_call_on_login_return(code : int, msg : String) -> void:
 	on_login_return.emit(code, msg)
@@ -129,3 +135,17 @@ func _dont_call_on_tap_moment_return(code : int, msg : String) -> void:
 	
 func _dont_call_on_achievement_return(code : int, msg : String) -> void:
 	on_achievement_return.emit(code, msg)
+	
+	
+func _dont_call_on_gift_return(code : int, msg : String) -> void:
+	on_gift_return.emit(code, msg)
+	
+	
+func _json_to_array(json_string : Variant) -> Array:
+	if json_string == null:
+		return []
+	var dict : Dictionary = JSON.parse_string(json_string)
+	if dict.has("list"):
+		return dict["list"]
+	else:
+		return []
