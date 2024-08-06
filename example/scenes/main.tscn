@@ -38,10 +38,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -269.0
-offset_top = -527.0
-offset_right = 277.0
-offset_bottom = 253.0
+offset_left = -323.0
+offset_top = -523.0
+offset_right = 337.0
+offset_bottom = 357.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/h_separation = 20
@@ -154,6 +154,27 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "提交礼品码"
 
+[node name="SubmitLeaderboardScore" type="Button" parent="GridContainer"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 48
+text = "新增排行榜分数"
+
+[node name="AccessSectionRankings" type="Button" parent="GridContainer"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 48
+text = "获取区间排行"
+
+[node name="AccessUserRanking" type="Button" parent="GridContainer"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 48
+text = "获取玩家排行"
+
 [connection signal="button_down" from="GridContainer/Login" to="." method="_on_login_button_down"]
 [connection signal="button_down" from="GridContainer/Logout" to="." method="_on_logout_button_down"]
 [connection signal="button_down" from="GridContainer/AntiAddiction" to="." method="_on_anti_addiction_button_down"]
@@ -169,3 +190,6 @@ text = "提交礼品码"
 [connection signal="button_down" from="GridContainer/ReachAchievement" to="." method="_on_reach_achievement_button_down"]
 [connection signal="button_down" from="GridContainer/GrowAchievement" to="." method="_on_grow_achievement_button_down"]
 [connection signal="button_down" from="GridContainer/SubmitGiftCode" to="." method="_on_submit_gift_code_button_down"]
+[connection signal="button_down" from="GridContainer/SubmitLeaderboardScore" to="." method="_on_submit_leaderboard_score_button_down"]
+[connection signal="button_down" from="GridContainer/AccessSectionRankings" to="." method="_on_access_section_rankings_button_down"]
+[connection signal="button_down" from="GridContainer/AccessUserRanking" to="." method="_on_access_user_ranking_button_down"]

@@ -2,6 +2,8 @@ package cc.zhtsu.godot_tds_plugin
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.tapsdk.lc.LCLeaderboard
+import com.tapsdk.lc.LCUser
 import com.tds.achievement.TapAchievementBean
 import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
@@ -20,7 +22,8 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
             SignalInfo("onAntiAddictionReturn", Integer::class.java, String::class.java),
             SignalInfo("onTapMomentReturn", Integer::class.java, String::class.java),
             SignalInfo("OnAchievementReturn", Integer::class.java, String::class.java),
-            SignalInfo("OnGiftReturn", Integer::class.java, String::class.java)
+            SignalInfo("OnGiftReturn", Integer::class.java, String::class.java),
+            SignalInfo("OnLeaderboardReturn", Integer::class.java, String::class.java)
         )
     }
 
@@ -153,6 +156,24 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
     fun submitGiftCode(giftCode : String)
     {
         _tapSDK.submitGiftCode(giftCode)
+    }
+
+    @UsedByGodot
+    fun submitLeaderboardScore(leaderboardName : String, score : Double)
+    {
+        _tapSDK.submitLeaderboardScore(leaderboardName, score)
+    }
+
+    @UsedByGodot
+    fun accessLeaderboardSectionRankings(leaderboardName : String, start : Int, end : Int)
+    {
+        _tapSDK.accessLeaderboardSectionRankings(leaderboardName, start, end)
+    }
+
+    @UsedByGodot
+    fun accessLeaderboardUserRanking(leaderboardName : String)
+    {
+        _tapSDK.accessLeaderboardUserRanking(leaderboardName)
     }
 
     fun getShowTipsToast() : Boolean { return _showTipsToast }

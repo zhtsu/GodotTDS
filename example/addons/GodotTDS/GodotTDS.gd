@@ -6,6 +6,7 @@ signal on_anti_addiction_return(code : int, msg : String)
 signal on_tap_moment_return(code : int, msg : String)
 signal on_achievement_return(code : int, msg : String)
 signal on_gift_return(code : int, msg : String)
+signal on_leaderboard_return(code : int, msg : String)
 
 
 var _plugin_name : String = "GodotTdsPlugin"
@@ -31,23 +32,9 @@ func _ready() -> void:
 		_plugin_singleton.connect("onTapMomentReturn", _dont_call_on_anti_addiction_return)
 		_plugin_singleton.connect("OnAchievementReturn", _dont_call_on_achievement_return)
 		_plugin_singleton.connect("OnGiftReturn", _dont_call_on_gift_return)
-
-
-func call_android_function(android_func : String, args : Array = []) -> Variant:
-	if OS.has_feature("android"):
-		if args.size() == 0:
-			return _plugin_singleton.call(android_func)
-		elif args.size() == 1:
-			return _plugin_singleton.call(android_func, args[0])
-		elif args.size() == 2:
-			return _plugin_singleton.call(android_func, args[0], args[1])
-		else:
-			return null
-	else:
-		push_warning("Only works on Android")
-		return null
-
-
+		_plugin_singleton.connect("OnLeaderboardReturn", _dont_call_on_leaderboard_return)
+		
+		
 func login() -> void:
 	call_android_function("logIn")
 		
@@ -120,6 +107,18 @@ func submit_gift_code(gift_code : String) -> void:
 	call_android_function("submitGiftCode", [gift_code])
 	
 	
+func submit_leaderboard_score(leaderboard_name : String, score : float) -> void:
+	call_android_function("submitLeaderboardScore", [leaderboard_name, score])
+	
+	
+func access_leaderboard_section_rankings(leaderboard_name : String, start : int, end : int) -> void:
+	call_android_function("accessLeaderboardSectionRankings", [leaderboard_name, start, end])
+	
+	
+func access_leaderboard_user_ranking(leaderboard_name : String) -> void:
+	call_android_function("accessLeaderboardUserRanking", [leaderboard_name])
+	
+	
 # Dont call these functions from outside
 func _dont_call_on_login_return(code : int, msg : String) -> void:
 	on_login_return.emit(code, msg)
@@ -141,6 +140,10 @@ func _dont_call_on_gift_return(code : int, msg : String) -> void:
 	on_gift_return.emit(code, msg)
 	
 	
+func _dont_call_on_leaderboard_return(code : int, msg : String) -> void:
+	on_leaderboard_return.emit(code, msg)
+	
+	
 func _json_to_array(json_string : Variant) -> Array:
 	if json_string == null:
 		return []
@@ -149,3 +152,20 @@ func _json_to_array(json_string : Variant) -> Array:
 		return dict["list"]
 	else:
 		return []
+		
+		
+func call_android_function(android_func : String, args : Array = []) -> Variant:
+	if OS.has_feature("android"):
+		if args.size() == 0:
+			return _plugin_singleton.call(android_func)
+		elif args.size() == 1:
+			return _plugin_singleton.call(android_func, args[0])
+		elif args.size() == 2:
+			return _plugin_singleton.call(android_func, args[0], args[1])
+		elif args.size() == 3:
+			return _plugin_singleton.call(android_func, args[0], args[1], args[2])
+		else:
+			return null
+	else:
+		push_warning("Only works on Android")
+		return null
