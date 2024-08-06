@@ -3,6 +3,7 @@
     <application>
         <meta-data
             android:name="org.godotengine.plugin.v2.GodotTdsPlugin"
-            android:value="cc.zhtsu.godot_tds_plugin.GodotTdsPlugin" />
+            android:value="cc.zhtsu.godot_tds_plugin.GodotTdsPlugin">
+        </meta-data>
     </application>
 </manifest>

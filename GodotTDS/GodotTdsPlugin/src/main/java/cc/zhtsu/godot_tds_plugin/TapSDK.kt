@@ -51,7 +51,7 @@ class TapSDK {
     private lateinit var _antiAddictionUICallback : AntiAddictionUICallback
     private lateinit var _tapMomentCallback : TapMomentCallback
     private lateinit var _achievementCallback : AchievementCallback
-    private lateinit var _okHttpCallback : okhttp3.Callback
+    private lateinit var _giftCallback : okhttp3.Callback
     private lateinit var _leaderboardSubmitObserver : Observer<LCStatisticResult>
     private lateinit var _leaderboardSectionRankingsObserver : Observer<LCLeaderboardResult>
     private lateinit var _leaderboardUserAroundRankingsObserver : Observer<LCLeaderboardResult>
@@ -74,40 +74,38 @@ class TapSDK {
 
         _initAllCallback()
 
-        activity.let {
-            // Initialize Login
-            activity.runOnUiThread {
-                val tdsConfig = TapConfig.Builder()
-                    .withAppContext(activity)
-                    .withClientId(clientId)
-                    .withClientToken(clientToken)
-                    .withServerUrl(serverUrl)
-                    .withRegionType(TapRegionType.CN)
-                    .build()
-
-                TapBootstrap.init(activity, tdsConfig)
-
-                // Initialize Achievement if user is valid
-                if (TDSUser.currentUser() != null)
-                {
-                    TapAchievement.initData()
-                    _objectId = TDSUser.currentUser().objectId
-                }
-            }
-
-            // Initialize AntiAddiction
-            val config = Config.Builder()
+        // Initialize Login
+        activity.runOnUiThread {
+            val tdsConfig = TapConfig.Builder()
+                .withAppContext(activity)
                 .withClientId(clientId)
-                .showSwitchAccount(false)
-                .useAgeRange(false)
+                .withClientToken(clientToken)
+                .withServerUrl(serverUrl)
+                .withRegionType(TapRegionType.CN)
                 .build()
-            AntiAddictionUIKit.init(activity, config)
 
-            // Register callbacks
-            AntiAddictionUIKit.setAntiAddictionCallback(_antiAddictionUICallback)
-            TapMoment.setCallback(_tapMomentCallback)
-            TapAchievement.registerCallback(_achievementCallback)
+            TapBootstrap.init(activity, tdsConfig)
+
+            // Initialize Achievement if user is valid
+            if (TDSUser.currentUser() != null)
+            {
+                TapAchievement.initData()
+                _objectId = TDSUser.currentUser().objectId
+            }
         }
+
+        // Initialize AntiAddiction
+        val config = Config.Builder()
+            .withClientId(clientId)
+            .showSwitchAccount(false)
+            .useAgeRange(false)
+            .build()
+        AntiAddictionUIKit.init(activity, config)
+
+        // Register callbacks
+        AntiAddictionUIKit.setAntiAddictionCallback(_antiAddictionUICallback)
+        TapMoment.setCallback(_tapMomentCallback)
+        TapAchievement.registerCallback(_achievementCallback)
     }
 
     fun logIn()
@@ -279,7 +277,7 @@ class TapSDK {
             .url("https://poster-api.xd.cn/api/v1.0/cdk/game/submit-simple")
             .post(body)
             .build()
-        okHttpClient.newCall(request).enqueue(_okHttpCallback)
+        okHttpClient.newCall(request).enqueue(_giftCallback)
     }
 
     fun submitLeaderboardScore(leaderboardName : String, score : Long)
@@ -430,7 +428,7 @@ class TapSDK {
             }
         }
 
-        _okHttpCallback = object : okhttp3.Callback
+        _giftCallback = object : okhttp3.Callback
         {
             override fun onFailure(call : Call, e : IOException)
             {
