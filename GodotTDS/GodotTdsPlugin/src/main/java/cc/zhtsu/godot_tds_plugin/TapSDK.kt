@@ -69,7 +69,7 @@ class TapSDK {
 
     private var _networkAllAchievementList : List<TapAchievementBean> = listOf()
     private var _objectId : String = ""
-    private var _gameSave : TapGameSave = TapGameSave()
+    private var _gameSaves : MutableMap<String, TapGameSave> = mutableMapOf()
 
     fun init(
         activity: android.app.Activity,
@@ -314,7 +314,7 @@ class TapSDK {
         leaderboard.getAroundResults(_objectId, 0, count, selectKeys, null).subscribe(_leaderboardUserAroundRankingsObserver)
     }
 
-    fun saveGameData(name : String, summary : String, playedTime : Long, progressValue : Int, coverPath : String, gameFilePath : String, modifiedAt : Long)
+    fun submitGameSave(name : String, summary : String, playedTime : Long, progressValue : Int, coverPath : String, gameFilePath : String, modifiedAt : Long)
     {
         val snapshot = TapGameSave()
         snapshot.name = name
@@ -322,27 +322,36 @@ class TapSDK {
         snapshot.playedTime = playedTime.toDouble()
         snapshot.progressValue = progressValue
         val a = _copyAssetGetFilePath(coverPath)
-        if (a != null) {
-            Log.v("CNM", a)
+        a.let {
+            snapshot.setCover(a)
         }
-        snapshot.setCover(a)
+        Log.v("Cover path: ", a)
         val b = _copyAssetGetFilePath(gameFilePath)
-        if (b != null) {
-            Log.v("CNM", b)
+        b.let {
+            snapshot.setGameFile(b)
         }
-        snapshot.setGameFile(b)
+        Log.v("Game file path: ", b)
         snapshot.modifiedAt = Date(modifiedAt)
         snapshot.saveInBackground().subscribe(_gameSaveCreateCallback)
     }
 
-    fun accessGameData()
+    fun accessGameSaves()
     {
         TapGameSave.getCurrentUserGameSaves().subscribe(_gameSaveAccessCallback)
     }
 
-    fun deleteGameData()
+    fun deleteGameSave(gameSaveId : String)
     {
-        _gameSave.deleteInBackground().subscribe(_gameSaveDeleteCallback)
+        if (_gameSaves.containsKey(gameSaveId))
+        {
+            _gameSaves[gameSaveId]?.deleteInBackground()?.subscribe(_gameSaveDeleteCallback)
+            _gameSaves.remove(gameSaveId)
+        }
+        else
+        {
+            val msg = "Try to delete a nonexistent game save!"
+            _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", Code.GAME_SAVE_DELETE_FAIL, msg)
+        }
     }
 
     private fun _showToast(msg : String)
@@ -350,14 +359,7 @@ class TapSDK {
         if (_godotTdsPlugin.getShowTipsToast())
         {
             _activity.runOnUiThread {
-                try
-                {
-                    Toast.makeText(_activity, msg, Toast.LENGTH_SHORT).show()
-                }
-                catch (e : java.lang.Exception)
-                {
-                    Log.e("GodotTdsPlugin", e.message.toString())
-                }
+                Toast.makeText(_activity, msg, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -404,7 +406,7 @@ class TapSDK {
     {
         try
         {
-            val signTxt: String = _shaEncode(timestamp + nonceStr + _clientId)
+            val signTxt: String = _shaEncode("${timestamp}${nonceStr}${_clientId}")
             return signTxt
         }
         catch (e: java.lang.Exception)
@@ -428,19 +430,21 @@ class TapSDK {
         return jsonObject
     }
 
-    private fun _copyAssetGetFilePath(filePath : String) : String?
+    private fun _copyAssetGetFilePath(filePath : String) : String
     {
         try
         {
-            val file = File(filePath)
             val cacheDir = _activity.baseContext.cacheDir
             if (!cacheDir.exists())
             {
                 cacheDir.mkdirs()
             }
-            val outFile = File(cacheDir, _shaEncode(file.name) + "." + file.extension)
+
+            val file = File(filePath)
+            val outFile = File(cacheDir, "${_shaEncode(file.name)}.${file.extension}")
             if (outFile.exists())
             {
+                Log.v("SSSSSSSSSSSSSSSSSSSSSSSS", "")
                 return outFile.path
             }
             else
@@ -448,21 +452,25 @@ class TapSDK {
                 val res = outFile.createNewFile()
                 if (!res)
                 {
-                    return null
+                    Log.v("RRRRRRRRRRRRRRRRRRRRRRRRRR", "")
+                    return ""
                 }
             }
 
             val input : InputStream = _activity.assets.open(filePath)
-            val fos = FileOutputStream(outFile)
+            val output = FileOutputStream(outFile)
             val buffer = ByteArray(1024)
             var byteCount : Int = input.read(buffer)
-            while (byteCount != -1) {
-                fos.write(buffer, 0, byteCount)
+            while (byteCount != -1)
+            {
+                output.write(buffer, 0, byteCount)
                 byteCount = input.read(buffer)
             }
-            fos.flush()
+            output.flush()
             input.close()
-            fos.close()
+            output.close()
+
+            Log.v("TTTTTTTTTTTTTTTTTTTTTTTTTTT", "${byteCount}")
             return outFile.path
         }
         catch (e : IOException)
@@ -470,7 +478,8 @@ class TapSDK {
             e.printStackTrace()
         }
 
-        return null
+        Log.v("MMMMMMMMMMMMMMMMMMMMMMMMMMMMM", "")
+        return ""
     }
 
     private fun _initAllCallback()
@@ -511,14 +520,14 @@ class TapSDK {
 
             override fun onAchievementSDKInitFail(exception: AchievementException)
             {
-                _godotTdsPlugin.emitPluginSignal("OnAchievementReturn", Code.ACHIEVEMENT_INIT_ERROR, exception.message.toString())
+                _godotTdsPlugin.emitPluginSignal("OnAchievementReturn", Code.ACHIEVEMENT_INIT_FAIL, exception.message.toString())
             }
 
             override fun onAchievementStatusUpdate(item: TapAchievementBean?, exception: AchievementException?)
             {
                 if (exception != null)
                 {
-                    _godotTdsPlugin.emitPluginSignal("OnAchievementReturn", Code.ACHIEVEMENT_UPDATE_ERROR, exception.message.toString())
+                    _godotTdsPlugin.emitPluginSignal("OnAchievementReturn", Code.ACHIEVEMENT_UPDATE_FAIL, exception.message.toString())
                 }
 
                 if (item != null)
@@ -532,19 +541,19 @@ class TapSDK {
         {
             override fun onFailure(call : Call, e : IOException)
             {
-                _godotTdsPlugin.emitPluginSignal("OnGiftReturn", Code.GIFT_CODE_SUBMIT_ERROR, e.message.toString())
+                _godotTdsPlugin.emitPluginSignal("OnGiftReturn", Code.GIFT_CODE_SUBMIT_FAIL, e.message.toString())
             }
 
             override fun onResponse(call : Call, response : Response)
             {
-                var emptyBody : Boolean = true
+                var emptyBody = true
                 response.body?.let {
                     emptyBody = false
                     _godotTdsPlugin.emitPluginSignal("OnGiftReturn", Code.GIFT_CODE_SUBMIT_SUCCESS, it.string())
                 }
                 if (emptyBody)
                 {
-                    _godotTdsPlugin.emitPluginSignal("OnGiftReturn", Code.GIFT_CODE_SUBMIT_ERROR, "Empty body")
+                    _godotTdsPlugin.emitPluginSignal("OnGiftReturn", Code.GIFT_CODE_SUBMIT_FAIL, "Empty body")
                 }
             }
         }
@@ -560,7 +569,7 @@ class TapSDK {
 
             override fun onError(throwable : Throwable)
             {
-                _godotTdsPlugin.emitPluginSignal("OnLeaderboardReturn", Code.LEADERBOARD_SUBMIT_ERROR, throwable.message.toString())
+                _godotTdsPlugin.emitPluginSignal("OnLeaderboardReturn", Code.LEADERBOARD_SUBMIT_FAIL, throwable.message.toString())
             }
 
             override fun onComplete() {}
@@ -579,7 +588,7 @@ class TapSDK {
 
             override fun onError(throwable : Throwable)
             {
-                _godotTdsPlugin.emitPluginSignal("OnLeaderboardReturn", Code.LEADERBOARD_ACCESS_SECTION_RANKINGS_ERROR, throwable.message.toString())
+                _godotTdsPlugin.emitPluginSignal("OnLeaderboardReturn", Code.LEADERBOARD_ACCESS_SECTION_RANKINGS_FAIL, throwable.message.toString())
             }
 
             override fun onComplete() {}
@@ -598,7 +607,7 @@ class TapSDK {
 
             override fun onError(throwable : Throwable)
             {
-                _godotTdsPlugin.emitPluginSignal("OnLeaderboardReturn", Code.LEADERBOARD_ACCESS_USER_RANKING_ERROR, throwable.message.toString())
+                _godotTdsPlugin.emitPluginSignal("OnLeaderboardReturn", Code.LEADERBOARD_ACCESS_USER_RANKING_FAIL, throwable.message.toString())
             }
 
             override fun onComplete() {}
@@ -610,14 +619,15 @@ class TapSDK {
 
             override fun onNext(gameSave : TapGameSave)
             {
-                _showToast("Game save successful")
-                _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", Code.GAME_SAVE_CREATE_SUCCESS, Code.EMPTY_MSG)
+                _showToast("Submit successful")
+                _gameSaves[gameSave.objectId] = gameSave
+                _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", Code.GAME_SAVE_CREATE_SUCCESS, gameSave.objectId)
             }
 
             override fun onError(throwable : Throwable)
             {
-                _showToast("Game save failed")
-                _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", Code.GAME_SAVE_CREATE_ERROR, throwable.message.toString())
+                _showToast("Submit failed")
+                _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", Code.GAME_SAVE_CREATE_FAIL, throwable.message.toString())
             }
 
             override fun onComplete() {}
@@ -631,16 +641,25 @@ class TapSDK {
             override fun onNext(gameSaves : List<TapGameSave>)
             {
                 val jsonObject = JSONObject()
+                _gameSaves.clear()
                 for (gameSave in gameSaves)
                 {
+                    _gameSaves[gameSave.objectId] = gameSave
                     val tempJsonObject = JSONObject()
+                    tempJsonObject.put("id", gameSave.objectId)
                     tempJsonObject.put("name", gameSave.name)
                     tempJsonObject.put("summary", gameSave.summary)
                     tempJsonObject.put("modifiedAt", gameSave.modifiedAt.time)
                     tempJsonObject.put("playedTime", gameSave.playedTime.toLong())
                     tempJsonObject.put("progressValue", gameSave.progressValue)
-                    tempJsonObject.put("cover", gameSave.cover.url)
-                    tempJsonObject.put("gameFile", gameSave.gameFile.url)
+                    if (gameSave.cover == null)
+                        tempJsonObject.put("cover", "null")
+                    else
+                        tempJsonObject.put("cover", gameSave.cover.url)
+                    if (gameSave.gameFile == null)
+                        tempJsonObject.put("gameFile", "null")
+                    else
+                        tempJsonObject.put("gameFile", gameSave.gameFile.url)
                     jsonObject.append("list", tempJsonObject)
                 }
                 _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", Code.GAME_SAVE_ACCESS_SUCCESS, jsonObject.toString())
@@ -648,7 +667,7 @@ class TapSDK {
 
             override fun onError(throwable : Throwable)
             {
-                _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", Code.GAME_SAVE_ACCESS_ERROR, throwable.message.toString())
+                _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", Code.GAME_SAVE_ACCESS_FAIL, throwable.message.toString())
             }
 
             override fun onComplete() {}
@@ -661,13 +680,13 @@ class TapSDK {
             override fun onNext(response : LCNull)
             {
                 _showToast("Delete successful")
-                _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", Code.GAME_SAVE_DELETE_SUCCESS, response.toString())
+                _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", Code.GAME_SAVE_DELETE_SUCCESS, "Game save delete successful")
             }
 
             override fun onError(throwable : Throwable)
             {
                 _showToast("Delete failed")
-                _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", Code.GAME_SAVE_DELETE_ERROR, throwable.message.toString())
+                _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", Code.GAME_SAVE_DELETE_FAIL, throwable.message.toString())
             }
 
             override fun onComplete() {}

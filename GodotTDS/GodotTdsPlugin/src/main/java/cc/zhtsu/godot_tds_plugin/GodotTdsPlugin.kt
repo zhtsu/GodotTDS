@@ -3,14 +3,12 @@ package cc.zhtsu.godot_tds_plugin
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import com.tapsdk.bootstrap.gamesave.TapGameSave
 import com.tds.achievement.TapAchievementBean
 import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.SignalInfo
 import org.godotengine.godot.plugin.UsedByGodot
 import org.json.JSONObject
-import java.util.Date
 
 class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
 
@@ -179,21 +177,21 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
     }
 
     @UsedByGodot
-    fun saveGameData(name : String, summary : String, playedTime : Long, progressValue : Int, coverPath : String, gameFilePath : String, modifiedAt : Long)
+    fun submitGameSave(name : String, summary : String, playedTime : Long, progressValue : Int, coverPath : String, gameFilePath : String, modifiedAt : Long)
     {
-        _tapSDK.saveGameData(name, summary, playedTime, progressValue, coverPath, gameFilePath, modifiedAt)
+        _tapSDK.submitGameSave(name, summary, playedTime, progressValue, coverPath, gameFilePath, modifiedAt)
     }
 
     @UsedByGodot
-    fun accessGameData()
+    fun accessGameSaves()
     {
-        _tapSDK.accessGameData()
+        _tapSDK.accessGameSaves()
     }
 
     @UsedByGodot
-    fun deleteGameData()
+    fun deleteGameSave(gameSaveId : String)
     {
-        _tapSDK.deleteGameData()
+        _tapSDK.deleteGameSave(gameSaveId)
     }
 
     @UsedByGodot
