@@ -8,9 +8,10 @@ func _ready() -> void:
 	GodotTDS.on_achievement_return.connect(_on_test_return)
 	GodotTDS.on_gift_return.connect(_on_test_return)
 	GodotTDS.on_leaderboard_return.connect(_on_test_return)
+	GodotTDS.on_game_save_return.connect(_on_test_return)
 	
 	
-func _on_test_return(code : int, msg : String):
+func _on_test_return(code : int, msg : String) -> void:
 	$Code.text = str(code)
 	if code == 1006:
 		$Text.text = GodotTDS.get_network_all_achievement_list()
@@ -104,3 +105,23 @@ func _on_access_section_rankings_button_down() -> void:
 
 func _on_access_user_ranking_button_down() -> void:
 	GodotTDS.access_leaderboard_user_around_rankings("Score")
+
+
+func _on_save_game_data_button_down() -> void:
+	var game_data : GodotTDS.GameSaveData = GodotTDS.GameSaveData.new()
+	game_data.save_name = "Test"
+	game_data.summary = "This is a test game save"
+	game_data.played_time = 6000
+	game_data.progress_value = 10
+	game_data.cover_path = ProjectSettings.globalize_path("res://assets/logo.png")
+	game_data.game_file_path = ProjectSettings.globalize_path("res://assets/data.json")
+	game_data.modified_at = Time.get_unix_time_from_system() as int
+	GodotTDS.save_game_data(game_data)
+
+
+func _on_access_game_data_button_down() -> void:
+	GodotTDS.access_game_data()
+
+
+func _on_delete_game_data_button_down() -> void:
+	GodotTDS.delete_game_data()

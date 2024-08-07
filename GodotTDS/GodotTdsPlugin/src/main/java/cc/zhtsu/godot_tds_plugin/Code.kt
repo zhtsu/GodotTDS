@@ -31,6 +31,18 @@ class Code {
         @JvmStatic
         val LEADERBOARD_ACCESS_USER_RANKING_ERROR : Int = 1014
         @JvmStatic
+        val GAME_SAVE_CREATE_SUCCESS : Int = 1015
+        @JvmStatic
+        val GAME_SAVE_CREATE_ERROR : Int = 1016
+        @JvmStatic
+        val GAME_SAVE_ACCESS_SUCCESS : Int = 1017
+        @JvmStatic
+        val GAME_SAVE_ACCESS_ERROR : Int = 1018
+        @JvmStatic
+        val GAME_SAVE_DELETE_SUCCESS : Int = 1019
+        @JvmStatic
+        val GAME_SAVE_DELETE_ERROR : Int = 1020
+        @JvmStatic
         val EMPTY_MSG : String = "{}"
     }
 }
