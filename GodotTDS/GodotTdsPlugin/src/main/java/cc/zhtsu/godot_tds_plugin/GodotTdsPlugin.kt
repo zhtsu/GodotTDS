@@ -1,13 +1,16 @@
 package cc.zhtsu.godot_tds_plugin
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
+import com.tapsdk.bootstrap.gamesave.TapGameSave
 import com.tds.achievement.TapAchievementBean
 import org.godotengine.godot.Godot
 import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.SignalInfo
 import org.godotengine.godot.plugin.UsedByGodot
 import org.json.JSONObject
+import java.util.Date
 
 class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
 
@@ -21,7 +24,8 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
             SignalInfo("onTapMomentReturn", Integer::class.java, String::class.java),
             SignalInfo("OnAchievementReturn", Integer::class.java, String::class.java),
             SignalInfo("OnGiftReturn", Integer::class.java, String::class.java),
-            SignalInfo("OnLeaderboardReturn", Integer::class.java, String::class.java)
+            SignalInfo("OnLeaderboardReturn", Integer::class.java, String::class.java),
+            SignalInfo("OnGameSaveReturn", Integer::class.java, String::class.java)
         )
     }
 
@@ -172,6 +176,37 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
     fun accessLeaderboardUserAroundRankings(leaderboardName : String, count : Int)
     {
         _tapSDK.accessLeaderboardUserAroundRankings(leaderboardName, count)
+    }
+
+    @UsedByGodot
+    fun saveGameData(name : String, summary : String, playedTime : Long, progressValue : Int, coverPath : String, gameFilePath : String, modifiedAt : Long)
+    {
+        _tapSDK.saveGameData(name, summary, playedTime, progressValue, coverPath, gameFilePath, modifiedAt)
+    }
+
+    @UsedByGodot
+    fun accessGameData()
+    {
+        _tapSDK.accessGameData()
+    }
+
+    @UsedByGodot
+    fun deleteGameData()
+    {
+        _tapSDK.deleteGameData()
+    }
+
+    @UsedByGodot
+    fun PushLog(msg : String, error : Boolean)
+    {
+        if (error)
+        {
+            Log.e("GodotTdsPlugin", msg)
+        }
+        else
+        {
+            Log.v("GodotTdsPlugin", msg)
+        }
     }
 
     fun getShowTipsToast() : Boolean { return _showTipsToast }
