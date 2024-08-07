@@ -1,12 +1,19 @@
 extends Node
 
 
+# 登录相关操作的信号
 signal on_login_return(code : int, msg : String)
+# 防沉迷相关操作的信号
 signal on_anti_addiction_return(code : int, msg : String)
+# 内嵌动态相关操作的信号
 signal on_tap_moment_return(code : int, msg : String)
+# 成就相关操作的信号
 signal on_achievement_return(code : int, msg : String)
+# 礼包相关操作的信号
 signal on_gift_return(code : int, msg : String)
+# 排行榜相关操作的信号
 signal on_leaderboard_return(code : int, msg : String)
+# 云存档相关操作的信号
 signal on_game_save_return(code : int, msg : String)
 
 
@@ -24,10 +31,10 @@ class GameSaveData:
 	# played_time 的单位为毫秒
 	var played_time : int
 	var progress_value : int
-	# 被存档的封面图片的绝对路径
+	# 存档封面图片的路径
 	var cover_path : String
-	# 被存档的文件的绝对路径
-	# 确保存档文件不会被作为资源打包，否则无法获取
+	# 存档文件的路径
+	# 确保存档文件不会被作为资源打包，否则无法正常获取
 	# （存档文件一般是存放在 user:// 目录下的文件）
 	var game_file_path : String
 	# modified_at 的值应该设置为对应 Date 的时间戳
@@ -52,7 +59,7 @@ func _ready() -> void:
 		_plugin_singleton.connect("OnGameSaveReturn", _dont_call_on_game_save_return)
 		
 		
-# 调试可用
+# 调试用
 # 用来在安卓平台输出日志
 func push_log(msg : String, error : bool = false) -> void:
 	_call_android_function("PushLog", [msg, error])
@@ -172,25 +179,28 @@ func access_leaderboard_user_around_rankings(leaderboard_name : String, count : 
 	_call_android_function("accessLeaderboardUserAroundRankings", [leaderboard_name, count])
 	
 	
-# 将游戏数据保存到云存档
-# 这是一个异步操作，请处理对应的信号以获取保存结果
-func save_game_data(data : GameSaveData) -> void:
-	_call_android_function("saveGameData", [
+# 将游戏数据提交到云存档
+# 这是一个异步操作，请处理对应的信号以获取提交结果
+func submit_game_save(data : GameSaveData) -> void:
+	var cover_path = ProjectSettings.globalize_path(data.cover_path)
+	var game_file_path = ProjectSettings.globalize_path(data.game_file_path)
+	_call_android_function("submitGameSave", [
 		data.save_name, data.summary, data.played_time,
-		data.progress_value, data.cover_path, data.game_file_path, data.modified_at
+		data.progress_value, data.cover_path, game_file_path, data.modified_at
 	])
 	
 	
 # 获取当前登录用户的存档数据
 # 这是一个异步操作，请处理对应的信号以获取返回数据
-func access_game_data() -> void:
-	_call_android_function("accessGameData")
+func access_game_saves() -> void:
+	_call_android_function("accessGameSaves")
 	
 	
-# 删除当前登录用户的存档数据
+# 删除指定 Id 的存档
+# 存档的 Id 包含在通过 access_game_save 函数返回的数据中
 # 这是一个异步操作，请处理对应的信号以获取删除结果
-func delete_game_data() -> void:
-	_call_android_function("deleteGameData")
+func delete_game_save(game_save_id) -> void:
+	_call_android_function("deleteGameSave", [game_save_id])
 	
 	
 # Dont call these functions from outside
@@ -232,22 +242,33 @@ func _json_to_array(json_string : Variant) -> Array:
 		return []
 		
 		
-func _save_image(image_path : String) -> void:
-	var image : Image = load(image_path) as Image
-	image.flip_y()
-	var user_path : String = image_path.replace("res://", "user://")
+func _save_image_get_path(image_path : String) -> String:
+	var tex : Texture2D = load(image_path) as Texture2D
+	tex.get_image().flip_y()
+	
+	var unique_id : String = str(Time.get_unix_time_from_system()) + "_" + str(hash(tex.get_rid().get_id()))
+	var user_path : String = "user://" + unique_id + ".png"
+	if (FileAccess.file_exists(user_path)):
+		return ProjectSettings.globalize_path(user_path)
+		
 	var dir_path : String = user_path.get_base_dir()
-	var dir : DirAccess = DirAccess.open(user_path)
+	var dir : DirAccess = DirAccess.open(dir_path)
 	if not dir.dir_exists(dir_path):
 		var error : Error = dir.make_dir_recursive(dir_path)
-		if error != null:
+		if error != OK:
 			push_log(str(error), true)
-			return
-	var error : Error = image.save_png(user_path)
-	if error != null:
-		push_log("Failed to saving the png image", true)
+			return ""
+			
+	var g_user_path : String = ProjectSettings.globalize_path(user_path)
+	var error : Error = tex.get_image().save_png(user_path)
+	if error != OK:
+		var err_msg = "Failed to saving the png image! Error: " + str(error)
+		push_log(err_msg, true)
+		push_log("Error file: " + g_user_path, true)
 	else:
-		push_log("Save the png image successful: " + user_path)
+		push_log("Save the png image successful: " + g_user_path)
+		
+	return g_user_path
 		
 		
 func _call_android_function(android_func : String, args : Array = []) -> Variant:

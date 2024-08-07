@@ -107,21 +107,21 @@ func _on_access_user_ranking_button_down() -> void:
 	GodotTDS.access_leaderboard_user_around_rankings("Score")
 
 
-func _on_save_game_data_button_down() -> void:
+func _on_submit_game_save_button_down() -> void:
 	var game_data : GodotTDS.GameSaveData = GodotTDS.GameSaveData.new()
 	game_data.save_name = "Test"
 	game_data.summary = "This is a test game save"
 	game_data.played_time = 6000
 	game_data.progress_value = 10
-	game_data.cover_path = ProjectSettings.globalize_path("res://assets/logo.png")
-	game_data.game_file_path = ProjectSettings.globalize_path("res://assets/data.json")
+	game_data.cover_path = "res://assets/logo.png"
+	game_data.game_file_path = "res://assets/data.json"
 	game_data.modified_at = Time.get_unix_time_from_system() as int
-	GodotTDS.save_game_data(game_data)
+	GodotTDS.submit_game_save(game_data)
 
 
-func _on_access_game_data_button_down() -> void:
-	GodotTDS.access_game_data()
+func _on_access_game_saves_button_down() -> void:
+	GodotTDS.access_game_saves()
 
 
-func _on_delete_game_data_button_down() -> void:
-	GodotTDS.delete_game_data()
+func _on_delete_game_save_button_down() -> void:
+	GodotTDS.delete_game_save($GridContainer/GameSaveObjectId.text)
