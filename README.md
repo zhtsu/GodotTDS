@@ -22,7 +22,7 @@ Godot plugin for supporting TapTap Developer Services
 - [x] 成就系统
 - [x] 礼包系统
 - [x] 排行榜
-- [ ] 云存档
+- [x] 云存档
 - [ ] TapLink
 - [ ] 激励广告
 
