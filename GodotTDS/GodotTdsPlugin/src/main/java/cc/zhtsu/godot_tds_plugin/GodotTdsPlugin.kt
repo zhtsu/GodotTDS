@@ -27,49 +27,62 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
         )
     }
 
-    private var _tapSDK : TapSDK = TapSDK()
+    private val _tapAccount = Account(activity!!, this)
+    private val _tapAntiAddiction = AntiAddiction(activity!!, this)
+    private val _tapMoment = Moment(activity!!, this)
+    private val _tapAchievement = Achievement(activity!!, this)
+    private val _tapGift = Gift(activity!!, this)
+    private val _tapLeaderboard = Leaderboard(activity!!, this)
+    private val _tapGameSave = GameSave(activity!!, this)
+
     private var _showTipsToast : Boolean = true
 
     @UsedByGodot
     fun init(clientId : String, clientToken : String, serverUrl : String)
     {
-        activity?.let { _tapSDK.init(it, clientId, clientToken, serverUrl, this) }
+        _tapAccount.init(clientId, clientToken, serverUrl)
+        _tapAntiAddiction.init(clientId)
+        _tapMoment.init()
+        _tapAchievement.init()
+        _tapGift.init(clientId)
+        _tapLeaderboard.init()
+        _tapGameSave.init()
     }
 
     @UsedByGodot
     fun logIn()
     {
-        _tapSDK.logIn()
+        _tapAccount.logIn()
     }
 
     @UsedByGodot
     fun logOut()
     {
-        _tapSDK.logOut()
+        _tapAccount.logOut()
     }
 
     @UsedByGodot
     fun getUserProfile() : String
     {
-        return _tapSDK.getUserProfile()
+        return _tapAccount.getUserProfile()
     }
 
     @UsedByGodot
     fun getUserObjectId() : String
     {
-        return _tapSDK.getUserObjectId()
+        return _tapAccount.getUserObjectId()
     }
 
     @UsedByGodot
     fun isLoggedIn() : Boolean
     {
-        return _tapSDK.isLoggedIn()
+        return _tapAccount.isLoggedIn()
     }
 
     @UsedByGodot
     fun antiAddiction()
     {
-        _tapSDK.antiAddiction()
+        _tapAntiAddiction.startUpWithTapTap()
     }
 
     @UsedByGodot
@@ -81,26 +94,26 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
     @UsedByGodot
     fun tapMoment(orientation : Int)
     {
-        _tapSDK.tapMoment(orientation)
+        _tapMoment.showPage(orientation)
     }
 
     @UsedByGodot
     fun setEntryVisible(visible : Boolean)
     {
-        _tapSDK.setEntryVisible(visible)
+        _tapAccount.setEntryVisible(visible)
     }
 
     @UsedByGodot
     fun fetchAllAchievementList()
     {
-        _tapSDK.fetchAllAchievementList()
+        _tapAchievement.fetchAllAchievementList()
     }
 
     @UsedByGodot
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun getLocalAllAchievementList() : String
     {
-        val allAchievementList : List<TapAchievementBean> = _tapSDK.getLocalAllAchievementList()
+        val allAchievementList : List<TapAchievementBean> = _tapAchievement.getLocalAllAchievementList()
         val jsonObject = JSONObject()
         for (achievementBean in allAchievementList)
         {
@@ -113,7 +126,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun getNetworkAllAchievementList() : String
     {
-        val allAchievementList : List<TapAchievementBean> = _tapSDK.getNetworkAllAchievementList()
+        val allAchievementList : List<TapAchievementBean> = _tapAchievement.getNetworkAllAchievementList()
         val jsonObject = JSONObject()
         for (achievementBean in allAchievementList)
         {
@@ -125,77 +138,77 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
     @UsedByGodot
     fun showAchievementPage()
     {
-        _tapSDK.showAchievementPage()
+        _tapAchievement.showAchievementPage()
     }
 
     @UsedByGodot
     fun reachAchievement(displayId : String)
     {
-        _tapSDK.reachAchievement(displayId)
+        _tapAchievement.reachAchievement(displayId)
     }
 
     @UsedByGodot
     fun growAchievementSteps(displayId : String, steps : Int)
     {
-        _tapSDK.growAchievementSteps(displayId, steps)
+        _tapAchievement.growAchievementSteps(displayId, steps)
     }
 
     @UsedByGodot
     fun makeAchievementSteps(displayId : String, steps : Int)
     {
-        _tapSDK.makeAchievementSteps(displayId, steps)
+        _tapAchievement.makeAchievementSteps(displayId, steps)
     }
 
     @UsedByGodot
     fun setShowAchievementToast(show : Boolean)
     {
-        _tapSDK.setShowAchievementToast(show)
+        _tapAchievement.setShowAchievementToast(show)
     }
 
     @UsedByGodot
     fun submitGiftCode(giftCode : String)
     {
-        _tapSDK.submitGiftCode(giftCode)
+        _tapGift.submitGiftCode(giftCode)
     }
 
     @UsedByGodot
     fun submitLeaderboardScore(leaderboardName : String, score : Long)
     {
-        _tapSDK.submitLeaderboardScore(leaderboardName, score)
+        _tapLeaderboard.submitLeaderboardScore(leaderboardName, score)
     }
 
     @UsedByGodot
     fun accessLeaderboardSectionRankings(leaderboardName : String, start : Int, end : Int)
     {
-        _tapSDK.accessLeaderboardSectionRankings(leaderboardName, start, end)
+        _tapLeaderboard.accessLeaderboardSectionRankings(leaderboardName, start, end)
     }
 
     @UsedByGodot
     fun accessLeaderboardUserAroundRankings(leaderboardName : String, count : Int)
     {
-        _tapSDK.accessLeaderboardUserAroundRankings(leaderboardName, count)
+        _tapLeaderboard.accessLeaderboardUserAroundRankings(leaderboardName, count)
     }
 
     @UsedByGodot
     fun submitGameSave(name : String, summary : String, playedTime : Long, progressValue : Int, coverPath : String, gameFilePath : String, modifiedAt : Long)
     {
-        _tapSDK.submitGameSave(name, summary, playedTime, progressValue, coverPath, gameFilePath, modifiedAt)
+        _tapGameSave.submitGameSave(name, summary, playedTime, progressValue, coverPath, gameFilePath, modifiedAt)
     }
 
     @UsedByGodot
     fun accessGameSaves()
     {
-        _tapSDK.accessGameSaves()
+        _tapGameSave.accessGameSaves()
     }
 
     @UsedByGodot
     fun deleteGameSave(gameSaveId : String)
     {
-        _tapSDK.deleteGameSave(gameSaveId)
+        _tapGameSave.deleteGameSave(gameSaveId)
     }
 
     @UsedByGodot
-    fun PushLog(msg : String, error : Boolean)
+    fun pushLog(msg : String, error : Boolean)
     {
         if (error)
         {

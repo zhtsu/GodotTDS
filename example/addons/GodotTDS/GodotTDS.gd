@@ -62,7 +62,7 @@ func _ready() -> void:
 # 调试用
 # 用来在安卓平台输出日志
 func push_log(msg : String, error : bool = false) -> void:
-	_call_android_function("PushLog", [msg, error])
+	_call_android_function("pushLog", [msg, error])
 		
 		
 # 使用内建账户登录
