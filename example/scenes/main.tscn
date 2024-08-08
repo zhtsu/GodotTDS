@@ -215,6 +215,29 @@ grow_vertical = 0
 theme_override_font_sizes/font_size = 40
 text = "DeepLink"
 
+[node name="Panel" type="Panel" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -343.5
+offset_top = -453.0
+offset_right = 343.5
+offset_bottom = 453.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 66.0
+offset_top = 366.0
+offset_right = 626.0
+offset_bottom = 476.0
+theme_override_font_sizes/font_size = 80
+text = "从深度链接启动"
+
 [connection signal="button_down" from="GridContainer/Login" to="." method="_on_login_button_down"]
 [connection signal="button_down" from="GridContainer/Logout" to="." method="_on_logout_button_down"]
 [connection signal="button_down" from="GridContainer/AntiAddiction" to="." method="_on_anti_addiction_button_down"]

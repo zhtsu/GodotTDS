@@ -12,6 +12,7 @@ func _enter_tree():
 
 
 func _exit_tree():
+	remove_autoload_singleton("GodotTDS")
 	remove_export_plugin(export_plugin)
 	export_plugin = null
 
@@ -79,6 +80,16 @@ class AndroidExportPlugin extends EditorExportPlugin:
 		<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"></uses-permission>
 		<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
 		"""
+		
+	func _get_android_manifest_activity_element_contents(platform: EditorExportPlatform, debug: bool) -> String:
+		return """
+		<intent-filter>
+			<action android:name="android.intent.action.VIEW" />
+			<category android:name="android.intent.category.DEFAULT" />
+			<category android:name="android.intent.category.BROWSABLE" />
+			<data android:scheme="{scheme}" android:host="{host}" />
+		</intent-filter>
+		""".format({"scheme": GodotTDS.deep_link_scheme, "host": GodotTDS.deep_link_host})
 
 	func _get_name():
 		return _plugin_name

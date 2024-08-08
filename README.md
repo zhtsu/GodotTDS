@@ -23,7 +23,7 @@ Godot plugin for supporting TapTap Developer Services
 - [x] 礼包系统
 - [x] 排行榜
 - [x] 云存档
-- [ ] 深度链接
+- [x] 深度链接（需要优化）
 - [ ] 激励广告
 
 # How to use

@@ -13,8 +13,8 @@ func _ready() -> void:
 	
 	
 func _on_show_deep_link(uri : String) -> void:
-	get_tree().quit()
-	$DeepLink.Text = uri
+	$Panel.show()
+	$DeepLink.text = uri
 	
 	
 func _on_test_return(code : int, msg : String) -> void:
