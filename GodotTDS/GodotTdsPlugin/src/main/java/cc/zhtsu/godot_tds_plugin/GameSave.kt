@@ -33,8 +33,12 @@ class GameSave(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
         snapshot.summary = summary
         snapshot.playedTime = playedTime.toDouble()
         snapshot.progressValue = progressValue
-        snapshot.setCover(coverPath)
-        snapshot.setGameFile(gameFilePath)
+        try
+        {
+            snapshot.setCover(coverPath)
+            snapshot.setGameFile(gameFilePath)
+        }
+        catch (_ : java.lang.IllegalArgumentException) {}
         snapshot.modifiedAt = Date(modifiedAt)
         snapshot.saveInBackground().subscribe(_gameSaveCreateCallback)
     }

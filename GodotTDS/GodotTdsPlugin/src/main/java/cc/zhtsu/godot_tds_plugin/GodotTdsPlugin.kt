@@ -10,8 +10,8 @@ import org.godotengine.godot.plugin.SignalInfo
 import org.godotengine.godot.plugin.UsedByGodot
 import org.json.JSONObject
 
-class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
-
+class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
+{
     override fun getPluginName() = "GodotTdsPlugin"
 
     override fun getPluginSignals() : MutableSet<SignalInfo>
@@ -218,6 +218,12 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot) {
         {
             Log.v("GodotTdsPlugin", msg)
         }
+    }
+
+    @UsedByGodot
+    fun getCacheDirPath() : String
+    {
+        return activity!!.baseContext.cacheDir.absolutePath
     }
 
     fun getShowTipsToast() : Boolean { return _showTipsToast }
