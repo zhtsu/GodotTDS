@@ -23,7 +23,8 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
             SignalInfo("OnAchievementReturn", Integer::class.java, String::class.java),
             SignalInfo("OnGiftReturn", Integer::class.java, String::class.java),
             SignalInfo("OnLeaderboardReturn", Integer::class.java, String::class.java),
-            SignalInfo("OnGameSaveReturn", Integer::class.java, String::class.java)
+            SignalInfo("OnGameSaveReturn", Integer::class.java, String::class.java),
+            SignalInfo("OnTapLinkReturn", Integer::class.java, String::class.java)
         )
     }
 
@@ -104,6 +105,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     }
 
     @UsedByGodot
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun fetchAllAchievementList()
     {
         _tapAchievement.fetchAllAchievementList()
@@ -114,19 +116,6 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     fun getLocalAllAchievementList() : String
     {
         val allAchievementList : List<TapAchievementBean> = _tapAchievement.getLocalAllAchievementList()
-        val jsonObject = JSONObject()
-        for (achievementBean in allAchievementList)
-        {
-            jsonObject.append("list", achievementBean.toJson())
-        }
-        return jsonObject.toString()
-    }
-
-    @UsedByGodot
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    fun getNetworkAllAchievementList() : String
-    {
-        val allAchievementList : List<TapAchievementBean> = _tapAchievement.getNetworkAllAchievementList()
         val jsonObject = JSONObject()
         for (achievementBean in allAchievementList)
         {
@@ -178,15 +167,15 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     }
 
     @UsedByGodot
-    fun accessLeaderboardSectionRankings(leaderboardName : String, start : Int, end : Int)
+    fun fetchLeaderboardSectionRankings(leaderboardName : String, start : Int, end : Int)
     {
-        _tapLeaderboard.accessLeaderboardSectionRankings(leaderboardName, start, end)
+        _tapLeaderboard.fetchLeaderboardSectionRankings(leaderboardName, start, end)
     }
 
     @UsedByGodot
-    fun accessLeaderboardUserAroundRankings(leaderboardName : String, count : Int)
+    fun fetchLeaderboardUserAroundRankings(leaderboardName : String, count : Int)
     {
-        _tapLeaderboard.accessLeaderboardUserAroundRankings(leaderboardName, count)
+        _tapLeaderboard.fetchLeaderboardUserAroundRankings(leaderboardName, count)
     }
 
     @UsedByGodot
@@ -196,9 +185,9 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     }
 
     @UsedByGodot
-    fun accessGameSaves()
+    fun fetchGameSaves()
     {
-        _tapGameSave.accessGameSaves()
+        _tapGameSave.fetchGameSaves()
     }
 
     @UsedByGodot

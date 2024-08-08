@@ -17,8 +17,8 @@ class GameSave(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
 
     private var _gameSaves : MutableMap<String, TapGameSave> = mutableMapOf()
 
-    private lateinit var _gameSaveCreateCallback : Observer<TapGameSave>
-    private lateinit var _gameSaveAccessCallback : Observer<List<TapGameSave>>
+    private lateinit var _gameSaveSubmitCallback : Observer<TapGameSave>
+    private lateinit var _gameSaveFetchCallback : Observer<List<TapGameSave>>
     private lateinit var _gameSaveDeleteCallback : Observer<LCNull>
 
     fun init()
@@ -40,12 +40,12 @@ class GameSave(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
         }
         catch (_ : java.lang.IllegalArgumentException) {}
         snapshot.modifiedAt = Date(modifiedAt)
-        snapshot.saveInBackground().subscribe(_gameSaveCreateCallback)
+        snapshot.saveInBackground().subscribe(_gameSaveSubmitCallback)
     }
 
-    fun accessGameSaves()
+    fun fetchGameSaves()
     {
-        TapGameSave.getCurrentUserGameSaves().subscribe(_gameSaveAccessCallback)
+        TapGameSave.getCurrentUserGameSaves().subscribe(_gameSaveFetchCallback)
     }
 
     fun deleteGameSave(gameSaveId : String)
@@ -64,7 +64,7 @@ class GameSave(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
 
     override fun _initCallbacks()
     {
-        _gameSaveCreateCallback = object : Observer<TapGameSave>
+        _gameSaveSubmitCallback = object : Observer<TapGameSave>
         {
             override fun onSubscribe(d: Disposable) {}
 
@@ -72,19 +72,19 @@ class GameSave(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
             {
                 _showToast("Submit successful")
                 _gameSaves[gameSave.objectId] = gameSave
-                _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", StateCode.GAME_SAVE_CREATE_SUCCESS, gameSave.objectId)
+                _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", StateCode.GAME_SAVE_SUBMIT_SUCCESS, gameSave.objectId)
             }
 
             override fun onError(throwable : Throwable)
             {
                 _showToast("Submit failed")
-                _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", StateCode.GAME_SAVE_CREATE_FAIL, throwable.message.toString())
+                _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", StateCode.GAME_SAVE_SUBMIT_FAIL, throwable.message.toString())
             }
 
             override fun onComplete() {}
         }
 
-        _gameSaveAccessCallback = object : Observer<List<TapGameSave>>
+        _gameSaveFetchCallback = object : Observer<List<TapGameSave>>
         {
             override fun onSubscribe(d: Disposable) {}
 
@@ -113,12 +113,12 @@ class GameSave(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
                         tempJsonObject.put("gameFile", gameSave.gameFile.url)
                     jsonObject.append("list", tempJsonObject)
                 }
-                _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", StateCode.GAME_SAVE_ACCESS_SUCCESS, jsonObject.toString())
+                _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", StateCode.GAME_SAVE_FETCH_SUCCESS, jsonObject.toString())
             }
 
             override fun onError(throwable : Throwable)
             {
-                _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", StateCode.GAME_SAVE_ACCESS_FAIL, throwable.message.toString())
+                _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", StateCode.GAME_SAVE_FETCH_FAIL, throwable.message.toString())
             }
 
             override fun onComplete() {}

@@ -161,14 +161,14 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "新增排行榜分数"
 
-[node name="AccessSectionRankings" type="Button" parent="GridContainer"]
+[node name="FetchSectionRankings" type="Button" parent="GridContainer"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "获取区间排行"
 
-[node name="AccessUserRanking" type="Button" parent="GridContainer"]
+[node name="FetchUserRanking" type="Button" parent="GridContainer"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
@@ -182,7 +182,7 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "保存到云存档"
 
-[node name="AccessGameSaves" type="Button" parent="GridContainer"]
+[node name="FetchGameSaves" type="Button" parent="GridContainer"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
@@ -217,8 +217,8 @@ text = "删除云存档"
 [connection signal="button_down" from="GridContainer/GrowAchievement" to="." method="_on_grow_achievement_button_down"]
 [connection signal="button_down" from="GridContainer/SubmitGiftCode" to="." method="_on_submit_gift_code_button_down"]
 [connection signal="button_down" from="GridContainer/SubmitLeaderboardScore" to="." method="_on_submit_leaderboard_score_button_down"]
-[connection signal="button_down" from="GridContainer/AccessSectionRankings" to="." method="_on_access_section_rankings_button_down"]
-[connection signal="button_down" from="GridContainer/AccessUserRanking" to="." method="_on_access_user_ranking_button_down"]
+[connection signal="button_down" from="GridContainer/FetchSectionRankings" to="." method="_on_fetch_section_rankings_button_down"]
+[connection signal="button_down" from="GridContainer/FetchUserRanking" to="." method="_on_fetch_user_ranking_button_down"]
 [connection signal="button_down" from="GridContainer/SubmitGameSave" to="." method="_on_submit_game_save_button_down"]
-[connection signal="button_down" from="GridContainer/AccessGameSaves" to="." method="_on_access_game_saves_button_down"]
+[connection signal="button_down" from="GridContainer/FetchGameSaves" to="." method="_on_fetch_game_saves_button_down"]
 [connection signal="button_down" from="GridContainer/DeleteGameSave" to="." method="_on_delete_game_save_button_down"]

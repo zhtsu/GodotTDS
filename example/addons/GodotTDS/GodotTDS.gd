@@ -123,21 +123,16 @@ func set_show_tips_toast(show : bool) -> void:
 	
 	
 # 从 TapTap 服务器拉取所有的成就数据
-# 这是一个异步操作，请处理对应的信号并使用 get_network_all_achievement_list 方法获取返回数据
+# 这是一个异步操作，请处理对应的信号获取返回数据
 func fetch_all_achievement_list() -> void:
 	_call_android_function("fetchAllAchievementList")
 	
 	
-# 得到本地存储所有的成就数据
+# 得到本地存储存储的所有成就数据
+# 本地的成就数据会在拉取服务端数据时进行同步
+# 优先使用本地的成就数据
 func get_local_all_achievement_list() -> Array:
 	var json_str : Variant = _call_android_function("getLocalAllAchievementList")
-	return _json_to_array(json_str)
-	
-	
-# 得到拉取到的所有的成就数据
-# 请配合 fetch_all_achievement_list 函数使用
-func get_network_all_achievement_list() -> Array:
-	var json_str : Variant = _call_android_function("getNetworkAllAchievementList")
 	return _json_to_array(json_str)
 	
 	
@@ -183,15 +178,15 @@ func submit_leaderboard_score(leaderboard_name : String, score : int) -> void:
 	
 # 获取目标排行榜中指定区间的排名
 # 这是一个异步操作，请处理对应的信号以获取返回数据
-func access_leaderboard_section_rankings(leaderboard_name : String, start : int, end : int) -> void:
-	_call_android_function("accessLeaderboardSectionRankings", [leaderboard_name, start, end])
+func fetch_leaderboard_section_rankings(leaderboard_name : String, start : int, end : int) -> void:
+	_call_android_function("fetchLeaderboardSectionRankings", [leaderboard_name, start, end])
 	
 
 # 获取目标排行榜中用户周围指定个数的排名（包括用户自己）
 # 如果不指定个数（count 使用默认数值 1），则代表只获取当前用户的排名
 # 这是一个异步操作，请处理对应的信号以获取返回数据
-func access_leaderboard_user_around_rankings(leaderboard_name : String, count : int = 1) -> void:
-	_call_android_function("accessLeaderboardUserAroundRankings", [leaderboard_name, count])
+func fetch_leaderboard_user_around_rankings(leaderboard_name : String, count : int = 1) -> void:
+	_call_android_function("fetchLeaderboardUserAroundRankings", [leaderboard_name, count])
 	
 	
 # 将游戏数据提交到云存档
@@ -217,14 +212,14 @@ func submit_game_save(data : GameSaveData) -> void:
 	])
 	
 	
-# 获取当前登录用户的存档数据
+# 获取当前登录用户的所有存档数据
 # 这是一个异步操作，请处理对应的信号以获取返回数据
-func access_game_saves() -> void:
-	_call_android_function("accessGameSaves")
+func fetch_game_saves() -> void:
+	_call_android_function("fetchGameSaves")
 	
 	
 # 删除指定 Id 的存档
-# 存档的 Id 包含在通过 access_game_save 函数返回的数据中
+# 存档的 Id 包含在通过 fetch_game_saves 函数返回的数据中
 # 这是一个异步操作，请处理对应的信号以获取删除结果
 func delete_game_save(game_save_id) -> void:
 	_call_android_function("deleteGameSave", [game_save_id])
