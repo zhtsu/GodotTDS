@@ -1,7 +1,9 @@
 package cc.zhtsu.godot_tds_plugin
 
+import android.app.Activity
 import android.os.Build
 import android.util.Log
+import android.view.View
 import androidx.annotation.RequiresApi
 import com.tds.achievement.TapAchievementBean
 import org.godotengine.godot.Godot
@@ -20,11 +22,11 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
             SignalInfo("onLogInReturn", Integer::class.java, String::class.java),
             SignalInfo("onAntiAddictionReturn", Integer::class.java, String::class.java),
             SignalInfo("onTapMomentReturn", Integer::class.java, String::class.java),
-            SignalInfo("OnAchievementReturn", Integer::class.java, String::class.java),
-            SignalInfo("OnGiftReturn", Integer::class.java, String::class.java),
-            SignalInfo("OnLeaderboardReturn", Integer::class.java, String::class.java),
-            SignalInfo("OnGameSaveReturn", Integer::class.java, String::class.java),
-            SignalInfo("OnTapLinkReturn", Integer::class.java, String::class.java)
+            SignalInfo("onAchievementReturn", Integer::class.java, String::class.java),
+            SignalInfo("onGiftReturn", Integer::class.java, String::class.java),
+            SignalInfo("onLeaderboardReturn", Integer::class.java, String::class.java),
+            SignalInfo("onGameSaveReturn", Integer::class.java, String::class.java),
+            SignalInfo("onLaunchFromDeepLink", String::class.java)
         )
     }
 
@@ -213,6 +215,33 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     fun getCacheDirPath() : String
     {
         return activity!!.baseContext.cacheDir.absolutePath
+    }
+
+    override fun onMainCreate(mainActivity : Activity?) : View?
+    {
+        _emitSignalIfLaunchFromDeepLink(mainActivity)
+        return super.onMainCreate(mainActivity)
+    }
+
+    override fun onMainResume()
+    {
+        _emitSignalIfLaunchFromDeepLink(activity)
+        super.onMainResume()
+    }
+
+    private fun _emitSignalIfLaunchFromDeepLink(checkedActivity : Activity?)
+    {
+        checkedActivity?.let {
+            val currentIntent = checkedActivity.intent
+            if (currentIntent != null)
+            {
+                val uri = currentIntent.data
+                if (uri != null)
+                {
+                    emitSignal("onLaunchFromDeepLink", uri.toString())
+                }
+            }
+        }
     }
 
     fun getShowTipsToast() : Boolean { return _showTipsToast }

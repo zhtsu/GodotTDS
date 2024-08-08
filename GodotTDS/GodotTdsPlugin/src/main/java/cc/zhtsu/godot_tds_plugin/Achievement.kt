@@ -68,7 +68,7 @@ class Achievement(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
         TapAchievement.fetchAllAchievementList { achievementList, exception ->
             if (exception != null)
             {
-                _godotTdsPlugin.emitPluginSignal("OnAchievementReturn", exception.errorCode, exception.message.toString())
+                _godotTdsPlugin.emitPluginSignal("onAchievementReturn", exception.errorCode, exception.message.toString())
             }
             else
             {
@@ -77,7 +77,7 @@ class Achievement(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
                 {
                     jsonObject.append("list", achievementBean.toJson())
                 }
-                _godotTdsPlugin.emitPluginSignal("OnAchievementReturn", StateCode.ACHIEVEMENT_LIST_FETCH_SUCCESS, jsonObject.toString())
+                _godotTdsPlugin.emitPluginSignal("onAchievementReturn", StateCode.ACHIEVEMENT_LIST_FETCH_SUCCESS, jsonObject.toString())
             }
         }
     }
@@ -93,24 +93,24 @@ class Achievement(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
         {
             override fun onAchievementSDKInitSuccess()
             {
-                _godotTdsPlugin.emitPluginSignal("OnAchievementReturn", StateCode.ACHIEVEMENT_INIT_SUCCESS, StateCode.EMPTY_MSG)
+                _godotTdsPlugin.emitPluginSignal("onAchievementReturn", StateCode.ACHIEVEMENT_INIT_SUCCESS, StateCode.EMPTY_MSG)
             }
 
             override fun onAchievementSDKInitFail(exception: AchievementException)
             {
-                _godotTdsPlugin.emitPluginSignal("OnAchievementReturn", StateCode.ACHIEVEMENT_INIT_FAIL, exception.message.toString())
+                _godotTdsPlugin.emitPluginSignal("onAchievementReturn", StateCode.ACHIEVEMENT_INIT_FAIL, exception.message.toString())
             }
 
             override fun onAchievementStatusUpdate(item: TapAchievementBean?, exception: AchievementException?)
             {
                 if (exception != null)
                 {
-                    _godotTdsPlugin.emitPluginSignal("OnAchievementReturn", StateCode.ACHIEVEMENT_UPDATE_FAIL, exception.message.toString())
+                    _godotTdsPlugin.emitPluginSignal("onAchievementReturn", StateCode.ACHIEVEMENT_UPDATE_FAIL, exception.message.toString())
                 }
 
                 if (item != null)
                 {
-                    _godotTdsPlugin.emitPluginSignal("OnAchievementReturn", StateCode.ACHIEVEMENT_UPDATE_SUCCESS, item.toJson().toString())
+                    _godotTdsPlugin.emitPluginSignal("onAchievementReturn", StateCode.ACHIEVEMENT_UPDATE_SUCCESS, item.toJson().toString())
                 }
             }
         }

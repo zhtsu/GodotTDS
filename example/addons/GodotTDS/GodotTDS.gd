@@ -15,6 +15,8 @@ signal on_gift_return(code : int, msg : String)
 signal on_leaderboard_return(code : int, msg : String)
 # 云存档相关操作的信号
 signal on_game_save_return(code : int, msg : String)
+# 当程序从深度链接启动时，此信号被触发
+signal on_launch_from_deep_link(uri : String)
 
 
 enum
@@ -63,10 +65,11 @@ func _ready() -> void:
 		_plugin_singleton.connect("onLogInReturn", _dont_call_on_login_return)
 		_plugin_singleton.connect("onAntiAddictionReturn", _dont_call_on_anti_addiction_return)
 		_plugin_singleton.connect("onTapMomentReturn", _dont_call_on_anti_addiction_return)
-		_plugin_singleton.connect("OnAchievementReturn", _dont_call_on_achievement_return)
-		_plugin_singleton.connect("OnGiftReturn", _dont_call_on_gift_return)
-		_plugin_singleton.connect("OnLeaderboardReturn", _dont_call_on_leaderboard_return)
-		_plugin_singleton.connect("OnGameSaveReturn", _dont_call_on_game_save_return)
+		_plugin_singleton.connect("onAchievementReturn", _dont_call_on_achievement_return)
+		_plugin_singleton.connect("onGiftReturn", _dont_call_on_gift_return)
+		_plugin_singleton.connect("onLeaderboardReturn", _dont_call_on_leaderboard_return)
+		_plugin_singleton.connect("onGameSaveReturn", _dont_call_on_game_save_return)
+		_plugin_singleton.connect("onLaunchFromDeepLink", _dont_call_on_launch_from_deep_link_return)
 		
 		
 # 在安卓平台输出日志
@@ -252,6 +255,11 @@ func _dont_call_on_leaderboard_return(code : int, msg : String) -> void:
 	
 func _dont_call_on_game_save_return(code : int, msg : String) -> void:
 	on_game_save_return.emit(code, msg)
+	
+	
+func _dont_call_on_launch_from_deep_link_return(uri : String) -> void:
+	push_log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + uri)
+	on_launch_from_deep_link.emit(uri)
 	
 	
 func _json_to_array(json_string : Variant) -> Array:
