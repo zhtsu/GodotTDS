@@ -1,6 +1,13 @@
 extends Node
 
 
+const client_id : String = "qj7nkppf3iltbsyk4b"
+const client_token : String = "Ybw1yeEmPXCnbEu29oM1ffb5IKZAsY9bDKXHFQ1d"
+const server_url : String = "https://tapserver.zhtsu.cn"
+const deep_link_scheme : String = "tdsqj7nkppf3iltbsyk4b"
+const deep_link_host : String = "gifts"
+
+
 # 登录相关操作的信号
 signal on_login_return(code : int, msg : String)
 # 防沉迷相关操作的信号
@@ -46,21 +53,15 @@ class GameSaveData:
 	
 	
 var _plugin_name : String = "GodotTdsPlugin"
-var _plugin_singleton : Object
+var _plugin_singleton : Variant = null
+# 用来轮询检查深度链接
+var _check_timer : Timer
 
 
 func _ready() -> void:
 	if Engine.has_singleton(_plugin_name):
 		_plugin_singleton = Engine.get_singleton(_plugin_name)
-		# 替换以下配置
-		_plugin_singleton.init(
-			# clientId
-			"qj7nkppf3iltbsyk4b",
-			# clientToken
-			"Ybw1yeEmPXCnbEu29oM1ffb5IKZAsY9bDKXHFQ1d",
-			# 服务器地址（域名）
-			"https://tapserver.zhtsu.cn"
-		)
+		_plugin_singleton.init(client_id, client_token, server_url)
 			
 		_plugin_singleton.connect("onLogInReturn", _dont_call_on_login_return)
 		_plugin_singleton.connect("onAntiAddictionReturn", _dont_call_on_anti_addiction_return)
@@ -69,7 +70,7 @@ func _ready() -> void:
 		_plugin_singleton.connect("onGiftReturn", _dont_call_on_gift_return)
 		_plugin_singleton.connect("onLeaderboardReturn", _dont_call_on_leaderboard_return)
 		_plugin_singleton.connect("onGameSaveReturn", _dont_call_on_game_save_return)
-		_plugin_singleton.connect("onLaunchFromDeepLink", _dont_call_on_launch_from_deep_link_return)
+		_plugin_singleton.connect("onLaunchFromDeepLink", _dont_call_on_launch_from_deep_link)
 		
 		
 # 在安卓平台输出日志
@@ -257,8 +258,7 @@ func _dont_call_on_game_save_return(code : int, msg : String) -> void:
 	on_game_save_return.emit(code, msg)
 	
 	
-func _dont_call_on_launch_from_deep_link_return(uri : String) -> void:
-	push_log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + uri)
+func _dont_call_on_launch_from_deep_link(uri : String) -> void:
 	on_launch_from_deep_link.emit(uri)
 	
 	
@@ -319,20 +319,21 @@ func _cache_image_get_path(image_path : String) -> Array:
 		
 		
 func _call_android_function(android_func : String, args : Array = []) -> Variant:
-	if OS.has_feature("android"):
-		if args.size() == 0:
-			return _plugin_singleton.call(android_func)
-		elif args.size() == 1:
-			return _plugin_singleton.call(android_func, args[0])
-		elif args.size() == 2:
-			return _plugin_singleton.call(android_func, args[0], args[1])
-		elif args.size() == 3:
-			return _plugin_singleton.call(android_func, args[0], args[1], args[2])
-		elif args.size() == 7:
-			return _plugin_singleton.call(android_func,
-				args[0], args[1], args[2], args[3], args[4], args[5], args[6])
-		else:
-			return null
-	else:
+	if not OS.has_feature("android"):
 		push_warning("Only works on Android")
 		return null
+		
+	if args.size() == 0:
+		return _plugin_singleton.call(android_func)
+	elif args.size() == 1:
+		return _plugin_singleton.call(android_func, args[0])
+	elif args.size() == 2:
+		return _plugin_singleton.call(android_func, args[0], args[1])
+	elif args.size() == 3:
+		return _plugin_singleton.call(android_func, args[0], args[1], args[2])
+	elif args.size() == 7:
+		return _plugin_singleton.call(android_func,
+			args[0], args[1], args[2], args[3], args[4], args[5], args[6])
+	else:
+		return null
+		

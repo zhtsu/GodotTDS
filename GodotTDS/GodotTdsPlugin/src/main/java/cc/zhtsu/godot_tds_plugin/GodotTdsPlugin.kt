@@ -1,12 +1,11 @@
 package cc.zhtsu.godot_tds_plugin
 
-import android.app.Activity
 import android.os.Build
 import android.util.Log
-import android.view.View
 import androidx.annotation.RequiresApi
 import com.tds.achievement.TapAchievementBean
 import org.godotengine.godot.Godot
+import org.godotengine.godot.GodotFragment
 import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.SignalInfo
 import org.godotengine.godot.plugin.UsedByGodot
@@ -217,31 +216,15 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
         return activity!!.baseContext.cacheDir.absolutePath
     }
 
-    override fun onMainCreate(mainActivity : Activity?) : View?
+    override fun onGodotMainLoopStarted()
     {
-        _emitSignalIfLaunchFromDeepLink(mainActivity)
-        return super.onMainCreate(mainActivity)
-    }
-
-    override fun onMainResume()
-    {
-        _emitSignalIfLaunchFromDeepLink(activity)
-        super.onMainResume()
-    }
-
-    private fun _emitSignalIfLaunchFromDeepLink(checkedActivity : Activity?)
-    {
-        checkedActivity?.let {
-            val currentIntent = checkedActivity.intent
-            if (currentIntent != null)
-            {
-                val uri = currentIntent.data
-                if (uri != null)
-                {
-                    emitSignal("onLaunchFromDeepLink", uri.toString())
-                }
-            }
+        val uri = GodotFragment.getCurrentIntent().dataString
+        if (uri != null)
+        {
+            emitSignal("onLaunchFromDeepLink", uri)
         }
+
+        super.onGodotMainLoopStarted()
     }
 
     fun getShowTipsToast() : Boolean { return _showTipsToast }
