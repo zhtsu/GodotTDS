@@ -1,7 +1,9 @@
 package cc.zhtsu.godot_tds_plugin
 
-class Code {
-    companion object {
+class StateCode
+{
+    companion object
+    {
         @JvmStatic
         val LOG_IN_SUCCESS : Int = 1001
         @JvmStatic
