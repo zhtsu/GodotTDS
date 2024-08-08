@@ -1,18 +1,19 @@
 package cc.zhtsu.godot_tds_plugin
 
 import android.app.Activity
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.tapsdk.bootstrap.account.TDSUser
 import com.tds.achievement.AchievementCallback
 import com.tds.achievement.AchievementException
 import com.tds.achievement.TapAchievement
 import com.tds.achievement.TapAchievementBean
+import org.json.JSONObject
 
 class Achievement(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
 {
     override var _activity : Activity = activity
     override var _godotTdsPlugin : GodotTdsPlugin = godotTdsPlugin
-
-    private var _networkAllAchievementList : List<TapAchievementBean> = listOf()
 
     private lateinit var _achievementCallback : AchievementCallback
 
@@ -61,6 +62,7 @@ class Achievement(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
         TapAchievement.setShowToast(show)
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun fetchAllAchievementList()
     {
         TapAchievement.fetchAllAchievementList { achievementList, exception ->
@@ -70,8 +72,12 @@ class Achievement(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
             }
             else
             {
-                _godotTdsPlugin.emitPluginSignal("OnAchievementReturn", StateCode.ACHIEVEMENT_LIST_FETCH_SUCCESS, StateCode.EMPTY_MSG)
-                _networkAllAchievementList = achievementList
+                val jsonObject = JSONObject()
+                for (achievementBean in achievementList)
+                {
+                    jsonObject.append("list", achievementBean.toJson())
+                }
+                _godotTdsPlugin.emitPluginSignal("OnAchievementReturn", StateCode.ACHIEVEMENT_LIST_FETCH_SUCCESS, jsonObject.toString())
             }
         }
     }
@@ -79,11 +85,6 @@ class Achievement(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
     fun getLocalAllAchievementList() : List<TapAchievementBean>
     {
         return TapAchievement.getLocalAllAchievementList()
-    }
-
-    fun getNetworkAllAchievementList() : List<TapAchievementBean>
-    {
-        return _networkAllAchievementList
     }
 
     override fun _initCallbacks()

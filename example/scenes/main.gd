@@ -13,14 +13,7 @@ func _ready() -> void:
 	
 func _on_test_return(code : int, msg : String) -> void:
 	$Code.text = str(code)
-	if code == 1006:
-		$Text.text = GodotTDS.get_network_all_achievement_list()
-	elif code == 1001:
-		$Text.text = str(JSON.parse_string(msg))
-	elif code == 1001:
-		$Text.text = str(JSON.parse_string(msg))
-	else:
-		$Text.text = msg
+	$Text.text = msg
 	
 
 func _on_login_button_down() -> void:
@@ -99,12 +92,12 @@ func _on_submit_leaderboard_score_button_down() -> void:
 	GodotTDS.submit_leaderboard_score("Score", 100)
 
 
-func _on_access_section_rankings_button_down() -> void:
-	GodotTDS.access_leaderboard_section_rankings("Score", 0, 10)
+func _on_fetch_section_rankings_button_down() -> void:
+	GodotTDS.fetch_leaderboard_section_rankings("Score", 0, 10)
 
 
-func _on_access_user_ranking_button_down() -> void:
-	GodotTDS.access_leaderboard_user_around_rankings("Score")
+func _on_fetch_user_ranking_button_down() -> void:
+	GodotTDS.fetch_leaderboard_user_around_rankings("Score")
 
 
 func _on_submit_game_save_button_down() -> void:
@@ -119,8 +112,8 @@ func _on_submit_game_save_button_down() -> void:
 	GodotTDS.submit_game_save(game_data)
 
 
-func _on_access_game_saves_button_down() -> void:
-	GodotTDS.access_game_saves()
+func _on_fetch_game_saves_button_down() -> void:
+	GodotTDS.fetch_game_saves()
 
 
 func _on_delete_game_save_button_down() -> void:

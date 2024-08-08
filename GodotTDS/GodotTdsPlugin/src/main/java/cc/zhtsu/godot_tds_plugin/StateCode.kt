@@ -25,21 +25,21 @@ class StateCode
         @JvmStatic
         val LEADERBOARD_SUBMIT_FAIL : Int = 1010
         @JvmStatic
-        val LEADERBOARD_ACCESS_SECTION_RANKINGS_SUCCESS : Int = 1011
+        val LEADERBOARD_FETCH_SECTION_RANKINGS_SUCCESS : Int = 1011
         @JvmStatic
-        val LEADERBOARD_ACCESS_SECTION_RANKINGS_FAIL : Int = 1012
+        val LEADERBOARD_FETCH_SECTION_RANKINGS_FAIL : Int = 1012
         @JvmStatic
-        val LEADERBOARD_ACCESS_USER_RANKING_SUCCESS : Int = 1013
+        val LEADERBOARD_FETCH_USER_RANKING_SUCCESS : Int = 1013
         @JvmStatic
-        val LEADERBOARD_ACCESS_USER_RANKING_FAIL : Int = 1014
+        val LEADERBOARD_FETCH_USER_RANKING_FAIL : Int = 1014
         @JvmStatic
-        val GAME_SAVE_CREATE_SUCCESS : Int = 1015
+        val GAME_SAVE_SUBMIT_SUCCESS : Int = 1015
         @JvmStatic
-        val GAME_SAVE_CREATE_FAIL : Int = 1016
+        val GAME_SAVE_SUBMIT_FAIL : Int = 1016
         @JvmStatic
-        val GAME_SAVE_ACCESS_SUCCESS : Int = 1017
+        val GAME_SAVE_FETCH_SUCCESS : Int = 1017
         @JvmStatic
-        val GAME_SAVE_ACCESS_FAIL : Int = 1018
+        val GAME_SAVE_FETCH_FAIL : Int = 1018
         @JvmStatic
         val GAME_SAVE_DELETE_SUCCESS : Int = 1019
         @JvmStatic
