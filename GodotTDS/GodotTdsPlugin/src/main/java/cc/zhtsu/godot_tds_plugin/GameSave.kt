@@ -58,7 +58,7 @@ class GameSave(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
         else
         {
             val msg = "Try to delete a nonexistent game save!"
-            _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", StateCode.GAME_SAVE_DELETE_FAIL, msg)
+            _godotTdsPlugin.emitPluginSignal("onGameSaveReturn", StateCode.GAME_SAVE_DELETE_FAIL, msg)
         }
     }
 
@@ -72,13 +72,13 @@ class GameSave(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
             {
                 _showToast("Submit successful")
                 _gameSaves[gameSave.objectId] = gameSave
-                _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", StateCode.GAME_SAVE_SUBMIT_SUCCESS, gameSave.objectId)
+                _godotTdsPlugin.emitPluginSignal("onGameSaveReturn", StateCode.GAME_SAVE_SUBMIT_SUCCESS, gameSave.objectId)
             }
 
             override fun onError(throwable : Throwable)
             {
                 _showToast("Submit failed")
-                _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", StateCode.GAME_SAVE_SUBMIT_FAIL, throwable.message.toString())
+                _godotTdsPlugin.emitPluginSignal("onGameSaveReturn", StateCode.GAME_SAVE_SUBMIT_FAIL, throwable.message.toString())
             }
 
             override fun onComplete() {}
@@ -113,12 +113,12 @@ class GameSave(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
                         tempJsonObject.put("gameFile", gameSave.gameFile.url)
                     jsonObject.append("list", tempJsonObject)
                 }
-                _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", StateCode.GAME_SAVE_FETCH_SUCCESS, jsonObject.toString())
+                _godotTdsPlugin.emitPluginSignal("onGameSaveReturn", StateCode.GAME_SAVE_FETCH_SUCCESS, jsonObject.toString())
             }
 
             override fun onError(throwable : Throwable)
             {
-                _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", StateCode.GAME_SAVE_FETCH_FAIL, throwable.message.toString())
+                _godotTdsPlugin.emitPluginSignal("onGameSaveReturn", StateCode.GAME_SAVE_FETCH_FAIL, throwable.message.toString())
             }
 
             override fun onComplete() {}
@@ -131,13 +131,13 @@ class GameSave(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
             override fun onNext(response : LCNull)
             {
                 _showToast("Delete successful")
-                _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", StateCode.GAME_SAVE_DELETE_SUCCESS, "Game save delete successful")
+                _godotTdsPlugin.emitPluginSignal("onGameSaveReturn", StateCode.GAME_SAVE_DELETE_SUCCESS, "Game save delete successful")
             }
 
             override fun onError(throwable : Throwable)
             {
                 _showToast("Delete failed")
-                _godotTdsPlugin.emitPluginSignal("OnGameSaveReturn", StateCode.GAME_SAVE_DELETE_FAIL, throwable.message.toString())
+                _godotTdsPlugin.emitPluginSignal("onGameSaveReturn", StateCode.GAME_SAVE_DELETE_FAIL, throwable.message.toString())
             }
 
             override fun onComplete() {}

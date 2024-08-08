@@ -120,7 +120,7 @@ class Gift(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
         {
             override fun onFailure(call : Call, e : IOException)
             {
-                _godotTdsPlugin.emitPluginSignal("OnGiftReturn", StateCode.GIFT_CODE_SUBMIT_FAIL, e.message.toString())
+                _godotTdsPlugin.emitPluginSignal("onGiftReturn", StateCode.GIFT_CODE_SUBMIT_FAIL, e.message.toString())
             }
 
             override fun onResponse(call : Call, response : Response)
@@ -128,11 +128,11 @@ class Gift(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
                 var emptyBody = true
                 response.body?.let {
                     emptyBody = false
-                    _godotTdsPlugin.emitPluginSignal("OnGiftReturn", StateCode.GIFT_CODE_SUBMIT_SUCCESS, it.string())
+                    _godotTdsPlugin.emitPluginSignal("onGiftReturn", StateCode.GIFT_CODE_SUBMIT_SUCCESS, it.string())
                 }
                 if (emptyBody)
                 {
-                    _godotTdsPlugin.emitPluginSignal("OnGiftReturn", StateCode.GIFT_CODE_SUBMIT_FAIL, "Empty body")
+                    _godotTdsPlugin.emitPluginSignal("onGiftReturn", StateCode.GIFT_CODE_SUBMIT_FAIL, "Empty body")
                 }
             }
         }

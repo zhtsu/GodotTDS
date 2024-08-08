@@ -9,6 +9,12 @@ func _ready() -> void:
 	GodotTDS.on_gift_return.connect(_on_test_return)
 	GodotTDS.on_leaderboard_return.connect(_on_test_return)
 	GodotTDS.on_game_save_return.connect(_on_test_return)
+	GodotTDS.on_launch_from_deep_link.connect(_on_show_deep_link)
+	
+	
+func _on_show_deep_link(uri : String) -> void:
+	get_tree().quit()
+	$DeepLink.Text = uri
 	
 	
 func _on_test_return(code : int, msg : String) -> void:
