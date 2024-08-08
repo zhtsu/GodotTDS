@@ -17,13 +17,17 @@ signal on_leaderboard_return(code : int, msg : String)
 signal on_game_save_return(code : int, msg : String)
 
 
-var _plugin_name : String = "GodotTdsPlugin"
-var _plugin_singleton : Object
-
-const Orientation_Default : int = 0
-const Orientation_Landscape : int = 1
-const Orientation_Portrait : int = 2
-const Orientation_Sensor : int = 3
+enum
+{
+	# 使用后台配置的默认朝向
+	ORIENTATION_DEFAULT = 0,
+	# 横屏
+	ORIENTATION_LANDSCAPE = 1,
+	# 竖屏
+	ORIENTATION_PORTRAIT = 2,
+	# 根据传感器决定朝向
+	ORIENTATION_SENSOR = 3
+}
 
 class GameSaveData:
 	var save_name : String
@@ -34,21 +38,27 @@ class GameSaveData:
 	# 存档封面图片的路径
 	var cover_path : String
 	# 存档文件的路径
-	# 确保存档文件不会被作为资源打包，否则无法正常获取
-	# （存档文件一般是存放在 user:// 目录下的文件）
 	var game_file_path : String
 	# modified_at 的值应该设置为对应 Date 的时间戳
 	var modified_at : int
+	
+	
+var _plugin_name : String = "GodotTdsPlugin"
+var _plugin_singleton : Object
 
 
 func _ready() -> void:
 	if Engine.has_singleton(_plugin_name):
 		_plugin_singleton = Engine.get_singleton(_plugin_name)
-		# Configure your own client info here
+		# 替换以下配置
 		_plugin_singleton.init(
+			# clientId
 			"qj7nkppf3iltbsyk4b",
+			# clientToken
 			"Ybw1yeEmPXCnbEu29oM1ffb5IKZAsY9bDKXHFQ1d",
-			"https://server.zhtsu.cn")
+			# 服务器地址（域名）
+			"https://tapserver.zhtsu.cn"
+		)
 			
 		_plugin_singleton.connect("onLogInReturn", _dont_call_on_login_return)
 		_plugin_singleton.connect("onAntiAddictionReturn", _dont_call_on_anti_addiction_return)
@@ -59,10 +69,15 @@ func _ready() -> void:
 		_plugin_singleton.connect("OnGameSaveReturn", _dont_call_on_game_save_return)
 		
 		
-# 调试用
-# 用来在安卓平台输出日志
+# 在安卓平台输出日志
 func push_log(msg : String, error : bool = false) -> void:
 	_call_android_function("pushLog", [msg, error])
+	
+	
+# 获取安卓平台的缓存路径
+func get_cache_dir_path() -> String:
+	var cache_dir_path : Variant = _call_android_function("getCacheDirPath")
+	return "" if cache_dir_path == null else cache_dir_path
 		
 		
 # 使用内建账户登录
@@ -81,7 +96,7 @@ func anti_addiction() -> void:
 		
 		
 # 内嵌动态
-func tap_moment(orientation : int = Orientation_Default) -> void:
+func tap_moment(orientation : int = ORIENTATION_DEFAULT) -> void:
 	_call_android_function("tapMoment", [orientation])
 	
 	
@@ -182,11 +197,23 @@ func access_leaderboard_user_around_rankings(leaderboard_name : String, count : 
 # 将游戏数据提交到云存档
 # 这是一个异步操作，请处理对应的信号以获取提交结果
 func submit_game_save(data : GameSaveData) -> void:
-	var cover_path = ProjectSettings.globalize_path(data.cover_path)
-	var game_file_path = ProjectSettings.globalize_path(data.game_file_path)
+	if not OS.has_feature("android"):
+		push_warning("Only works on Android")
+		return
+		
+	var image_cache_result : Array = _cache_image_get_path(data.cover_path)
+	if image_cache_result[0] == false:
+		push_log("Invalid image! Failed to cache image!", true)
+		return
+		
+	var file_cache_result : Array = _cache_file_get_path(data.game_file_path)
+	if file_cache_result[0] == false:
+		push_log("Invalid file! Failed to cache file!", true)
+		return
+		
 	_call_android_function("submitGameSave", [
 		data.save_name, data.summary, data.played_time,
-		data.progress_value, data.cover_path, game_file_path, data.modified_at
+		data.progress_value, image_cache_result[1], file_cache_result[1], data.modified_at
 	])
 	
 	
@@ -242,33 +269,50 @@ func _json_to_array(json_string : Variant) -> Array:
 		return []
 		
 		
-func _save_image_get_path(image_path : String) -> String:
-	var tex : Texture2D = load(image_path) as Texture2D
-	tex.get_image().flip_y()
-	
-	var unique_id : String = str(Time.get_unix_time_from_system()) + "_" + str(hash(tex.get_rid().get_id()))
-	var user_path : String = "user://" + unique_id + ".png"
-	if (FileAccess.file_exists(user_path)):
-		return ProjectSettings.globalize_path(user_path)
+func _generate_unique_filepath(id : int, extension : String) -> String:
+	var date_str : String = Time.get_date_string_from_system()
+	var time_str : String = Time.get_time_string_from_system().replace(":", "-")
+	var prefix_str : String = date_str + "-" + time_str
+	var unique_id : String = prefix_str + "_" + str(hash(id))
+	var cache_dir : String = get_cache_dir_path()
+	var cache_path : String = cache_dir + "/" + unique_id + "." + extension
+	return cache_path
 		
-	var dir_path : String = user_path.get_base_dir()
-	var dir : DirAccess = DirAccess.open(dir_path)
-	if not dir.dir_exists(dir_path):
-		var error : Error = dir.make_dir_recursive(dir_path)
-		if error != OK:
-			push_log(str(error), true)
-			return ""
-			
-	var g_user_path : String = ProjectSettings.globalize_path(user_path)
-	var error : Error = tex.get_image().save_png(user_path)
+		
+func _cache_file_get_path(file_path : String) -> Array:
+	if not FileAccess.file_exists(file_path):
+		return [false, null]
+		
+	var cache_path : String = _generate_unique_filepath(hash(file_path), file_path.get_extension())
+	if FileAccess.file_exists(cache_path):
+		return [true, cache_path]
+		
+	var input_file : FileAccess = FileAccess.open(file_path, FileAccess.READ)
+	var output_file : FileAccess = FileAccess.open(cache_path, FileAccess.WRITE)
+	output_file.store_string(input_file.get_as_text())
+	
+	return [true, cache_path]
+		
+		
+func _cache_image_get_path(image_path : String) -> Array:
+	var tex : Texture2D = load(image_path) as Texture2D
+	var image : Image = tex.get_image()
+	if image == null:
+		return [false, null]
+		
+	var cache_path : String = _generate_unique_filepath(image.get_rid().get_id(), "png")
+	if FileAccess.file_exists(cache_path):
+		return [true, cache_path]
+		
+	var error : Error = image.save_png(cache_path)
 	if error != OK:
 		var err_msg = "Failed to saving the png image! Error: " + str(error)
 		push_log(err_msg, true)
-		push_log("Error file: " + g_user_path, true)
+		push_log("Error file: " + cache_path, true)
 	else:
-		push_log("Save the png image successful: " + g_user_path)
+		push_log("Save the png image successful: " + cache_path)
 		
-	return g_user_path
+	return [true, cache_path]
 		
 		
 func _call_android_function(android_func : String, args : Array = []) -> Variant:

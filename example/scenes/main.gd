@@ -32,7 +32,7 @@ func _on_anti_addiction_button_down() -> void:
 
 
 func _on_tap_moment_button_down() -> void:
-	GodotTDS.tap_moment(GodotTDS.Orientation_Portrait)
+	GodotTDS.tap_moment(GodotTDS.ORIENTATION_DEFAULT)
 
 
 func _on_logout_button_down() -> void:
@@ -109,10 +109,10 @@ func _on_access_user_ranking_button_down() -> void:
 
 func _on_submit_game_save_button_down() -> void:
 	var game_data : GodotTDS.GameSaveData = GodotTDS.GameSaveData.new()
-	game_data.save_name = "Test"
+	game_data.save_name = "GameSave"
 	game_data.summary = "This is a test game save"
 	game_data.played_time = 6000
-	game_data.progress_value = 10
+	game_data.progress_value = 60
 	game_data.cover_path = "res://assets/logo.png"
 	game_data.game_file_path = "res://assets/data.json"
 	game_data.modified_at = Time.get_unix_time_from_system() as int
