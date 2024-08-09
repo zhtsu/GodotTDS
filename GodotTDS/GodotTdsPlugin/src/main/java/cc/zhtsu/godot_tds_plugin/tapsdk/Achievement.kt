@@ -1,8 +1,11 @@
-package cc.zhtsu.godot_tds_plugin
+package cc.zhtsu.godot_tds_plugin.tapsdk
 
 import android.app.Activity
 import android.os.Build
 import androidx.annotation.RequiresApi
+import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
+import cc.zhtsu.godot_tds_plugin.StateCode
+import cc.zhtsu.godot_tds_plugin.TapTDS
 import com.tapsdk.bootstrap.account.TDSUser
 import com.tds.achievement.AchievementCallback
 import com.tds.achievement.AchievementException
@@ -77,7 +80,8 @@ class Achievement(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
                 {
                     jsonObject.append("list", achievementBean.toJson())
                 }
-                _godotTdsPlugin.emitPluginSignal("onAchievementReturn", StateCode.ACHIEVEMENT_LIST_FETCH_SUCCESS, jsonObject.toString())
+                _godotTdsPlugin.emitPluginSignal("onAchievementReturn",
+                    StateCode.ACHIEVEMENT_LIST_FETCH_SUCCESS, jsonObject.toString())
             }
         }
     }
@@ -87,30 +91,36 @@ class Achievement(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
         return TapAchievement.getLocalAllAchievementList()
     }
 
-    override fun _initCallbacks()
+    fun _initCallbacks()
     {
         _achievementCallback = object : AchievementCallback
         {
             override fun onAchievementSDKInitSuccess()
             {
-                _godotTdsPlugin.emitPluginSignal("onAchievementReturn", StateCode.ACHIEVEMENT_INIT_SUCCESS, StateCode.EMPTY_MSG)
+                _godotTdsPlugin.emitPluginSignal("onAchievementReturn",
+                    StateCode.ACHIEVEMENT_INIT_SUCCESS,
+                    "Achievement initialized successful"
+                )
             }
 
             override fun onAchievementSDKInitFail(exception: AchievementException)
             {
-                _godotTdsPlugin.emitPluginSignal("onAchievementReturn", StateCode.ACHIEVEMENT_INIT_FAIL, exception.message.toString())
+                _godotTdsPlugin.emitPluginSignal("onAchievementReturn",
+                    StateCode.ACHIEVEMENT_INIT_FAIL, exception.message.toString())
             }
 
             override fun onAchievementStatusUpdate(item: TapAchievementBean?, exception: AchievementException?)
             {
                 if (exception != null)
                 {
-                    _godotTdsPlugin.emitPluginSignal("onAchievementReturn", StateCode.ACHIEVEMENT_UPDATE_FAIL, exception.message.toString())
+                    _godotTdsPlugin.emitPluginSignal("onAchievementReturn",
+                        StateCode.ACHIEVEMENT_UPDATE_FAIL, exception.message.toString())
                 }
 
                 if (item != null)
                 {
-                    _godotTdsPlugin.emitPluginSignal("onAchievementReturn", StateCode.ACHIEVEMENT_UPDATE_SUCCESS, item.toJson().toString())
+                    _godotTdsPlugin.emitPluginSignal("onAchievementReturn",
+                        StateCode.ACHIEVEMENT_UPDATE_SUCCESS, item.toJson().toString())
                 }
             }
         }

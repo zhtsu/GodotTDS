@@ -67,18 +67,16 @@ class AndroidExportPlugin extends EditorExportPlugin:
 	func _get_android_manifest_element_contents(platform: EditorExportPlatform, debug: bool) -> String:
 		return """
 		<uses-permission android:name="android.permission.INTERNET"></uses-permission>
-		<uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
-		<uses-permission android:name="android.permission.GET_TASKS"></uses-permission>
-		<uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
 		<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
-		<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"></uses-permission>
-		<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
-		<uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
-		<uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
-		<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
-		<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
+		<uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
+		<uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"></uses-permission>
 		<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"></uses-permission>
+		<uses-permission android:name="android.permission.BLUETOOTH"/>
+		<uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
 		<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+		<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
+		<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
+		<uses-permission android:name="android.permission.POST_NOTIFICATIONS"></uses-permission>
 		"""
 		
 	func _get_android_manifest_activity_element_contents(platform: EditorExportPlatform, debug: bool) -> String:

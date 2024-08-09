@@ -34,7 +34,7 @@ enum
 	ORIENTATION_LANDSCAPE = 1,
 	# 竖屏
 	ORIENTATION_PORTRAIT = 2,
-	# 根据传感器决定朝向
+	# 根据重力传感器旋转
 	ORIENTATION_SENSOR = 3
 }
 

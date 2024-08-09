@@ -32,174 +32,206 @@ theme_override_font_sizes/font_size = 25
 text = "READY"
 wrap_mode = 1
 
-[node name="GridContainer" type="GridContainer" parent="."]
+[node name="TabContainer" type="TabContainer" parent="."]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -326.0
-offset_top = -541.0
-offset_right = 334.0
-offset_bottom = 539.0
+offset_left = -330.0
+offset_top = -555.5
+offset_right = 330.0
+offset_bottom = 555.5
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="TapSDK" type="GridContainer" parent="TabContainer"]
+layout_mode = 2
 theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
 columns = 2
 metadata/_edit_group_ = true
 
-[node name="Login" type="Button" parent="GridContainer"]
+[node name="Login" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "登录"
 
-[node name="Logout" type="Button" parent="GridContainer"]
+[node name="Logout" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "退出登录"
 
-[node name="AntiAddiction" type="Button" parent="GridContainer"]
+[node name="AntiAddiction" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "防沉迷"
 
-[node name="TapMoment" type="Button" parent="GridContainer"]
+[node name="TapMoment" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "内嵌动态"
 
-[node name="ShowEntry" type="Button" parent="GridContainer"]
+[node name="ShowEntry" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "显示悬浮窗"
 
-[node name="HideEntry" type="Button" parent="GridContainer"]
+[node name="HideEntry" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "隐藏悬浮窗"
 
-[node name="ShowTipsToast" type="Button" parent="GridContainer"]
+[node name="ShowTipsToast" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "开启提示"
 
-[node name="HideTipsToast" type="Button" parent="GridContainer"]
+[node name="HideTipsToast" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "关闭提示"
 
-[node name="GetUserProfile" type="Button" parent="GridContainer"]
+[node name="GetUserProfile" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "用户信息"
 
-[node name="AchievementToast" type="Button" parent="GridContainer"]
+[node name="AchievementToast" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "成就弹窗(开)"
 
-[node name="FetchAchievement" type="Button" parent="GridContainer"]
+[node name="FetchAchievement" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "所有成就"
 
-[node name="AchievementPage" type="Button" parent="GridContainer"]
+[node name="AchievementPage" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "成就页面"
 
-[node name="ReachAchievement" type="Button" parent="GridContainer"]
+[node name="ReachAchievement" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "单步成就"
 
-[node name="GrowAchievement" type="Button" parent="GridContainer"]
+[node name="GrowAchievement" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "分步成就"
 
-[node name="SubmitGiftCode" type="Button" parent="GridContainer"]
+[node name="SubmitGiftCode" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "提交礼品码"
 
-[node name="SubmitLeaderboardScore" type="Button" parent="GridContainer"]
+[node name="SubmitLeaderboardScore" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "更新排行榜分数"
 
-[node name="FetchSectionRankings" type="Button" parent="GridContainer"]
+[node name="FetchSectionRankings" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "获取区间排行"
 
-[node name="FetchUserRanking" type="Button" parent="GridContainer"]
+[node name="FetchUserRanking" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "获取玩家排行"
 
-[node name="SubmitGameSave" type="Button" parent="GridContainer"]
+[node name="SubmitGameSave" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "保存到云存档"
 
-[node name="FetchGameSaves" type="Button" parent="GridContainer"]
+[node name="FetchGameSaves" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "获取云存档"
 
-[node name="GameSaveObjectId" type="TextEdit" parent="GridContainer"]
+[node name="GameSaveObjectId" type="TextEdit" parent="TabContainer/TapSDK"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 25
 wrap_mode = 1
 
-[node name="DeleteGameSave" type="Button" parent="GridContainer"]
+[node name="DeleteGameSave" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "删除云存档"
+
+[node name="TapAD" type="GridContainer" parent="TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 2
+metadata/_edit_group_ = true
+
+[node name="LoadSplashAD" type="Button" parent="TabContainer/TapAD"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 48
+text = "加载开屏广告"
+
+[node name="ShowSplashAD" type="Button" parent="TabContainer/TapAD"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 48
+text = "展示开屏广告"
+
+[node name="DisposeSplashAD" type="Button" parent="TabContainer/TapAD"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 48
+text = "关闭开屏广告"
 
 [node name="DeepLink" type="Label" parent="."]
 anchors_preset = 7
@@ -238,24 +270,27 @@ offset_bottom = 476.0
 theme_override_font_sizes/font_size = 80
 text = "从深度链接启动"
 
-[connection signal="button_down" from="GridContainer/Login" to="." method="_on_login_button_down"]
-[connection signal="button_down" from="GridContainer/Logout" to="." method="_on_logout_button_down"]
-[connection signal="button_down" from="GridContainer/AntiAddiction" to="." method="_on_anti_addiction_button_down"]
-[connection signal="button_down" from="GridContainer/TapMoment" to="." method="_on_tap_moment_button_down"]
-[connection signal="button_down" from="GridContainer/ShowEntry" to="." method="_on_show_entry_button_down"]
-[connection signal="button_down" from="GridContainer/HideEntry" to="." method="_on_hide_entry_button_down"]
-[connection signal="button_down" from="GridContainer/ShowTipsToast" to="." method="_on_show_tips_toast_button_down"]
-[connection signal="button_down" from="GridContainer/HideTipsToast" to="." method="_on_hide_tips_toast_button_down"]
-[connection signal="button_down" from="GridContainer/GetUserProfile" to="." method="_on_get_user_profile_button_down"]
-[connection signal="button_down" from="GridContainer/AchievementToast" to="." method="_on_achievement_toast_button_down"]
-[connection signal="button_down" from="GridContainer/FetchAchievement" to="." method="_on_achievement_button_down"]
-[connection signal="button_down" from="GridContainer/AchievementPage" to="." method="_on_achievement_page_button_down"]
-[connection signal="button_down" from="GridContainer/ReachAchievement" to="." method="_on_reach_achievement_button_down"]
-[connection signal="button_down" from="GridContainer/GrowAchievement" to="." method="_on_grow_achievement_button_down"]
-[connection signal="button_down" from="GridContainer/SubmitGiftCode" to="." method="_on_submit_gift_code_button_down"]
-[connection signal="button_down" from="GridContainer/SubmitLeaderboardScore" to="." method="_on_submit_leaderboard_score_button_down"]
-[connection signal="button_down" from="GridContainer/FetchSectionRankings" to="." method="_on_fetch_section_rankings_button_down"]
-[connection signal="button_down" from="GridContainer/FetchUserRanking" to="." method="_on_fetch_user_ranking_button_down"]
-[connection signal="button_down" from="GridContainer/SubmitGameSave" to="." method="_on_submit_game_save_button_down"]
-[connection signal="button_down" from="GridContainer/FetchGameSaves" to="." method="_on_fetch_game_saves_button_down"]
-[connection signal="button_down" from="GridContainer/DeleteGameSave" to="." method="_on_delete_game_save_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/Login" to="." method="_on_login_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/Logout" to="." method="_on_logout_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/AntiAddiction" to="." method="_on_anti_addiction_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/TapMoment" to="." method="_on_tap_moment_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/ShowEntry" to="." method="_on_show_entry_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/HideEntry" to="." method="_on_hide_entry_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/ShowTipsToast" to="." method="_on_show_tips_toast_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/HideTipsToast" to="." method="_on_hide_tips_toast_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/GetUserProfile" to="." method="_on_get_user_profile_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/AchievementToast" to="." method="_on_achievement_toast_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/FetchAchievement" to="." method="_on_achievement_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/AchievementPage" to="." method="_on_achievement_page_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/ReachAchievement" to="." method="_on_reach_achievement_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/GrowAchievement" to="." method="_on_grow_achievement_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/SubmitGiftCode" to="." method="_on_submit_gift_code_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/SubmitLeaderboardScore" to="." method="_on_submit_leaderboard_score_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/FetchSectionRankings" to="." method="_on_fetch_section_rankings_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/FetchUserRanking" to="." method="_on_fetch_user_ranking_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/SubmitGameSave" to="." method="_on_submit_game_save_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/FetchGameSaves" to="." method="_on_fetch_game_saves_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/DeleteGameSave" to="." method="_on_delete_game_save_button_down"]
+[connection signal="button_down" from="TabContainer/TapAD/LoadSplashAD" to="." method="_on_load_splash_ad_button_down"]
+[connection signal="button_down" from="TabContainer/TapAD/ShowSplashAD" to="." method="_on_show_splash_ad_button_down"]
+[connection signal="button_down" from="TabContainer/TapAD/DisposeSplashAD" to="." method="_on_dispose_splash_ad_button_down"]

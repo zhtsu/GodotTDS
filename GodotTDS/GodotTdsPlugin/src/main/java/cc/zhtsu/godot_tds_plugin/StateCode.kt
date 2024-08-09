@@ -45,6 +45,15 @@ class StateCode
         @JvmStatic
         val GAME_SAVE_DELETE_FAIL : Int = 1020
         @JvmStatic
-        val EMPTY_MSG : String = "{}"
+        val AD_SPLASH_LOAD_SUCCESS : Int = 1021
+        @JvmStatic
+        val AD_SPLASH_SHOW_FAIL : Int = 1022
+        @JvmStatic
+        val AD_SPLASH_CLICKED : Int = 1023
+        @JvmStatic
+        val AD_SPLASH_SKIPPED : Int = 1024
+        @JvmStatic
+        val AD_SPLASH_TIME_OVER : Int = 1025
+
     }
 }
