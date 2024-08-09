@@ -124,3 +124,15 @@ func _on_fetch_game_saves_button_down() -> void:
 
 func _on_delete_game_save_button_down() -> void:
 	GodotTDS.delete_game_save($GridContainer/GameSaveObjectId.text)
+
+
+func _on_load_splash_ad_button_down() -> void:
+	GodotTDS._call_android_function("")
+
+
+func _on_show_splash_ad_button_down() -> void:
+	pass # Replace with function body.
+
+
+func _on_dispose_splash_ad_button_down() -> void:
+	pass # Replace with function body.

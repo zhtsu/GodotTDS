@@ -1,8 +1,11 @@
-package cc.zhtsu.godot_tds_plugin
+package cc.zhtsu.godot_tds_plugin.tapsdk
 
 import android.app.Activity
 import android.os.Build
 import androidx.annotation.RequiresApi
+import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
+import cc.zhtsu.godot_tds_plugin.StateCode
+import cc.zhtsu.godot_tds_plugin.TapTDS
 import com.tapsdk.bootstrap.account.TDSUser
 import com.tapsdk.lc.LCLeaderboard
 import com.tapsdk.lc.LCLeaderboardResult
@@ -64,7 +67,7 @@ class Leaderboard(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
         return jsonObject
     }
 
-    override fun _initCallbacks()
+    fun _initCallbacks()
     {
         _leaderboardSubmitObserver = object : Observer<LCStatisticResult>
         {
@@ -72,12 +75,16 @@ class Leaderboard(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
 
             override fun onNext(result : LCStatisticResult)
             {
-                _godotTdsPlugin.emitPluginSignal("onLeaderboardReturn", StateCode.LEADERBOARD_SUBMIT_SUCCESS, StateCode.EMPTY_MSG)
+                _godotTdsPlugin.emitPluginSignal("onLeaderboardReturn",
+                    StateCode.LEADERBOARD_SUBMIT_SUCCESS,
+                    result.toString()
+                )
             }
 
             override fun onError(throwable : Throwable)
             {
-                _godotTdsPlugin.emitPluginSignal("onLeaderboardReturn", StateCode.LEADERBOARD_SUBMIT_FAIL, throwable.message.toString())
+                _godotTdsPlugin.emitPluginSignal("onLeaderboardReturn",
+                    StateCode.LEADERBOARD_SUBMIT_FAIL, throwable.message.toString())
             }
 
             override fun onComplete() {}
@@ -91,12 +98,14 @@ class Leaderboard(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
             override fun onNext(leaderboardResult : LCLeaderboardResult)
             {
                 val msg : String = _rankingListToJsonObj(leaderboardResult.results).toString()
-                _godotTdsPlugin.emitPluginSignal("onLeaderboardReturn", StateCode.LEADERBOARD_FETCH_SECTION_RANKINGS_SUCCESS, msg)
+                _godotTdsPlugin.emitPluginSignal("onLeaderboardReturn",
+                    StateCode.LEADERBOARD_FETCH_SECTION_RANKINGS_SUCCESS, msg)
             }
 
             override fun onError(throwable : Throwable)
             {
-                _godotTdsPlugin.emitPluginSignal("onLeaderboardReturn", StateCode.LEADERBOARD_FETCH_SECTION_RANKINGS_FAIL, throwable.message.toString())
+                _godotTdsPlugin.emitPluginSignal("onLeaderboardReturn",
+                    StateCode.LEADERBOARD_FETCH_SECTION_RANKINGS_FAIL, throwable.message.toString())
             }
 
             override fun onComplete() {}
@@ -110,12 +119,14 @@ class Leaderboard(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
             override fun onNext(leaderboardResult : LCLeaderboardResult)
             {
                 val msg : String = _rankingListToJsonObj(leaderboardResult.results).toString()
-                _godotTdsPlugin.emitPluginSignal("onLeaderboardReturn", StateCode.LEADERBOARD_FETCH_USER_RANKING_SUCCESS, msg)
+                _godotTdsPlugin.emitPluginSignal("onLeaderboardReturn",
+                    StateCode.LEADERBOARD_FETCH_USER_RANKING_SUCCESS, msg)
             }
 
             override fun onError(throwable : Throwable)
             {
-                _godotTdsPlugin.emitPluginSignal("onLeaderboardReturn", StateCode.LEADERBOARD_FETCH_USER_RANKING_FAIL, throwable.message.toString())
+                _godotTdsPlugin.emitPluginSignal("onLeaderboardReturn",
+                    StateCode.LEADERBOARD_FETCH_USER_RANKING_FAIL, throwable.message.toString())
             }
 
             override fun onComplete() {}

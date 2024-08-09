@@ -8,8 +8,6 @@ interface TapTDS
     var _activity : Activity
     var _godotTdsPlugin : GodotTdsPlugin
 
-    fun _initCallbacks() {}
-
     fun _showToast(msg : String)
     {
         if (_godotTdsPlugin.getShowTipsToast())

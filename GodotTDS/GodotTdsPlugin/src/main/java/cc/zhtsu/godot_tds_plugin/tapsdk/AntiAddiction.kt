@@ -1,6 +1,9 @@
-package cc.zhtsu.godot_tds_plugin
+package cc.zhtsu.godot_tds_plugin.tapsdk
 
 import android.app.Activity
+import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
+import cc.zhtsu.godot_tds_plugin.StateCode
+import cc.zhtsu.godot_tds_plugin.TapTDS
 import com.tapsdk.antiaddiction.Config
 import com.tapsdk.antiaddictionui.AntiAddictionUICallback
 import com.tapsdk.antiaddictionui.AntiAddictionUIKit
@@ -40,10 +43,10 @@ class AntiAddiction(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTD
         }
     }
 
-    override fun _initCallbacks()
+    fun _initCallbacks()
     {
         _antiAddictionUICallback = AntiAddictionUICallback { code, _ ->
-            _godotTdsPlugin.emitPluginSignal("onAntiAddictionReturn", code, StateCode.EMPTY_MSG)
+            _godotTdsPlugin.emitPluginSignal("onAntiAddictionReturn", code, "Anti addiction authentication failure")
         }
     }
 }

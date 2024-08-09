@@ -1,6 +1,9 @@
-package cc.zhtsu.godot_tds_plugin
+package cc.zhtsu.godot_tds_plugin.tapsdk
 
 import android.app.Activity
+import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
+import cc.zhtsu.godot_tds_plugin.StateCode
+import cc.zhtsu.godot_tds_plugin.TapTDS
 import com.tapsdk.bootstrap.account.TDSUser
 import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaType
@@ -114,7 +117,7 @@ class Gift(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
         return hexValue.toString()
     }
 
-    override fun _initCallbacks()
+    fun _initCallbacks()
     {
         _giftCallback = object : okhttp3.Callback
         {
@@ -128,11 +131,13 @@ class Gift(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
                 var emptyBody = true
                 response.body?.let {
                     emptyBody = false
-                    _godotTdsPlugin.emitPluginSignal("onGiftReturn", StateCode.GIFT_CODE_SUBMIT_SUCCESS, it.string())
+                    _godotTdsPlugin.emitPluginSignal("onGiftReturn",
+                        StateCode.GIFT_CODE_SUBMIT_SUCCESS, it.string())
                 }
                 if (emptyBody)
                 {
-                    _godotTdsPlugin.emitPluginSignal("onGiftReturn", StateCode.GIFT_CODE_SUBMIT_FAIL, "Empty body")
+                    _godotTdsPlugin.emitPluginSignal("onGiftReturn",
+                        StateCode.GIFT_CODE_SUBMIT_FAIL, "Empty body")
                 }
             }
         }

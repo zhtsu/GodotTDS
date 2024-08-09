@@ -1,6 +1,9 @@
-package cc.zhtsu.godot_tds_plugin
+package cc.zhtsu.godot_tds_plugin.tapsdk
 
 import android.app.Activity
+import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
+import cc.zhtsu.godot_tds_plugin.StateCode
+import cc.zhtsu.godot_tds_plugin.TapTDS
 import com.tapsdk.antiaddictionui.AntiAddictionUIKit
 import com.tapsdk.bootstrap.Callback
 import com.tapsdk.bootstrap.TapBootstrap
@@ -68,7 +71,7 @@ class Account(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
         }
         else
         {
-            StateCode.EMPTY_MSG
+            "{}"
         }
     }
 
@@ -87,7 +90,7 @@ class Account(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
         }
     }
 
-    override fun _initCallbacks()
+    fun _initCallbacks()
     {
         _logInCallback = object : Callback<TDSUser>
         {
