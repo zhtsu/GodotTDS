@@ -54,6 +54,37 @@ class StateCode
         val AD_SPLASH_SKIPPED : Int = 1024
         @JvmStatic
         val AD_SPLASH_TIME_OVER : Int = 1025
-
+        @JvmStatic
+        val AD_REWARD_VIDEO_LOAD_SUCCESS : Int = 1026
+        @JvmStatic
+        val AD_REWARD_VIDEO_CACHE_SUCCESS : Int = 1027
+        @JvmStatic
+        val AD_REWARD_VIDEO_LOAD_FAIL : Int = 1028
+        @JvmStatic
+        val AD_REWARD_VIDEO_SHOWED : Int = 1029
+        @JvmStatic
+        val AD_REWARD_VIDEO_CLOSED : Int = 1030
+        @JvmStatic
+        val AD_REWARD_VIDEO_COMPLETED : Int = 1031
+        @JvmStatic
+        val AD_REWARD_VIDEO_ERROR : Int = 1032
+        @JvmStatic
+        val AD_REWARD_VIDEO_VERIFIED : Int = 1033
+        @JvmStatic
+        val AD_REWARD_VIDEO_SKIPPED : Int = 1034
+        @JvmStatic
+        val AD_REWARD_VIDEO_CLICKED : Int = 1035
+        @JvmStatic
+        val AD_BANNER_LOAD_SUCCESS : Int = 1036
+        @JvmStatic
+        val AD_BANNER_LOAD_FAIL : Int = 1037
+        @JvmStatic
+        val AD_BANNER_SHOWED : Int = 1038
+        @JvmStatic
+        val AD_BANNER_CLOSED : Int = 1039
+        @JvmStatic
+        val AD_BANNER_CLICKED : Int = 1040
+        @JvmStatic
+        val AD_BANNER_DOWNLOAD_CLICKED : Int = 1041
     }
 }

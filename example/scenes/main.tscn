@@ -33,19 +33,24 @@ text = "READY"
 wrap_mode = 1
 
 [node name="TabContainer" type="TabContainer" parent="."]
+custom_minimum_size = Vector2(660, 1200)
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -330.0
-offset_top = -555.5
+offset_top = -512.0
 offset_right = 330.0
-offset_bottom = 555.5
+offset_bottom = 688.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_font_sizes/font_size = 48
+tab_alignment = 1
+current_tab = 1
 
 [node name="TapSDK" type="GridContainer" parent="TabContainer"]
+visible = false
 layout_mode = 2
 theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
@@ -55,6 +60,7 @@ metadata/_edit_group_ = true
 [node name="Login" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
+size_flags_horizontal = 3
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "登录"
@@ -62,6 +68,7 @@ text = "登录"
 [node name="Logout" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
+size_flags_horizontal = 3
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "退出登录"
@@ -205,7 +212,6 @@ theme_override_font_sizes/font_size = 48
 text = "删除云存档"
 
 [node name="TapAD" type="GridContainer" parent="TabContainer"]
-visible = false
 layout_mode = 2
 theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
@@ -215,6 +221,7 @@ metadata/_edit_group_ = true
 [node name="LoadSplashAD" type="Button" parent="TabContainer/TapAD"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
+size_flags_horizontal = 3
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "加载开屏广告"
@@ -222,16 +229,38 @@ text = "加载开屏广告"
 [node name="ShowSplashAD" type="Button" parent="TabContainer/TapAD"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
+size_flags_horizontal = 3
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "展示开屏广告"
 
-[node name="DisposeSplashAD" type="Button" parent="TabContainer/TapAD"]
+[node name="LoadRewardVideoAD" type="Button" parent="TabContainer/TapAD"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
-text = "关闭开屏广告"
+text = "加载激励广告"
+
+[node name="ShowRewardVideoAD" type="Button" parent="TabContainer/TapAD"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 48
+text = "播放激励广告"
+
+[node name="LoadBannerAD" type="Button" parent="TabContainer/TapAD"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 48
+text = "加载横幅广告"
+
+[node name="ShowBannerAD" type="Button" parent="TabContainer/TapAD"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 48
+text = "展示横幅广告"
 
 [node name="DeepLink" type="Label" parent="."]
 anchors_preset = 7
@@ -293,4 +322,7 @@ text = "从深度链接启动"
 [connection signal="button_down" from="TabContainer/TapSDK/DeleteGameSave" to="." method="_on_delete_game_save_button_down"]
 [connection signal="button_down" from="TabContainer/TapAD/LoadSplashAD" to="." method="_on_load_splash_ad_button_down"]
 [connection signal="button_down" from="TabContainer/TapAD/ShowSplashAD" to="." method="_on_show_splash_ad_button_down"]
-[connection signal="button_down" from="TabContainer/TapAD/DisposeSplashAD" to="." method="_on_dispose_splash_ad_button_down"]
+[connection signal="button_down" from="TabContainer/TapAD/LoadRewardVideoAD" to="." method="_on_load_reward_video_ad_button_down"]
+[connection signal="button_down" from="TabContainer/TapAD/ShowRewardVideoAD" to="." method="_on_show_reward_video_ad_button_down"]
+[connection signal="button_down" from="TabContainer/TapAD/LoadBannerAD" to="." method="_on_load_banner_ad_button_down"]
+[connection signal="button_down" from="TabContainer/TapAD/ShowBannerAD" to="." method="_on_show_banner_ad_button_down"]

@@ -18,6 +18,7 @@ import cc.zhtsu.godot_tds_plugin.tapsdk.Moment
 import com.tapsdk.tapad.TapAdConfig
 import com.tapsdk.tapad.TapAdCustomController
 import com.tapsdk.tapad.TapAdManager
+import com.tapsdk.tapad.TapAdNative
 import com.tapsdk.tapad.TapAdSdk
 import com.tds.achievement.TapAchievementBean
 import org.godotengine.godot.Godot
@@ -26,6 +27,7 @@ import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.SignalInfo
 import org.godotengine.godot.plugin.UsedByGodot
 import org.json.JSONObject
+
 
 class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
 {
@@ -42,7 +44,9 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
             SignalInfo("onLeaderboardReturn", Integer::class.java, String::class.java),
             SignalInfo("onGameSaveReturn", Integer::class.java, String::class.java),
             SignalInfo("onLaunchFromDeepLink", String::class.java),
-            SignalInfo("onSplashAdReturn", Integer::class.java, String::class.java)
+            SignalInfo("onSplashAdReturn", Integer::class.java, String::class.java),
+            SignalInfo("onRewardVideoAdReturn", Integer::class.java, String::class.java),
+            SignalInfo("onBannerAdReturn", Integer::class.java, String::class.java)
         )
     }
 
@@ -56,19 +60,19 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     private val _tapLeaderboard = Leaderboard(activity!!, this)
     private val _tapGameSave = GameSave(activity!!, this)
 
-    private val _tapAdNative = TapAdManager.get().createAdNative(activity)
-    private lateinit var _tapAdnCallback: TapAdCustomController
+    private var _tapAdNative : TapAdNative? = null
+    private lateinit var _tapAdnCallback : TapAdCustomController
 
-    private val _bannerAd = BannerAD(activity!!, this, _tapAdNative)
-    private val _feedAd = FeedAD(activity!!, this, _tapAdNative)
-    private val _interstitialAd = InterstitialAD(activity!!, this, _tapAdNative)
-    private val _rewardVideoAd = RewardVideoAD(activity!!, this, _tapAdNative)
-    private val _splashAd = SplashAD(activity!!, this, _tapAdNative)
+    private val _bannerAd = BannerAD(activity!!, this)
+    private val _feedAd = FeedAD(activity!!, this)
+    private val _interstitialAd = InterstitialAD(activity!!, this)
+    private val _rewardVideoAd = RewardVideoAD(activity!!, this)
+    private val _splashAd = SplashAD(activity!!, this)
 
     @UsedByGodot
     fun init(
         clientId: String, clientToken: String, serverUrl: String,
-        mediaId: Long, mediaName: String, mediaKey: String
+        mediaId: Long, mediaName: String, mediaKey: String,
     )
     {
         _tapAccount.init(clientId, clientToken, serverUrl)
@@ -79,7 +83,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
         _tapLeaderboard.init()
         _tapGameSave.init()
 
-        _initAdSdk(mediaId, mediaName, mediaKey)
+        _initAdSdk(mediaId, mediaName, mediaKey, clientId)
     }
 
     @UsedByGodot
@@ -219,7 +223,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
         progressValue: Int,
         coverPath: String,
         gameFilePath: String,
-        modifiedAt: Long
+        modifiedAt: Long,
     )
     {
         _tapGameSave.submitGameSave(
@@ -279,6 +283,36 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
         _splashAd.dispose()
     }
 
+    @UsedByGodot
+    fun loadRewardVideoAd(
+        spaceId: Int,
+        rewardName: String,
+        rewardAmount: Int,
+        extraInfo: String,
+        gameUserId: String,
+    )
+    {
+        _rewardVideoAd.load(spaceId, rewardName, rewardAmount, extraInfo, gameUserId)
+    }
+
+    @UsedByGodot
+    fun showRewardVideoAd()
+    {
+        _rewardVideoAd.show()
+    }
+
+    @UsedByGodot
+    fun loadBannerAd(spaceId : Int)
+    {
+        _bannerAd.load(spaceId)
+    }
+
+    @UsedByGodot
+    fun showBannerAd(gravity : Int, height : Int)
+    {
+        _bannerAd.show(gravity, height)
+    }
+
     override fun onGodotMainLoopStarted()
     {
         val uri = GodotFragment.getCurrentIntent().dataString
@@ -301,25 +335,40 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
         emitSignal(signal, code, msg)
     }
 
-    private fun _initAdSdk(mediaId: Long, mediaName: String, mediaKey: String)
+    fun getTapAdNative() : TapAdNative
+    {
+        return if (_tapAdNative == null)
+        {
+            TapAdManager.get().createAdNative(activity)
+        }
+        else
+        {
+            _tapAdNative!!
+        }
+    }
+
+    private fun _initAdSdk(mediaId: Long, mediaName: String, mediaKey: String, clientId : String)
     {
         TapAdManager.get().requestPermissionIfNecessary(activity)
+
+        _initTapAdnCallback()
 
         val config = TapAdConfig.Builder()
             .withMediaId(mediaId)
             .withMediaName(mediaName)
             .withMediaKey(mediaKey)
             .withMediaVersion("1")
-            .enableDebug(true)
-            .withGameChannel("TapTap")
+            .withGameChannel("taptap2")
+            .withTapClientId(clientId)
             .shakeEnabled(false)
+            .enableDebug(true)
             .withCustomController(_tapAdnCallback)
             .build()
 
         TapAdSdk.init(activity, config)
     }
 
-    private fun initTapAdnCallback()
+    private fun _initTapAdnCallback()
     {
         _tapAdnCallback = object : TapAdCustomController()
         {

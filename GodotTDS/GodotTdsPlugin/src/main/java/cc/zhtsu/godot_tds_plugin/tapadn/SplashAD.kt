@@ -8,11 +8,10 @@ import com.tapsdk.tapad.AdRequest
 import com.tapsdk.tapad.TapAdNative
 import com.tapsdk.tapad.TapSplashAd
 
-class SplashAD(activity : Activity, godotTdsPlugin : GodotTdsPlugin, tapAdNative : TapAdNative) : TapAD
+class SplashAD(activity : Activity, godotTdsPlugin : GodotTdsPlugin) : TapAD
 {
     override var _activity: Activity = activity
     override var _godotTdsPlugin : GodotTdsPlugin = godotTdsPlugin
-    override val _tapAdNative = tapAdNative
 
     private lateinit var _loadListener : TapAdNative.SplashAdListener
     private lateinit var _interactionListener : TapSplashAd.AdInteractionListener
@@ -24,32 +23,39 @@ class SplashAD(activity : Activity, godotTdsPlugin : GodotTdsPlugin, tapAdNative
         _initCallbacks()
     }
 
-    override fun load(
-        spaceId : Int,
-        query : String,
-        rewardName : String,
-        rewardAmount : Int,
-        extraInfo : String,
-        gameUserId : String
-    )
+    fun load(spaceId : Int)
     {
         val adRequest = AdRequest.Builder()
             .withSpaceId(spaceId)
             .build()
 
-        _tapAdNative.loadSplashAd(adRequest, _loadListener)
+        _godotTdsPlugin.getTapAdNative().loadSplashAd(adRequest, _loadListener)
     }
 
-    override fun show()
+    fun show()
     {
         if (_splashAd != null)
         {
             _splashAd!!.setSplashInteractionListener(_interactionListener)
-            _splashAd!!.show(_activity)
+
+            _activity.runOnUiThread {
+                _splashAd!!.show(_activity)
+            }
         }
         else
         {
             _godotTdsPlugin.emitPluginSignal("onSplashAdReturn", StateCode.AD_SPLASH_SHOW_FAIL, "Splash AD is not loaded")
+        }
+    }
+
+    fun dispose()
+    {
+        if (_splashAd != null)
+        {
+            _splashAd!!.dispose()
+            _activity.runOnUiThread {
+                _splashAd!!.destroyView()
+            }
         }
     }
 
@@ -64,6 +70,7 @@ class SplashAD(activity : Activity, godotTdsPlugin : GodotTdsPlugin, tapAdNative
 
             override fun onSplashAdLoad(taplashAd : TapSplashAd)
             {
+                _splashAd = taplashAd
                 _godotTdsPlugin.emitPluginSignal("onSplashAdReturn", StateCode.AD_SPLASH_LOAD_SUCCESS, _splashAd.toString())
             }
         }

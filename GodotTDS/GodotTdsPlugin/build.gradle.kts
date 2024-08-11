@@ -3,8 +3,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
 }
 
-val tapSDKVersion = "3.29.2"
-val tapADVersion = "3.16.3.31"
+val tapSdkVersion = "3.29.2"
+val tapAdVersion = "3.16.3.31"
 
 android {
     namespace = "cc.zhtsu.godot_tds_plugin"
@@ -41,16 +41,23 @@ dependencies {
     implementation(libs.lc.storage.android)
     implementation(libs.lc.realtime.android)
     implementation(libs.okhttp)
-    compileOnly(files("libs/AntiAddiction_${tapSDKVersion}.aar"))
-    compileOnly(files("libs/AntiAddictionUI_${tapSDKVersion}.aar"))
-    compileOnly(files("libs/TapAD_${tapADVersion}.aar"))
-    compileOnly(files("libs/TapBootstrap_${tapSDKVersion}.aar"))
-    compileOnly(files("libs/TapCommon_${tapSDKVersion}.aar"))
-    compileOnly(files("libs/TapConnect_${tapSDKVersion}.aar"))
-    compileOnly(files("libs/TapDB_${tapSDKVersion}.aar"))
-    compileOnly(files("libs/TapLogin_${tapSDKVersion}.aar"))
-    compileOnly(files("libs/TapMoment_${tapSDKVersion}.aar"))
-    compileOnly(files("libs/TapAchievement_${tapSDKVersion}.aar"))
+    implementation(libs.rxandroid)
+    implementation(libs.rxjava)
+    implementation(libs.appcompat.v7)
+    implementation(libs.support.annotations)
+    implementation(libs.support.v4)
+    implementation(libs.glide)
+    implementation(libs.recyclerview.v7)
+    compileOnly(files("libs/AntiAddiction_${tapSdkVersion}.aar"))
+    compileOnly(files("libs/AntiAddictionUI_${tapSdkVersion}.aar"))
+    compileOnly(files("libs/TapAD_${tapAdVersion}.aar"))
+    compileOnly(files("libs/TapBootstrap_${tapSdkVersion}.aar"))
+    compileOnly(files("libs/TapCommon_${tapSdkVersion}.aar"))
+    compileOnly(files("libs/TapConnect_${tapSdkVersion}.aar"))
+    compileOnly(files("libs/TapDB_${tapSdkVersion}.aar"))
+    compileOnly(files("libs/TapLogin_${tapSdkVersion}.aar"))
+    compileOnly(files("libs/TapMoment_${tapSdkVersion}.aar"))
+    compileOnly(files("libs/TapAchievement_${tapSdkVersion}.aar"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

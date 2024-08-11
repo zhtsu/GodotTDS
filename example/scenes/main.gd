@@ -9,10 +9,13 @@ func _ready() -> void:
 	GodotTDS.on_gift_return.connect(_on_test_return)
 	GodotTDS.on_leaderboard_return.connect(_on_test_return)
 	GodotTDS.on_game_save_return.connect(_on_test_return)
-	GodotTDS.on_launch_from_deep_link.connect(_on_show_deep_link)
+	GodotTDS.on_launch_from_deep_link.connect(_on_launch_from_deep_link)
+	GodotTDS.on_splash_ad_return.connect(_on_test_return)
+	GodotTDS.on_reward_video_ad_return.connect(_on_test_return)
+	GodotTDS.on_banner_ad_return.connect(_on_test_return)
 	
 	
-func _on_show_deep_link(uri : String) -> void:
+func _on_launch_from_deep_link(uri : String) -> void:
 	$Panel.show()
 	$DeepLink.text = uri
 	
@@ -20,11 +23,11 @@ func _on_show_deep_link(uri : String) -> void:
 func _on_test_return(code : int, msg : String) -> void:
 	$Code.text = str(code)
 	$Text.text = msg
-	
-
+		
+		
 func _on_login_button_down() -> void:
 	GodotTDS.login()
-
+	
 
 func _on_anti_addiction_button_down() -> void:
 	GodotTDS.anti_addiction()
@@ -127,12 +130,30 @@ func _on_delete_game_save_button_down() -> void:
 
 
 func _on_load_splash_ad_button_down() -> void:
-	GodotTDS._call_android_function("")
+	GodotTDS.load_splash_ad(1038037)
 
 
 func _on_show_splash_ad_button_down() -> void:
-	pass # Replace with function body.
+	GodotTDS.show_splash_ad()
 
 
 func _on_dispose_splash_ad_button_down() -> void:
-	pass # Replace with function body.
+	GodotTDS.dispose_splash_ad()
+
+
+func _on_load_reward_video_ad_button_down() -> void:
+	var data : GodotTDS.RewardVideoAdData = GodotTDS.RewardVideoAdData.new()
+	data.space_id = 1037811
+	GodotTDS.load_reward_video_ad(data)
+
+
+func _on_show_reward_video_ad_button_down() -> void:
+	GodotTDS.show_reward_video_ad()
+
+
+func _on_load_banner_ad_button_down() -> void:
+	GodotTDS.load_banner_ad(1038038)
+
+
+func _on_show_banner_ad_button_down() -> void:
+	GodotTDS.show_banner_ad(GodotTDS.BANNER_GRAVITY_BOTTOM)

@@ -27,6 +27,7 @@ class AndroidExportPlugin extends EditorExportPlugin:
 
 	const tap_sdk_version : String = "3.29.2"
 	const tap_ad_version : String = "3.16.3.31"
+	const oaid_sdk_version : String = "2.5.0"
 	var tap_sdk_libs : PackedStringArray = [
 		"GodotTDS/bin/TapSDK/AntiAddiction_{0}.aar".format([tap_sdk_version]),
 		"GodotTDS/bin/TapSDK/AntiAddictionUI_{0}.aar".format([tap_sdk_version]),
@@ -56,7 +57,15 @@ class AndroidExportPlugin extends EditorExportPlugin:
 			"com.taptap:lc-realtime-android:8.2.24",
 			"androidx.core:core-ktx:1.13.1",
 			"androidx.appcompat:appcompat:1.7.0",
-			"com.squareup.okhttp3:okhttp:4.9.2"
+			"com.squareup.okhttp3:okhttp:4.9.2",
+			"io.reactivex.rxjava2:rxandroid:2.1.1",
+			"io.reactivex.rxjava2:rxjava:2.2.19",
+			"com.squareup.okhttp3:okhttp:3.12.1",
+			"com.android.support:appcompat-v7:28.0.0",
+			"com.android.support:support-annotations:28.0.0",
+			"com.android.support:support-v4:28.0.0",
+			"com.github.bumptech.glide:glide:4.9.0",
+			"com.android.support:recyclerview-v7:28.0.0"
 		])
 		
 	func _get_android_dependencies_maven_repos(platform: EditorExportPlatform, debug: bool) -> PackedStringArray:

@@ -35,9 +35,6 @@ class Moment(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
             3 -> {
                 TapMoment.open(TapMoment.ORIENTATION_SENSOR)
             }
-            else -> {
-                TapMoment.open(TapMoment.ORIENTATION_DEFAULT)
-            }
         }
     }
 

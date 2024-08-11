@@ -15,6 +15,8 @@ Godot plugin for supporting TapTap Developer Services
 
 # Feature
 
+### TapSDK
+
 - [x] 登录
 - [x] 合规认证
 - [x] 内嵌动态
@@ -23,8 +25,15 @@ Godot plugin for supporting TapTap Developer Services
 - [x] 礼包系统
 - [x] 排行榜
 - [x] 云存档
-- [x] 深度链接（需要优化）
-- [ ] 激励广告
+- [x] 深度链接（目前版本有严重缺陷，不建议使用）
+
+### TapAD
+
+- [x] 开屏广告
+- [x] 激励广告
+- [x] 横幅广告（目前只支持竖屏显示）
+- [ ] 信息流广告（目前只支持模板渲染）
+- [ ] 插屏广告
 
 # How to use
 
