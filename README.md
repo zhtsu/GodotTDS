@@ -32,12 +32,12 @@ Godot plugin for supporting TapTap Developer Services
 - [x] 开屏广告
 - [x] 激励广告
 - [x] 横幅广告（目前只支持竖屏显示）
-- [ ] 信息流广告（目前只支持模板渲染）
-- [ ] 插屏广告
+- [x] 信息流广告（目前只支持模板渲染）
+- [x] 插屏广告
 
 # How to use
 
-[B站视频教程]()
+[B站视频讲解](https://www.bilibili.com/video/BV1HoYiejEF9/)
 
 example 目录下存放的是用于展示插件功能的 Godot 项目
 
