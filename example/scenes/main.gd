@@ -89,10 +89,10 @@ var show_achievement_toast : bool = true
 func _on_achievement_toast_button_down() -> void:
 	show_achievement_toast = not show_achievement_toast
 	if show_achievement_toast:
-		$GridContainer/AchievementToast.text = "成就弹窗(开)"
+		$TabContainer/TapSDK/AchievementToast.text = "成就弹窗(开)"
 		GodotTDS.set_show_achievement_toast(show_achievement_toast)
 	else:
-		$GridContainer/AchievementToast.text = "成就弹窗(关)"
+		$TabContainer/TapSDK/AchievementToast.text = "成就弹窗(关)"
 		GodotTDS.set_show_achievement_toast(show_achievement_toast)
 
 
@@ -133,7 +133,7 @@ func _on_fetch_game_saves_button_down() -> void:
 
 
 func _on_delete_game_save_button_down() -> void:
-	GodotTDS.delete_game_save($GridContainer/GameSaveObjectId.text)
+	GodotTDS.delete_game_save($TabContainer/TapSDK/GameSaveObjectId.text)
 
 
 func _on_load_splash_ad_button_down() -> void:
