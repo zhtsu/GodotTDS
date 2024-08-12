@@ -2,3 +2,4 @@
 .godot/
 .build/
 android/
+addons/GodotTDS/config.gd
