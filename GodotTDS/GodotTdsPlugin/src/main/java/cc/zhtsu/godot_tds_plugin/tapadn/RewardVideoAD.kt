@@ -64,7 +64,7 @@ class RewardVideoAD(activity : Activity, godotTdsPlugin : GodotTdsPlugin) : TapA
         {
             override fun onError(code : Int, msg : String)
             {
-                _godotTdsPlugin.emitPluginSignal("onRewardVideoAdReturn", code, msg)
+                _godotTdsPlugin.emitPluginSignal("onRewardVideoAdReturn", code, "RewardVideoAD error: $msg")
             }
 
             override fun onRewardVideoAdLoad(rewardVideoAd : TapRewardVideoAd)
@@ -84,7 +84,7 @@ class RewardVideoAD(activity : Activity, godotTdsPlugin : GodotTdsPlugin) : TapA
         {
             override fun onAdShow()
             {
-                _godotTdsPlugin.emitPluginSignal("onRewardVideoAdReturn", StateCode.AD_REWARD_VIDEO_SHOWED, "")
+                _godotTdsPlugin.emitPluginSignal("onRewardVideoAdReturn", StateCode.AD_REWARD_VIDEO_SHOWN, "")
             }
 
             override fun onAdClose()

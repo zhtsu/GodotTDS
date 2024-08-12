@@ -47,7 +47,7 @@ class StateCode
         @JvmStatic
         val AD_SPLASH_LOAD_SUCCESS : Int = 1021
         @JvmStatic
-        val AD_SPLASH_SHOW_FAIL : Int = 1022
+        val AD_SPLASH_LOAD_FAIL : Int = 1022
         @JvmStatic
         val AD_SPLASH_CLICKED : Int = 1023
         @JvmStatic
@@ -61,7 +61,7 @@ class StateCode
         @JvmStatic
         val AD_REWARD_VIDEO_LOAD_FAIL : Int = 1028
         @JvmStatic
-        val AD_REWARD_VIDEO_SHOWED : Int = 1029
+        val AD_REWARD_VIDEO_SHOWN : Int = 1029
         @JvmStatic
         val AD_REWARD_VIDEO_CLOSED : Int = 1030
         @JvmStatic
@@ -79,7 +79,7 @@ class StateCode
         @JvmStatic
         val AD_BANNER_LOAD_FAIL : Int = 1037
         @JvmStatic
-        val AD_BANNER_SHOWED : Int = 1038
+        val AD_BANNER_SHOWN : Int = 1038
         @JvmStatic
         val AD_BANNER_CLOSED : Int = 1039
         @JvmStatic
@@ -91,10 +91,22 @@ class StateCode
         @JvmStatic
         val AD_INTERSTITIAL_LOAD_FAIL : Int = 1043
         @JvmStatic
-        val AD_INTERSTITIAL_SHOWED : Int = 1044
+        val AD_INTERSTITIAL_SHOWN : Int = 1044
         @JvmStatic
         val AD_INTERSTITIAL_CLOSED : Int = 1045
         @JvmStatic
         val AD_INTERSTITIAL_ERROR : Int = 1046
+        @JvmStatic
+        val AD_FEED_LOAD_SUCCESS : Int = 1047
+        @JvmStatic
+        val AD_FEED_LOAD_FAIL : Int = 1048
+        @JvmStatic
+        val AD_FEED_RENDER_SUCCESS : Int = 1049
+        @JvmStatic
+        val AD_FEED_SHOWN : Int = 1050
+        @JvmStatic
+        val AD_FEED_CLICKED : Int = 1051
+        @JvmStatic
+        val AD_FEED_CLOSED : Int = 1052
     }
 }

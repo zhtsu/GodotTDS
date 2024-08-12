@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
@@ -15,7 +14,7 @@ import com.tapsdk.tapad.AdRequest
 import com.tapsdk.tapad.TapAdNative
 import com.tapsdk.tapad.TapBannerAd
 
-@SuppressLint("InflateParams")
+@SuppressLint("InflateParams", "ResourceType")
 class BannerAD(activity : Activity, godotTdsPlugin : GodotTdsPlugin) : TapAD
 {
     override var _activity: Activity = activity
@@ -24,7 +23,6 @@ class BannerAD(activity : Activity, godotTdsPlugin : GodotTdsPlugin) : TapAD
     private lateinit var _bannerAdListener : TapAdNative.BannerAdListener
     private lateinit var _bannerInteractionListener : TapBannerAd.BannerInteractionListener
 
-    private var _bannerContainerId : Int = 0
     private var _bannerAd : TapBannerAd? = null
 
     init
@@ -37,13 +35,11 @@ class BannerAD(activity : Activity, godotTdsPlugin : GodotTdsPlugin) : TapAD
             val inflater = LayoutInflater.from(activity)
             val bannerLayout = inflater.inflate(R.layout.banner_container, null) as FrameLayout
 
-            bannerLayout.id = View.generateViewId()
+            bannerLayout.id = R.layout.banner_container
             val params = FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.WRAP_CONTENT
             )
-
-            _bannerContainerId = bannerLayout.id
 
             rootView.addView(bannerLayout, params)
         }
@@ -64,7 +60,7 @@ class BannerAD(activity : Activity, godotTdsPlugin : GodotTdsPlugin) : TapAD
         {
             _bannerAd!!.setBannerInteractionListener(_bannerInteractionListener)
 
-            val frameLayout = _activity.findViewById<FrameLayout>(_bannerContainerId)
+            val frameLayout = _activity.findViewById<FrameLayout>(R.layout.banner_container)
 
             val layoutParams = FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
@@ -100,7 +96,7 @@ class BannerAD(activity : Activity, godotTdsPlugin : GodotTdsPlugin) : TapAD
         {
             override fun onError(code : Int, msg : String)
             {
-                _godotTdsPlugin.emitPluginSignal("onBannerAdReturn", code, msg)
+                _godotTdsPlugin.emitPluginSignal("onBannerAdReturn", code, "BannerAD error: $msg")
             }
 
             override fun onBannerAdLoad(tapBannerAd : TapBannerAd)
@@ -114,7 +110,7 @@ class BannerAD(activity : Activity, godotTdsPlugin : GodotTdsPlugin) : TapAD
         {
             override fun onAdShow()
             {
-                _godotTdsPlugin.emitPluginSignal("onBannerAdReturn", StateCode.AD_BANNER_SHOWED, "")
+                _godotTdsPlugin.emitPluginSignal("onBannerAdReturn", StateCode.AD_BANNER_SHOWN, "")
             }
 
             override fun onAdClose()

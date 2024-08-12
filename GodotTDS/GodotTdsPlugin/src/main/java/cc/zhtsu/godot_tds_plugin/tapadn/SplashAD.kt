@@ -44,7 +44,7 @@ class SplashAD(activity : Activity, godotTdsPlugin : GodotTdsPlugin) : TapAD
         }
         else
         {
-            _godotTdsPlugin.emitPluginSignal("onSplashAdReturn", StateCode.AD_SPLASH_SHOW_FAIL, "Splash AD is not loaded")
+            _godotTdsPlugin.emitPluginSignal("onSplashAdReturn", StateCode.AD_SPLASH_LOAD_FAIL, "Splash AD is not loaded")
         }
     }
 
@@ -53,6 +53,7 @@ class SplashAD(activity : Activity, godotTdsPlugin : GodotTdsPlugin) : TapAD
         if (_splashAd != null)
         {
             _splashAd!!.dispose()
+
             _activity.runOnUiThread {
                 _splashAd!!.destroyView()
             }
@@ -65,7 +66,7 @@ class SplashAD(activity : Activity, godotTdsPlugin : GodotTdsPlugin) : TapAD
         {
             override fun onError(code : Int, msg : String)
             {
-                _godotTdsPlugin.emitPluginSignal("onSplashAdReturn", code, msg)
+                _godotTdsPlugin.emitPluginSignal("onSplashAdReturn", code, "SplashAD error: $msg")
             }
 
             override fun onSplashAdLoad(taplashAd : TapSplashAd)

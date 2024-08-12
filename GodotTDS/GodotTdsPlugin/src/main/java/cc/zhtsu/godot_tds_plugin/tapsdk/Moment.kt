@@ -41,7 +41,7 @@ class Moment(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
     fun _initCallbacks()
     {
         _tapMomentCallback = TapMomentCallback { code, msg ->
-            _godotTdsPlugin.emitPluginSignal("onTapMomentReturn", code, msg)
+            _godotTdsPlugin.emitPluginSignal("onTapMomentReturn", code, "TapMoment: $msg")
         }
     }
 }

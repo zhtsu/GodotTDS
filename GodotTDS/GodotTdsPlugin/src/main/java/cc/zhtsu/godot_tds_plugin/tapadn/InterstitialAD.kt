@@ -60,7 +60,7 @@ class InterstitialAD(activity : Activity, godotTdsPlugin : GodotTdsPlugin) : Tap
 
             override fun onError(code : Int, msg : String)
             {
-                _godotTdsPlugin.emitPluginSignal("onInterstitialAdReturn", code, msg)
+                _godotTdsPlugin.emitPluginSignal("onInterstitialAdReturn", code, "InterstitialAD error: $msg")
             }
         }
 
@@ -68,7 +68,7 @@ class InterstitialAD(activity : Activity, godotTdsPlugin : GodotTdsPlugin) : Tap
         {
             override fun onAdShow()
             {
-                _godotTdsPlugin.emitPluginSignal("onInterstitialAdReturn", StateCode.AD_INTERSTITIAL_SHOWED, "")
+                _godotTdsPlugin.emitPluginSignal("onInterstitialAdReturn", StateCode.AD_INTERSTITIAL_SHOWN, "")
             }
 
             override fun onAdClose()

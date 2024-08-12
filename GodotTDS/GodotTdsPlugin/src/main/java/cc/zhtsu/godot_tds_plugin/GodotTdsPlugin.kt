@@ -47,7 +47,8 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
             SignalInfo("onSplashAdReturn", Integer::class.java, String::class.java),
             SignalInfo("onRewardVideoAdReturn", Integer::class.java, String::class.java),
             SignalInfo("onBannerAdReturn", Integer::class.java, String::class.java),
-            SignalInfo("onInterstitialAdReturn", Integer::class.java, String::class.java)
+            SignalInfo("onInterstitialAdReturn", Integer::class.java, String::class.java),
+            SignalInfo("onFeedAdReturn", Integer::class.java, String::class.java)
         )
     }
 
@@ -324,6 +325,18 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     fun showInterstitialAd()
     {
         _interstitialAd.show()
+    }
+
+    @UsedByGodot
+    fun loadFeedAd(spaceId : Int, query : String)
+    {
+        _feedAd.load(spaceId, query)
+    }
+
+    @UsedByGodot
+    fun showFeedAd(gravity : Int, height : Int)
+    {
+        _feedAd.show(gravity, height)
     }
 
     override fun onGodotMainLoopStarted()
