@@ -96,7 +96,10 @@ class AndroidExportPlugin extends EditorExportPlugin:
 			<category android:name="android.intent.category.BROWSABLE" />
 			<data android:scheme="{scheme}" android:host="{host}" />
 		</intent-filter>
-		""".format({"scheme": GodotTDS.deep_link_scheme, "host": GodotTDS.deep_link_host})
+		""".format({
+			"scheme": GodotTDS.config.deep_link_scheme,
+			"host": GodotTDS.config.deep_link_host
+		})
 
 	func _get_name():
 		return _plugin_name

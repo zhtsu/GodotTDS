@@ -1,6 +1,9 @@
 extends Node
 
 
+const config = preload("res://addons/GodotTDS/config.gd")
+
+
 # 登录相关操作的信号
 signal on_login_return(code : int, msg : String)
 # 防沉迷相关操作的信号
@@ -77,8 +80,8 @@ func _ready() -> void:
 	if Engine.has_singleton(_plugin_name):
 		_plugin_singleton = Engine.get_singleton(_plugin_name)
 		_plugin_singleton.init(
-			client_id, client_token, server_url,
-			media_id, media_name, media_key
+			config.client_id, config.client_token, config.server_url,
+			config.media_id, config.media_name, config.media_key
 		)
 			
 		_plugin_singleton.connect("onLogInReturn", _dont_call_on_login_return)
