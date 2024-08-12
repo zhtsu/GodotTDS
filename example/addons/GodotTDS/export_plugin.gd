@@ -89,6 +89,11 @@ class AndroidExportPlugin extends EditorExportPlugin:
 		"""
 		
 	func _get_android_manifest_activity_element_contents(platform: EditorExportPlatform, debug: bool) -> String:
+		var scheme : String = ""
+		var host : String = ""
+		if Engine.has_singleton("GodotTDS"):
+			scheme = Engine.get_singleton("GodotTDS").config.deep_link_scheme
+			host = Engine.get_singleton("GodotTDS").deep_link_host
 		return """
 		<intent-filter>
 			<action android:name="android.intent.action.VIEW" />
@@ -96,10 +101,7 @@ class AndroidExportPlugin extends EditorExportPlugin:
 			<category android:name="android.intent.category.BROWSABLE" />
 			<data android:scheme="{scheme}" android:host="{host}" />
 		</intent-filter>
-		""".format({
-			"scheme": GodotTDS.config.deep_link_scheme,
-			"host": GodotTDS.config.deep_link_host
-		})
+		""".format({ "scheme": scheme, "host": host })
 
 	func _get_name():
 		return _plugin_name
