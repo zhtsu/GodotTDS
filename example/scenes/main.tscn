@@ -232,7 +232,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
-text = "展示开屏广告"
+text = "显示开屏广告"
 
 [node name="LoadRewardVideoAD" type="Button" parent="TabContainer/TapAD"]
 custom_minimum_size = Vector2(200, 80)
@@ -246,7 +246,7 @@ custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
-text = "播放激励广告"
+text = "显示激励广告"
 
 [node name="LoadBannerAD" type="Button" parent="TabContainer/TapAD"]
 custom_minimum_size = Vector2(200, 80)
@@ -260,7 +260,35 @@ custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
-text = "展示横幅广告"
+text = "显示横幅广告"
+
+[node name="LoadFeedAD" type="Button" parent="TabContainer/TapAD"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 48
+text = "加载信息流广告"
+
+[node name="ShowFeedAD" type="Button" parent="TabContainer/TapAD"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 48
+text = "显示信息流广告"
+
+[node name="LoadInterstitialAD" type="Button" parent="TabContainer/TapAD"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 48
+text = "加载插屏广告"
+
+[node name="ShowInterstitialAD" type="Button" parent="TabContainer/TapAD"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 48
+text = "显示插屏广告"
 
 [node name="DeepLink" type="Label" parent="."]
 anchors_preset = 7
@@ -326,3 +354,7 @@ text = "从深度链接启动"
 [connection signal="button_down" from="TabContainer/TapAD/ShowRewardVideoAD" to="." method="_on_show_reward_video_ad_button_down"]
 [connection signal="button_down" from="TabContainer/TapAD/LoadBannerAD" to="." method="_on_load_banner_ad_button_down"]
 [connection signal="button_down" from="TabContainer/TapAD/ShowBannerAD" to="." method="_on_show_banner_ad_button_down"]
+[connection signal="button_down" from="TabContainer/TapAD/LoadFeedAD" to="." method="_on_load_feed_ad_button_down"]
+[connection signal="button_down" from="TabContainer/TapAD/ShowFeedAD" to="." method="_on_show_feed_ad_button_down"]
+[connection signal="button_down" from="TabContainer/TapAD/LoadInterstitialAD" to="." method="_on_load_interstitial_ad_button_down"]
+[connection signal="button_down" from="TabContainer/TapAD/ShowInterstitialAD" to="." method="_on_show_interstitial_ad_button_down"]

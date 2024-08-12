@@ -13,6 +13,7 @@ func _ready() -> void:
 	GodotTDS.on_splash_ad_return.connect(_on_test_return)
 	GodotTDS.on_reward_video_ad_return.connect(_on_test_return)
 	GodotTDS.on_banner_ad_return.connect(_on_test_return)
+	GodotTDS.on_interstitial_ad_return.connect(_on_test_return)
 	
 	
 func _on_launch_from_deep_link(uri : String) -> void:
@@ -23,6 +24,8 @@ func _on_launch_from_deep_link(uri : String) -> void:
 func _on_test_return(code : int, msg : String) -> void:
 	$Code.text = str(code)
 	$Text.text = msg
+	if code == 1025:
+		GodotTDS.dispose_splash_ad()
 		
 		
 func _on_login_button_down() -> void:
@@ -157,3 +160,19 @@ func _on_load_banner_ad_button_down() -> void:
 
 func _on_show_banner_ad_button_down() -> void:
 	GodotTDS.show_banner_ad(GodotTDS.BANNER_GRAVITY_BOTTOM)
+
+
+func _on_load_feed_ad_button_down() -> void:
+	pass # Replace with function body.
+
+
+func _on_show_feed_ad_button_down() -> void:
+	pass # Replace with function body.
+
+
+func _on_load_interstitial_ad_button_down() -> void:
+	GodotTDS.load_interstitial_ad(1038040)
+
+
+func _on_show_interstitial_ad_button_down() -> void:
+	GodotTDS.show_interstitial_ad()

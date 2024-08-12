@@ -46,7 +46,8 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
             SignalInfo("onLaunchFromDeepLink", String::class.java),
             SignalInfo("onSplashAdReturn", Integer::class.java, String::class.java),
             SignalInfo("onRewardVideoAdReturn", Integer::class.java, String::class.java),
-            SignalInfo("onBannerAdReturn", Integer::class.java, String::class.java)
+            SignalInfo("onBannerAdReturn", Integer::class.java, String::class.java),
+            SignalInfo("onInterstitialAdReturn", Integer::class.java, String::class.java)
         )
     }
 
@@ -311,6 +312,18 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     fun showBannerAd(gravity : Int, height : Int)
     {
         _bannerAd.show(gravity, height)
+    }
+
+    @UsedByGodot
+    fun loadInterstitialAd(spaceId : Int)
+    {
+        _interstitialAd.load(spaceId)
+    }
+
+    @UsedByGodot
+    fun showInterstitialAd()
+    {
+        _interstitialAd.show()
     }
 
     override fun onGodotMainLoopStarted()

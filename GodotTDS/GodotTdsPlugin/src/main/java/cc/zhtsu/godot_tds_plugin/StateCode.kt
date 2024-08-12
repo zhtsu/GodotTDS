@@ -86,5 +86,15 @@ class StateCode
         val AD_BANNER_CLICKED : Int = 1040
         @JvmStatic
         val AD_BANNER_DOWNLOAD_CLICKED : Int = 1041
+        @JvmStatic
+        val AD_INTERSTITIAL_LOAD_SUCCESS : Int = 1042
+        @JvmStatic
+        val AD_INTERSTITIAL_LOAD_FAIL : Int = 1043
+        @JvmStatic
+        val AD_INTERSTITIAL_SHOWED : Int = 1044
+        @JvmStatic
+        val AD_INTERSTITIAL_CLOSED : Int = 1045
+        @JvmStatic
+        val AD_INTERSTITIAL_ERROR : Int = 1046
     }
 }
