@@ -25,7 +25,7 @@ Godot plugin for supporting TapTap Developer Services
 - [x] 礼包系统
 - [x] 排行榜
 - [x] 云存档
-- [x] 深度链接（目前版本有严重缺陷，不建议使用）
+- [x] 深度链接（目前有严重缺陷，不建议使用）
 
 ### TapAD
 
