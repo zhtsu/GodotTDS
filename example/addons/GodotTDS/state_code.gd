@@ -1,0 +1,110 @@
+extends Node
+
+
+enum
+{
+	# 登录成功
+	LOG_IN_SUCCESS = 1001,
+	# 成就数据初始化成功
+	ACHIEVEMENT_INIT_SUCCESS = 1002,
+	# 成就数据初始化失败
+	ACHIEVEMENT_INIT_FAIL = 1003,
+	# 成就更新成功（达成成就时触发）
+	ACHIEVEMENT_UPDATE_SUCCESS = 1004,
+	# 成就更新失败
+	ACHIEVEMENT_UPDATE_FAIL = 1005,
+	# 成就数据拉取成功
+	ACHIEVEMENT_LIST_FETCH_SUCCESS = 1006,
+	# 礼品码提交成功
+	GIFT_CODE_SUBMIT_SUCCESS = 1007,
+	# 礼品码提交失败
+	GIFT_CODE_SUBMIT_FAIL = 1008,
+	# 排行榜成绩提交成功
+	LEADERBOARD_SUBMIT_SUCCESS = 1009,
+	# 排行榜成绩提交失败
+	LEADERBOARD_SUBMIT_FAIL = 1010,
+	# 排行榜区间排名拉取成功
+	LEADERBOARD_FETCH_SECTION_RANKINGS_SUCCESS = 1011,
+	# 排行榜区间排名拉取失败
+	LEADERBOARD_FETCH_SECTION_RANKINGS_FAIL = 1012,
+	# 排行榜用户排名拉取成功
+	LEADERBOARD_FETCH_USER_RANKING_SUCCESS = 1013,
+	# 排行榜用户排名拉取失败
+	LEADERBOARD_FETCH_USER_RANKING_FAIL = 1014,
+	# 游戏存档提交成功
+	GAME_SAVE_SUBMIT_SUCCESS = 1015,
+	# 游戏存档提交失败
+	GAME_SAVE_SUBMIT_FAIL = 1016,
+	# 游戏存档拉取成功
+	GAME_SAVE_FETCH_SUCCESS = 1017,
+	# 游戏存档拉取失败
+	GAME_SAVE_FETCH_FAIL = 1018,
+	# 游戏存档删除成功
+	GAME_SAVE_DELETE_SUCCESS = 1019,
+	# 游戏存档删除失败
+	GAME_SAVE_DELETE_FAIL = 1020,
+	# 开屏广告加载成功
+	AD_SPLASH_LOAD_SUCCESS = 1021,
+	# 开屏广告加载失败
+	AD_SPLASH_LOAD_FAIL = 1022,
+	# 开屏广告被点击
+	AD_SPLASH_CLICKED = 1023,
+	# 开屏广告被跳过
+	AD_SPLASH_SKIPPED = 1024,
+	# 开屏广告倒计时结束
+	AD_SPLASH_TIME_OVER = 1025,
+	# 视频激励广告加载成功
+	AD_REWARD_VIDEO_LOAD_SUCCESS = 1026,
+	# 视频激励广告缓存成功（如果不需要在加载成功时立即播放，可以考虑使用此信号，广告播放体验更佳）
+	AD_REWARD_VIDEO_CACHE_SUCCESS = 1027,
+	# 视频激励广告加载失败
+	AD_REWARD_VIDEO_LOAD_FAIL = 1028,
+	# 视频激励被显示
+	AD_REWARD_VIDEO_SHOWN = 1029,
+	# 视频激励广告被关闭
+	AD_REWARD_VIDEO_CLOSED = 1030,
+	# 视频激励广告播放完成
+	AD_REWARD_VIDEO_COMPLETED = 1031,
+	# 视频激励广告出错
+	AD_REWARD_VIDEO_ERROR = 1032,
+	# 视频广告被验证，可以给玩家发放奖励
+	AD_REWARD_VIDEO_VERIFIED = 1033,
+	# 视频激励广告被跳过
+	AD_REWARD_VIDEO_SKIPPED = 1034,
+	# 视频激励广告被点击
+	AD_REWARD_VIDEO_CLICKED = 1035,
+	# 横幅广告加载成功
+	AD_BANNER_LOAD_SUCCESS = 1036,
+	# 横幅广告加载失败
+	AD_BANNER_LOAD_FAIL = 1037,
+	# 横幅广告被显示
+	AD_BANNER_SHOWN = 1038,
+	# 横幅广告被关闭
+	AD_BANNER_CLOSED = 1039,
+	# 横幅广告被点击
+	AD_BANNER_CLICKED = 1040,
+	# 横幅广告中的下载按钮被点击
+	AD_BANNER_DOWNLOAD_CLICKED = 1041,
+	# 插屏广告加载成功
+	AD_INTERSTITIAL_LOAD_SUCCESS = 1042,
+	# 插屏广告加载失败
+	AD_INTERSTITIAL_LOAD_FAIL = 1043,
+	# 插屏广告被显示
+	AD_INTERSTITIAL_SHOWN = 1044,
+	# 插屏广告被关闭
+	AD_INTERSTITIAL_CLOSED = 1045,
+	# 插屏广告出错
+	AD_INTERSTITIAL_ERROR = 1046,
+	# 信息流广告加载成功
+	AD_FEED_LOAD_SUCCESS = 1047,
+	# 信息流广告加载失败
+	AD_FEED_LOAD_FAIL = 1048,
+	# 信息流广告渲染成功
+	AD_FEED_RENDER_SUCCESS = 1049,
+	# 信息流广告被显示
+	AD_FEED_SHOWN = 1050,
+	# 信息流广告被点击
+	AD_FEED_CLICKED = 1051,
+	# 信息流广告被关闭
+	AD_FEED_CLOSED = 1052
+}

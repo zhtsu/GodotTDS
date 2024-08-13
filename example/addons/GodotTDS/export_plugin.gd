@@ -92,8 +92,8 @@ class AndroidExportPlugin extends EditorExportPlugin:
 		var scheme : String = ""
 		var host : String = ""
 		if Engine.has_singleton("GodotTDS"):
-			scheme = Engine.get_singleton("GodotTDS").config.deep_link_scheme
-			host = Engine.get_singleton("GodotTDS").deep_link_host
+			scheme = Engine.get_singleton("GodotTDS").Config.deep_link_scheme
+			host = Engine.get_singleton("GodotTDS").Config.deep_link_host
 		return """
 		<intent-filter>
 			<action android:name="android.intent.action.VIEW" />

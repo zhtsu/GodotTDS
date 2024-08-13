@@ -1,7 +1,8 @@
 extends Node
 
 
-const config = preload("res://addons/GodotTDS/config.gd")
+const Config = preload("res://addons/GodotTDS/config.gd")
+const StateCode = preload("res://addons/GodotTDS/state_code.gd")
 
 
 # 登录相关操作的信号
@@ -80,8 +81,8 @@ func _ready() -> void:
 	if Engine.has_singleton(_plugin_name):
 		_plugin_singleton = Engine.get_singleton(_plugin_name)
 		_plugin_singleton.init(
-			config.client_id, config.client_token, config.server_url,
-			config.media_id, config.media_name, config.media_key
+			Config.client_id, Config.client_token, Config.server_url,
+			Config.media_id, Config.media_name, Config.media_key
 		)
 			
 		_plugin_singleton.connect("onLogInReturn", _dont_call_on_login_return)
