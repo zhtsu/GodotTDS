@@ -25,11 +25,8 @@ func _on_launch_from_deep_link(uri : String) -> void:
 func _on_test_return(code : int, msg : String) -> void:
 	$Code.text = str(code)
 	$Text.text = msg
-	if code == 1025:
+	if code == GodotTDS.StateCode.AD_SPLASH_TIME_OVER:
 		GodotTDS.dispose_splash_ad()
-	if code == 1045:
-		$Code.text = str(code)
-		$Text.text = msg
 		
 		
 func _on_login_button_down() -> void:
