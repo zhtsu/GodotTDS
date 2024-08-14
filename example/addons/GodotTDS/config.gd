@@ -1,4 +1,4 @@
-extends Resource
+extends Node
 
 
 const client_id : String = ""
