@@ -124,6 +124,12 @@ func login() -> void:
 # 退出登录
 func logout() -> void:
 	_call_android_function("logOut")
+
+
+# 判断当前用户是否登录
+func is_logged_in() -> bool:
+	var logged_in : Variant = _call_android_function("isLoggedIn")
+	return false if logged_in == null else logged_in
 		
 		
 # 防沉迷
