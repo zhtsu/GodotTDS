@@ -73,14 +73,6 @@ func _on_grow_achievement_button_down() -> void:
 	GodotTDS.grow_achievement_steps("robot_dash_04", 1)
 
 
-func _on_show_tips_toast_button_down() -> void:
-	GodotTDS.set_show_tips_toast(true)
-
-
-func _on_hide_tips_toast_button_down() -> void:
-	GodotTDS.set_show_tips_toast(false)
-
-
 var show_achievement_toast : bool = true
 
 func _on_achievement_toast_button_down() -> void:

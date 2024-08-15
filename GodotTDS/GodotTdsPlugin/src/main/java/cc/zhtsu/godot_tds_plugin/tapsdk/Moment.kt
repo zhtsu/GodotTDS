@@ -2,11 +2,11 @@ package cc.zhtsu.godot_tds_plugin.tapsdk
 
 import android.app.Activity
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
-import cc.zhtsu.godot_tds_plugin.TapTDS
+import cc.zhtsu.godot_tds_plugin.TapTdsInterface
 import com.tapsdk.moment.TapMoment
 import com.tapsdk.moment.TapMoment.TapMomentCallback
 
-class Moment(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
+class Moment(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTdsInterface
 {
     override var _activity : Activity = activity
     override var _godotTdsPlugin : GodotTdsPlugin = godotTdsPlugin
@@ -16,6 +16,7 @@ class Moment(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
     fun init()
     {
         _initCallbacks()
+
         TapMoment.setCallback(_tapMomentCallback)
     }
 

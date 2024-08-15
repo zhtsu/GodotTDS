@@ -9,7 +9,7 @@ import android.widget.FrameLayout
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
 import cc.zhtsu.godot_tds_plugin.R
 import cc.zhtsu.godot_tds_plugin.StateCode
-import cc.zhtsu.godot_tds_plugin.TapAD
+import cc.zhtsu.godot_tds_plugin.TapTdsInterface
 import com.tapsdk.tapad.AdRequest
 import com.tapsdk.tapad.TapAdNative
 import com.tapsdk.tapad.TapFeedAd
@@ -20,7 +20,7 @@ import com.tapsdk.tapad.feed.VideoOption
 
 
 @SuppressLint("ResourceType", "InflateParams")
-class FeedAD(activity : Activity, godotTdsPlugin : GodotTdsPlugin) : TapAD
+class FeedAD(activity : Activity, godotTdsPlugin : GodotTdsPlugin) : TapTdsInterface
 {
     override var _activity: Activity = activity
     override var _godotTdsPlugin : GodotTdsPlugin = godotTdsPlugin

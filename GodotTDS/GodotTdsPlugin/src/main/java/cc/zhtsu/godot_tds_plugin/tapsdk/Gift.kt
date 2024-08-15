@@ -3,7 +3,7 @@ package cc.zhtsu.godot_tds_plugin.tapsdk
 import android.app.Activity
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
 import cc.zhtsu.godot_tds_plugin.StateCode
-import cc.zhtsu.godot_tds_plugin.TapTDS
+import cc.zhtsu.godot_tds_plugin.TapTdsInterface
 import com.tapsdk.bootstrap.account.TDSUser
 import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaType
@@ -18,7 +18,7 @@ import java.io.IOException
 import java.security.MessageDigest
 import java.security.SecureRandom
 
-class Gift(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
+class Gift(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTdsInterface
 {
     override var _activity : Activity = activity
     override var _godotTdsPlugin : GodotTdsPlugin = godotTdsPlugin

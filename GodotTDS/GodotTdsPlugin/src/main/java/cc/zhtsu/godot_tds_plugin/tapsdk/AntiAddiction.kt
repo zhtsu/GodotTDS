@@ -2,19 +2,23 @@ package cc.zhtsu.godot_tds_plugin.tapsdk
 
 import android.app.Activity
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
-import cc.zhtsu.godot_tds_plugin.StateCode
-import cc.zhtsu.godot_tds_plugin.TapTDS
+import cc.zhtsu.godot_tds_plugin.TapTdsInterface
 import com.tapsdk.antiaddiction.Config
 import com.tapsdk.antiaddictionui.AntiAddictionUICallback
 import com.tapsdk.antiaddictionui.AntiAddictionUIKit
 import com.tapsdk.bootstrap.account.TDSUser
 
-class AntiAddiction(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
+class AntiAddiction(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTdsInterface
 {
     override var _activity : Activity = activity
     override var _godotTdsPlugin : GodotTdsPlugin = godotTdsPlugin
 
     private lateinit var _antiAddictionUICallback : AntiAddictionUICallback
+
+    init
+    {
+        _initCallbacks()
+    }
 
     fun init(clientId : String)
     {
@@ -26,7 +30,6 @@ class AntiAddiction(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTD
 
         AntiAddictionUIKit.init(_activity, config)
 
-        _initCallbacks()
         AntiAddictionUIKit.setAntiAddictionCallback(_antiAddictionUICallback)
     }
 
@@ -36,10 +39,6 @@ class AntiAddiction(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTD
         {
             val userIdentifier = TDSUser.currentUser().uuid
             AntiAddictionUIKit.startupWithTapTap(_activity, userIdentifier)
-        }
-        else
-        {
-            _showToast("Not log in")
         }
     }
 

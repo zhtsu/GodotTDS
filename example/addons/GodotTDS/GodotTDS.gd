@@ -148,11 +148,6 @@ func set_entry_visible(visible : bool) -> void:
 	_call_android_function("setEntryVisible", [visible])
 	
 	
-# 设置信号响应时的弹窗是否可见
-func set_show_tips_toast(show : bool) -> void:
-	_call_android_function("setShowTipsToast", [show])
-	
-	
 # 从 TapTap 服务器拉取所有的成就数据
 # 这是一个异步操作，请处理对应的信号获取返回数据
 func fetch_all_achievement_list() -> void:

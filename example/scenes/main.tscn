@@ -101,20 +101,6 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "隐藏悬浮窗"
 
-[node name="ShowTipsToast" type="Button" parent="TabContainer/TapSDK"]
-custom_minimum_size = Vector2(200, 80)
-layout_mode = 2
-focus_mode = 0
-theme_override_font_sizes/font_size = 48
-text = "开启提示"
-
-[node name="HideTipsToast" type="Button" parent="TabContainer/TapSDK"]
-custom_minimum_size = Vector2(200, 80)
-layout_mode = 2
-focus_mode = 0
-theme_override_font_sizes/font_size = 48
-text = "关闭提示"
-
 [node name="GetUserProfile" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
@@ -333,8 +319,6 @@ text = "从深度链接启动"
 [connection signal="button_down" from="TabContainer/TapSDK/TapMoment" to="." method="_on_tap_moment_button_down"]
 [connection signal="button_down" from="TabContainer/TapSDK/ShowEntry" to="." method="_on_show_entry_button_down"]
 [connection signal="button_down" from="TabContainer/TapSDK/HideEntry" to="." method="_on_hide_entry_button_down"]
-[connection signal="button_down" from="TabContainer/TapSDK/ShowTipsToast" to="." method="_on_show_tips_toast_button_down"]
-[connection signal="button_down" from="TabContainer/TapSDK/HideTipsToast" to="." method="_on_hide_tips_toast_button_down"]
 [connection signal="button_down" from="TabContainer/TapSDK/GetUserProfile" to="." method="_on_get_user_profile_button_down"]
 [connection signal="button_down" from="TabContainer/TapSDK/AchievementToast" to="." method="_on_achievement_toast_button_down"]
 [connection signal="button_down" from="TabContainer/TapSDK/FetchAchievement" to="." method="_on_achievement_button_down"]

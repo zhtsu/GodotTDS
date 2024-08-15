@@ -3,7 +3,7 @@ package cc.zhtsu.godot_tds_plugin.tapsdk
 import android.app.Activity
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
 import cc.zhtsu.godot_tds_plugin.StateCode
-import cc.zhtsu.godot_tds_plugin.TapTDS
+import cc.zhtsu.godot_tds_plugin.TapTdsInterface
 import com.tapsdk.antiaddictionui.AntiAddictionUIKit
 import com.tapsdk.bootstrap.Callback
 import com.tapsdk.bootstrap.TapBootstrap
@@ -15,12 +15,17 @@ import com.tds.achievement.TapAchievement
 import com.tds.common.entities.TapConfig
 import com.tds.common.models.TapRegionType
 
-class Account(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
+class Account(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTdsInterface
 {
     override var _activity : Activity = activity
     override var _godotTdsPlugin : GodotTdsPlugin = godotTdsPlugin
 
     private lateinit var _logInCallback : Callback<TDSUser>
+
+    init
+    {
+        _initCallbacks()
+    }
 
     fun init(clientId : String, clientToken : String, serverUrl : String)
     {
@@ -35,8 +40,6 @@ class Account(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
 
             TapBootstrap.init(_activity, tdsConfig)
         }
-
-        _initCallbacks()
     }
 
     fun logIn()
@@ -50,11 +53,6 @@ class Account(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
         {
             TDSUser.logOut()
             AntiAddictionUIKit.exit()
-            _showToast("Log out successful")
-        }
-        else
-        {
-            _showToast("Not log in")
         }
     }
 
@@ -96,7 +94,6 @@ class Account(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
         {
             override fun onSuccess(user : TDSUser)
             {
-                _showToast("Log in successful")
                 _godotTdsPlugin.emitPluginSignal("onLogInReturn", StateCode.LOG_IN_SUCCESS, user.toJSONInfo())
 
                 // Reinit achievement data
@@ -105,7 +102,6 @@ class Account(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
 
             override fun onFail(error : TapError)
             {
-                _showToast("Log in failed")
                 _godotTdsPlugin.emitPluginSignal("onLogInReturn", error.code, error.message.toString())
             }
         }

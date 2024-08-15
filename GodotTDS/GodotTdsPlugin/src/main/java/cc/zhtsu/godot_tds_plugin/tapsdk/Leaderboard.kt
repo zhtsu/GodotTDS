@@ -5,7 +5,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
 import cc.zhtsu.godot_tds_plugin.StateCode
-import cc.zhtsu.godot_tds_plugin.TapTDS
+import cc.zhtsu.godot_tds_plugin.TapTdsInterface
 import com.tapsdk.bootstrap.account.TDSUser
 import com.tapsdk.lc.LCLeaderboard
 import com.tapsdk.lc.LCLeaderboardResult
@@ -16,7 +16,7 @@ import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
 import org.json.JSONObject
 
-class Leaderboard(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
+class Leaderboard(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTdsInterface
 {
     override var _activity : Activity = activity
     override var _godotTdsPlugin : GodotTdsPlugin = godotTdsPlugin

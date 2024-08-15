@@ -5,7 +5,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
 import cc.zhtsu.godot_tds_plugin.StateCode
-import cc.zhtsu.godot_tds_plugin.TapTDS
+import cc.zhtsu.godot_tds_plugin.TapTdsInterface
 import com.tapsdk.bootstrap.account.TDSUser
 import com.tds.achievement.AchievementCallback
 import com.tds.achievement.AchievementException
@@ -13,16 +13,20 @@ import com.tds.achievement.TapAchievement
 import com.tds.achievement.TapAchievementBean
 import org.json.JSONObject
 
-class Achievement(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
+class Achievement(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTdsInterface
 {
     override var _activity : Activity = activity
     override var _godotTdsPlugin : GodotTdsPlugin = godotTdsPlugin
 
     private lateinit var _achievementCallback : AchievementCallback
 
-    fun init()
+    init
     {
         _initCallbacks()
+    }
+
+    fun init()
+    {
         TapAchievement.registerCallback(_achievementCallback)
 
         _activity.runOnUiThread {
@@ -38,10 +42,6 @@ class Achievement(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
         if (TDSUser.currentUser() != null)
         {
             TapAchievement.showAchievementPage()
-        }
-        else
-        {
-            _showToast("Not log in")
         }
     }
 

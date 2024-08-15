@@ -5,7 +5,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
 import cc.zhtsu.godot_tds_plugin.StateCode
-import cc.zhtsu.godot_tds_plugin.TapTDS
+import cc.zhtsu.godot_tds_plugin.TapTdsInterface
 import com.tapsdk.bootstrap.gamesave.TapGameSave
 import com.tapsdk.lc.types.LCNull
 import io.reactivex.Observer
@@ -13,7 +13,7 @@ import io.reactivex.disposables.Disposable
 import org.json.JSONObject
 import java.util.Date
 
-class GameSave(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
+class GameSave(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTdsInterface
 {
     override var _activity : Activity = activity
     override var _godotTdsPlugin : GodotTdsPlugin = godotTdsPlugin
@@ -74,7 +74,6 @@ class GameSave(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
 
             override fun onNext(gameSave : TapGameSave)
             {
-                _showToast("Submit successful")
                 _gameSaves[gameSave.objectId] = gameSave
                 _godotTdsPlugin.emitPluginSignal("onGameSaveReturn",
                     StateCode.GAME_SAVE_SUBMIT_SUCCESS, gameSave.objectId)
@@ -82,7 +81,6 @@ class GameSave(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
 
             override fun onError(throwable : Throwable)
             {
-                _showToast("Submit failed")
                 _godotTdsPlugin.emitPluginSignal("onGameSaveReturn",
                     StateCode.GAME_SAVE_SUBMIT_FAIL, throwable.message.toString())
             }
@@ -138,14 +136,12 @@ class GameSave(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTDS
 
             override fun onNext(response : LCNull)
             {
-                _showToast("Delete successful")
                 _godotTdsPlugin.emitPluginSignal("onGameSaveReturn",
                     StateCode.GAME_SAVE_DELETE_SUCCESS, "Game save delete successful")
             }
 
             override fun onError(throwable : Throwable)
             {
-                _showToast("Delete failed")
                 _godotTdsPlugin.emitPluginSignal("onGameSaveReturn",
                     StateCode.GAME_SAVE_DELETE_FAIL, throwable.message.toString())
             }
