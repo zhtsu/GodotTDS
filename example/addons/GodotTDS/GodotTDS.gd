@@ -109,6 +109,11 @@ func push_log(msg : String, error : bool = false) -> void:
 func get_cache_dir_path() -> String:
 	var cache_dir_path : Variant = _call_android_function("getCacheDirPath")
 	return "" if cache_dir_path == null else cache_dir_path
+	
+	
+# 在安卓平台弹出一个吐司弹窗
+func show_toast(msg : String) -> void:
+	_call_android_function("showToast", [msg])
 		
 		
 # 使用内建账户登录
