@@ -90,6 +90,16 @@ class BannerAD(activity : Activity, godotTdsPlugin : GodotTdsPlugin) : TapTdsInt
         }
     }
 
+    fun dispose()
+    {
+        if (_bannerAd != null)
+        {
+            _activity.runOnUiThread {
+                _bannerAd!!.dispose()
+            }
+        }
+    }
+
     private fun _initCallbacks()
     {
         _bannerAdListener = object : TapAdNative.BannerAdListener

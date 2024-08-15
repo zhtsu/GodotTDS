@@ -396,6 +396,14 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     }
 
     @UsedByGodot
+    fun disposeBannerAd()
+    {
+        _checkClientConfig {
+            _bannerAd.dispose()
+        }
+    }
+
+    @UsedByGodot
     fun loadInterstitialAd(spaceId : Int)
     {
         _checkClientConfig {

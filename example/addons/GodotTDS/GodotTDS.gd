@@ -293,6 +293,10 @@ func show_banner_ad(gravity : int = GRAVITY_BOTTOM, height = -1) -> void:
 	_call_android_function("showBannerAd", [gravity, height])
 	
 	
+func dispose_banner_ad() -> void:
+	_call_android_function("disposeBannerAd")
+	
+	
 func load_interstitial_ad(space_id : int) -> void:
 	_call_android_function("loadInterstitialAd", [space_id])
 
