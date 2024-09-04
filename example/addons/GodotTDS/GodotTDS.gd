@@ -185,8 +185,9 @@ func reach_achievement(display_id : String) -> void:
 	
 	
 # 增加分步成就的步数（累加）
+# 默认增加步数为 1
 # 这是一个异步操作，请处理对应的信号以获取成就更新结果
-func grow_achievement_steps(display_id : String, steps : int) -> void:
+func grow_achievement_steps(display_id : String, steps : int = 1) -> void:
 	_call_android_function("growAchievementSteps", [display_id, steps])
 	
 	
