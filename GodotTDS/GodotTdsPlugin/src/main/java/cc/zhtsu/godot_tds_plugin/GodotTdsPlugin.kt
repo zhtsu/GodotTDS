@@ -53,7 +53,8 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
         )
     }
 
-    var clientConfigValid : Boolean = true
+    private var isSdkConfigValid : Boolean = true
+    private var isAdnConfigValid : Boolean = true
 
     private val _tapAccount = Account(activity!!, this)
     private val _tapAntiAddiction = AntiAddiction(activity!!, this)
@@ -78,13 +79,17 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
         mediaId: Long, mediaName: String, mediaKey: String,
     )
     {
-        if (clientId == "" || clientToken == "" || serverUrl == "" ||
-            mediaId == -1L || mediaName == "" || mediaKey == "")
+        if (clientId == "" || clientToken == "")
         {
-            clientConfigValid = false
+            isSdkConfigValid = false
         }
 
-        _checkClientConfig {
+        if (mediaId == -1L || mediaName == "" || mediaKey == "")
+        {
+            isAdnConfigValid = false
+        }
+
+        _checkSdkConfig {
             _tapAccount.init(clientId, clientToken, serverUrl)
             _tapAntiAddiction.init(clientId)
             _tapMoment.init()
@@ -92,7 +97,9 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
             _tapGift.init(clientId)
             _tapLeaderboard.init()
             _tapGameSave.init()
+        }
 
+        _checkAdnConfig {
             _initAdSdk(mediaId, mediaName, mediaKey, clientId)
         }
     }
@@ -100,7 +107,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun logIn()
     {
-        _checkClientConfig {
+        _checkSdkConfig {
             _tapAccount.logIn()
         }
     }
@@ -108,7 +115,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun logOut()
     {
-        _checkClientConfig {
+        _checkSdkConfig {
             _tapAccount.logOut()
         }
     }
@@ -118,7 +125,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     {
         var userProfile = ""
 
-        _checkClientConfig {
+        _checkSdkConfig {
             userProfile = _tapAccount.getUserProfile()
         }
 
@@ -130,7 +137,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     {
         var userObjectId = ""
 
-        _checkClientConfig {
+        _checkSdkConfig {
             userObjectId = _tapAccount.getUserObjectId()
         }
 
@@ -142,7 +149,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     {
         var loggedIn = false
 
-        _checkClientConfig {
+        _checkSdkConfig {
             loggedIn = _tapAccount.isLoggedIn()
         }
 
@@ -152,7 +159,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun antiAddiction()
     {
-        _checkClientConfig {
+        _checkSdkConfig {
             _tapAntiAddiction.startUpWithTapTap()
         }
     }
@@ -160,7 +167,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun tapMoment(orientation: Int)
     {
-        _checkClientConfig {
+        _checkSdkConfig {
             _tapMoment.showPage(orientation)
         }
     }
@@ -168,7 +175,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun setEntryVisible(visible: Boolean)
     {
-        _checkClientConfig {
+        _checkSdkConfig {
             _tapAccount.setEntryVisible(visible)
         }
     }
@@ -177,7 +184,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun fetchAllAchievementList()
     {
-        _checkClientConfig {
+        _checkSdkConfig {
             _tapAchievement.fetchAllAchievementList()
         }
     }
@@ -188,7 +195,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     {
         var msg = ""
 
-        _checkClientConfig {
+        _checkSdkConfig {
             val allAchievementList: List<TapAchievementBean> =
                 _tapAchievement.getLocalAllAchievementList()
             val jsonObject = JSONObject()
@@ -205,7 +212,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun showAchievementPage()
     {
-        _checkClientConfig {
+        _checkSdkConfig {
             _tapAchievement.showAchievementPage()
         }
     }
@@ -213,7 +220,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun reachAchievement(displayId : String)
     {
-        _checkClientConfig {
+        _checkSdkConfig {
             _tapAchievement.reachAchievement(displayId)
         }
     }
@@ -221,7 +228,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun growAchievementSteps(displayId : String, steps : Int)
     {
-        _checkClientConfig {
+        _checkSdkConfig {
             _tapAchievement.growAchievementSteps(displayId, steps)
         }
     }
@@ -229,7 +236,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun makeAchievementSteps(displayId : String, steps : Int)
     {
-        _checkClientConfig {
+        _checkSdkConfig {
             _tapAchievement.makeAchievementSteps(displayId, steps)
         }
     }
@@ -237,7 +244,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun setShowAchievementToast(show : Boolean)
     {
-        _checkClientConfig {
+        _checkSdkConfig {
             _tapAchievement.setShowAchievementToast(show)
         }
     }
@@ -245,7 +252,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun submitGiftCode(giftCode : String)
     {
-        _checkClientConfig {
+        _checkSdkConfig {
             _tapGift.submitGiftCode(giftCode)
         }
     }
@@ -253,7 +260,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun submitLeaderboardScore(leaderboardName : String, score : Long)
     {
-        _checkClientConfig {
+        _checkSdkConfig {
             _tapLeaderboard.submitLeaderboardScore(leaderboardName, score)
         }
     }
@@ -261,7 +268,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun fetchLeaderboardSectionRankings(leaderboardName : String, start : Int, end : Int)
     {
-        _checkClientConfig {
+        _checkSdkConfig {
             _tapLeaderboard.fetchLeaderboardSectionRankings(leaderboardName, start, end)
         }
     }
@@ -269,7 +276,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun fetchLeaderboardUserAroundRankings(leaderboardName : String, count : Int)
     {
-        _checkClientConfig {
+        _checkSdkConfig {
             _tapLeaderboard.fetchLeaderboardUserAroundRankings(leaderboardName, count)
         }
     }
@@ -285,7 +292,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
         modifiedAt : Long,
     )
     {
-        _checkClientConfig {
+        _checkSdkConfig {
             _tapGameSave.submitGameSave(
                 name,
                 summary,
@@ -301,7 +308,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun fetchGameSaves()
     {
-        _checkClientConfig {
+        _checkSdkConfig {
             _tapGameSave.fetchGameSaves()
         }
     }
@@ -309,7 +316,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun deleteGameSave(gameSaveId : String)
     {
-        _checkClientConfig {
+        _checkSdkConfig {
             _tapGameSave.deleteGameSave(gameSaveId)
         }
     }
@@ -336,7 +343,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun loadSplashAd(spaceId : Int)
     {
-        _checkClientConfig {
+        _checkAdnConfig {
             _splashAd.load(spaceId)
         }
     }
@@ -344,7 +351,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun showSplashAd()
     {
-        _checkClientConfig {
+        _checkAdnConfig {
             _splashAd.show()
         }
     }
@@ -352,7 +359,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun disposeSplashAd()
     {
-        _checkClientConfig {
+        _checkAdnConfig {
             _splashAd.dispose()
         }
     }
@@ -366,7 +373,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
         gameUserId : String,
     )
     {
-        _checkClientConfig {
+        _checkAdnConfig {
             _rewardVideoAd.load(spaceId, rewardName, rewardAmount, extraInfo, gameUserId)
         }
     }
@@ -374,7 +381,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun showRewardVideoAd()
     {
-        _checkClientConfig {
+        _checkAdnConfig {
             _rewardVideoAd.show()
         }
     }
@@ -382,7 +389,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun loadBannerAd(spaceId : Int)
     {
-        _checkClientConfig {
+        _checkAdnConfig {
             _bannerAd.load(spaceId)
         }
     }
@@ -390,7 +397,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun showBannerAd(gravity : Int, height : Int)
     {
-        _checkClientConfig {
+        _checkAdnConfig {
             _bannerAd.show(gravity, height)
         }
     }
@@ -398,7 +405,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun disposeBannerAd()
     {
-        _checkClientConfig {
+        _checkAdnConfig {
             _bannerAd.dispose()
         }
     }
@@ -406,7 +413,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun loadInterstitialAd(spaceId : Int)
     {
-        _checkClientConfig {
+        _checkAdnConfig {
             _interstitialAd.load(spaceId)
         }
     }
@@ -414,7 +421,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun showInterstitialAd()
     {
-        _checkClientConfig {
+        _checkAdnConfig {
             _interstitialAd.show()
         }
     }
@@ -422,7 +429,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun loadFeedAd(spaceId : Int, query : String)
     {
-        _checkClientConfig {
+        _checkAdnConfig {
             _feedAd.load(spaceId, query)
         }
     }
@@ -430,7 +437,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     @UsedByGodot
     fun showFeedAd(gravity : Int, height : Int)
     {
-        _checkClientConfig {
+        _checkAdnConfig {
             _feedAd.show(gravity, height)
         }
     }
@@ -472,9 +479,21 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
         }
     }
 
-    fun _checkClientConfig(block : () -> Unit)
+    fun _checkSdkConfig(block : () -> Unit)
     {
-        if (clientConfigValid)
+        if (isSdkConfigValid)
+        {
+            block()
+        }
+        else
+        {
+            Log.e("GodotTdsPlugin", "Invalid client config!")
+        }
+    }
+
+    fun _checkAdnConfig(block : () -> Unit)
+    {
+        if (isAdnConfigValid)
         {
             block()
         }
