@@ -2,20 +2,16 @@ package cc.zhtsu.godot_tds_plugin.tapsdk
 
 import android.app.Activity
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
-import cc.zhtsu.godot_tds_plugin.TapTdsInterface
+import cc.zhtsu.godot_tds_plugin.core.GodotTdsPluginModule
+import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.MomentInterface
 import com.taptap.sdk.moment.TapTapMoment
 
-class Moment(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTdsInterface
+class Moment(activity : Activity, godotTdsPlugin: GodotTdsPlugin) :
+    GodotTdsPluginModule(activity, godotTdsPlugin),
+    MomentInterface
 {
-    override var _activity : Activity = activity
-    override var _godotTdsPlugin : GodotTdsPlugin = godotTdsPlugin
-
-    private lateinit var _tapMomentCallback : TapTapMoment.TapTapMomentCallback
-
     fun init()
     {
-        _initCallbacks()
-
         TapTapMoment.setCallback(_tapMomentCallback)
     }
 
@@ -24,14 +20,11 @@ class Moment(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTdsInterf
         TapTapMoment.open()
     }
 
-    fun _initCallbacks()
+    private var _tapMomentCallback : TapTapMoment.TapTapMomentCallback = object : TapTapMoment.TapTapMomentCallback
     {
-        _tapMomentCallback = object : TapTapMoment.TapTapMomentCallback
+        override fun onCallback(code: Int, msg: String?)
         {
-            override fun onCallback(code: Int, msg: String?)
-            {
-                _godotTdsPlugin.emitPluginSignal("onTapMomentReturn", code, "TapMoment: $msg")
-            }
+            _godotTdsPlugin.emitPluginSignal("onTapMomentReturn", code, "TapMoment: $msg")
         }
     }
 }

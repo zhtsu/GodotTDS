@@ -54,7 +54,6 @@ dependencies {
     compileOnly(files("libs/TapAD_${tapAdVersion}.aar"))
 
     implementation(libs.tap.core)
-    implementation(libs.tap.kit)
     implementation(libs.tap.compliance)
     implementation(libs.tap.login)
     implementation(libs.tap.moment)

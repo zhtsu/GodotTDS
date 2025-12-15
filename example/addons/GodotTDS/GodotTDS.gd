@@ -63,9 +63,22 @@ var _plugin_singleton : Variant = null
 func _ready() -> void:
 	if Engine.has_singleton(_plugin_name):
 		_plugin_singleton = Engine.get_singleton(_plugin_name)
-		_plugin_singleton.initTapSdk(Config.client_id, Config.client_token)
+		_plugin_singleton.initTapSdk(
+			Config.client_id,
+			Config.client_token,
+			Config.log_enabled,
+			Config.show_switch_account_enabled,
+			Config.public_profile_enabled,
+			Config.use_age_range_enabled,
+			Config.user_friends_enabled,
+			Config.request_permission_if_necessary_enabled
+		)
 		_plugin_singleton.initTapAdn(
-			Config.media_id, Config.media_name, Config.media_key, Config.client_id)
+			Config.media_id,
+			Config.media_name,
+			Config.media_key,
+			Config.client_id
+		)
 			
 		_plugin_singleton.connect("onLogInReturn", _dont_call_on_login_return)
 		_plugin_singleton.connect("onComplianceReturn", _dont_call_on_compliance_return)

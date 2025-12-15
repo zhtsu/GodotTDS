@@ -39,7 +39,7 @@ func _on_logout_button_down() -> void:
 
 
 func _on_get_user_profile_button_down() -> void:
-	$Text.text = GodotTDS.get_user_object_id()
+	$Text.text = GodotTDS.get_user_profile()
 
 
 func _on_achievement_page_button_down() -> void:

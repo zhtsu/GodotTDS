@@ -8,27 +8,22 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
 import cc.zhtsu.godot_tds_plugin.R
-import cc.zhtsu.godot_tds_plugin.StateCode
-import cc.zhtsu.godot_tds_plugin.TapTdsInterface
+import cc.zhtsu.godot_tds_plugin.core.StateCode
+import cc.zhtsu.godot_tds_plugin.core.GodotTdsPluginModule
+import cc.zhtsu.godot_tds_plugin.core.tapadn_interface.BannerAdInterface
 import com.tapsdk.tapad.AdRequest
 import com.tapsdk.tapad.TapAdNative
 import com.tapsdk.tapad.TapBannerAd
 
 @SuppressLint("InflateParams", "ResourceType")
-class BannerAD(activity : Activity, godotTdsPlugin : GodotTdsPlugin) : TapTdsInterface
+class BannerAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
+    GodotTdsPluginModule(activity, godotTdsPlugin),
+    BannerAdInterface
 {
-    override var _activity: Activity = activity
-    override var _godotTdsPlugin : GodotTdsPlugin = godotTdsPlugin
-
-    private lateinit var _bannerAdListener : TapAdNative.BannerAdListener
-    private lateinit var _bannerInteractionListener : TapBannerAd.BannerInteractionListener
-
     private var _bannerAd : TapBannerAd? = null
 
     init
     {
-        _initCallbacks()
-
         _activity.runOnUiThread {
             val rootView = activity.findViewById<ViewGroup>(android.R.id.content)
 
@@ -100,48 +95,45 @@ class BannerAD(activity : Activity, godotTdsPlugin : GodotTdsPlugin) : TapTdsInt
         }
     }
 
-    private fun _initCallbacks()
+    private var _bannerAdListener : TapAdNative.BannerAdListener = object : TapAdNative.BannerAdListener
     {
-        _bannerAdListener = object : TapAdNative.BannerAdListener
+        override fun onError(code : Int, msg : String)
         {
-            override fun onError(code : Int, msg : String)
-            {
-                _godotTdsPlugin.emitPluginSignal("onBannerAdReturn", code, "BannerAD error: $msg")
-            }
-
-            override fun onBannerAdLoad(tapBannerAd : TapBannerAd)
-            {
-                _bannerAd = tapBannerAd
-                _godotTdsPlugin.emitPluginSignal("onBannerAdReturn", StateCode.AD_BANNER_LOAD_SUCCESS, tapBannerAd.toString())
-            }
+            _godotTdsPlugin.emitPluginSignal("onBannerAdReturn", code, "BannerAD error: $msg")
         }
 
-        _bannerInteractionListener = object : TapBannerAd.BannerInteractionListener
+        override fun onBannerAdLoad(tapBannerAd : TapBannerAd)
         {
-            override fun onAdShow()
-            {
-                _godotTdsPlugin.emitPluginSignal("onBannerAdReturn", StateCode.AD_BANNER_SHOWN, "")
-            }
+            _bannerAd = tapBannerAd
+            _godotTdsPlugin.emitPluginSignal("onBannerAdReturn", StateCode.AD_BANNER_LOAD_SUCCESS, tapBannerAd.toString())
+        }
+    }
 
-            override fun onAdClose()
-            {
-                _godotTdsPlugin.emitPluginSignal("onBannerAdReturn", StateCode.AD_BANNER_CLOSED, "")
-            }
+    private var _bannerInteractionListener : TapBannerAd.BannerInteractionListener = object : TapBannerAd.BannerInteractionListener
+    {
+        override fun onAdShow()
+        {
+            _godotTdsPlugin.emitPluginSignal("onBannerAdReturn", StateCode.AD_BANNER_SHOWN, "")
+        }
 
-            override fun onAdClick()
-            {
-                _godotTdsPlugin.emitPluginSignal("onBannerAdReturn", StateCode.AD_BANNER_CLICKED, "")
-            }
+        override fun onAdClose()
+        {
+            _godotTdsPlugin.emitPluginSignal("onBannerAdReturn", StateCode.AD_BANNER_CLOSED, "")
+        }
 
-            override fun onDownloadClick()
-            {
-                _godotTdsPlugin.emitPluginSignal("onBannerAdReturn", StateCode.AD_BANNER_DOWNLOAD_CLICKED, "")
-            }
+        override fun onAdClick()
+        {
+            _godotTdsPlugin.emitPluginSignal("onBannerAdReturn", StateCode.AD_BANNER_CLICKED, "")
+        }
 
-            override fun onAdValidShow()
-            {
-                TODO("Not yet implemented")
-            }
+        override fun onDownloadClick()
+        {
+            _godotTdsPlugin.emitPluginSignal("onBannerAdReturn", StateCode.AD_BANNER_DOWNLOAD_CLICKED, "")
+        }
+
+        override fun onAdValidShow()
+        {
+            TODO("Not yet implemented")
         }
     }
 }

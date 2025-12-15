@@ -2,8 +2,9 @@ package cc.zhtsu.godot_tds_plugin.tapsdk
 
 import android.app.Activity
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
-import cc.zhtsu.godot_tds_plugin.StateCode
-import cc.zhtsu.godot_tds_plugin.TapTdsInterface
+import cc.zhtsu.godot_tds_plugin.core.StateCode
+import cc.zhtsu.godot_tds_plugin.core.GodotTdsPluginModule
+import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.GiftInterface
 import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -17,32 +18,21 @@ import java.io.IOException
 import java.security.MessageDigest
 import java.security.SecureRandom
 
-class Gift(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTdsInterface
+class Gift(activity : Activity, godotTdsPlugin: GodotTdsPlugin) :
+    GodotTdsPluginModule(activity, godotTdsPlugin),
+    GiftInterface
 {
-    override var _activity : Activity = activity
-    override var _godotTdsPlugin : GodotTdsPlugin = godotTdsPlugin
-
-    private lateinit var _giftCallback : okhttp3.Callback
-    private lateinit var _clientId : String
-
-    fun init(clientId : String)
-    {
-        _clientId = clientId
-
-        _initCallbacks()
-    }
-
     fun submitGiftCode(giftCode : String)
     {
         val okHttpClient = OkHttpClient()
         val jsonObject = JSONObject()
         val timestamp : String = (System.currentTimeMillis() / 1000).toString()
         val nonceStr : String = _generateNonceStr()
-        val objectId : String = _godotTdsPlugin.getTapAccount().getAccountOpenId()
+        val objectId : String = _godotTdsPlugin.getAccountOpenId()
 
         try
         {
-            jsonObject.put("client_id", _clientId)
+            jsonObject.put("client_id", _godotTdsPlugin.getClientId())
             jsonObject.put("gift_code", giftCode)
             jsonObject.put("character_id", objectId)
             jsonObject.put("nonce_str", nonceStr)
@@ -65,6 +55,29 @@ class Gift(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTdsInterfac
         okHttpClient.newCall(request).enqueue(_giftCallback)
     }
 
+    private var _giftCallback : okhttp3.Callback = object : okhttp3.Callback
+    {
+        override fun onFailure(call : Call, e : IOException)
+        {
+            _godotTdsPlugin.emitPluginSignal("onGiftReturn", StateCode.GIFT_CODE_SUBMIT_FAIL, e.message.toString())
+        }
+
+        override fun onResponse(call : Call, response : Response)
+        {
+            var emptyBody = true
+            response.body?.let {
+                emptyBody = false
+                _godotTdsPlugin.emitPluginSignal("onGiftReturn",
+                    StateCode.GIFT_CODE_SUBMIT_SUCCESS, it.string())
+            }
+            if (emptyBody)
+            {
+                _godotTdsPlugin.emitPluginSignal("onGiftReturn",
+                    StateCode.GIFT_CODE_SUBMIT_FAIL, "Empty body")
+            }
+        }
+    }
+
     private fun _generateNonceStr() : String
     {
         val random = SecureRandom()
@@ -77,7 +90,7 @@ class Gift(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTdsInterfac
     {
         try
         {
-            val signTxt: String = _shaEncode("${timestamp}${nonceStr}${_clientId}")
+            val signTxt: String = _shaEncode("${timestamp}${nonceStr}${_godotTdsPlugin.getClientId()}")
             return signTxt
         }
         catch (e: java.lang.Exception)
@@ -114,31 +127,5 @@ class Gift(activity : Activity, godotTdsPlugin: GodotTdsPlugin) : TapTdsInterfac
         }
 
         return hexValue.toString()
-    }
-
-    fun _initCallbacks()
-    {
-        _giftCallback = object : okhttp3.Callback
-        {
-            override fun onFailure(call : Call, e : IOException)
-            {
-                _godotTdsPlugin.emitPluginSignal("onGiftReturn", StateCode.GIFT_CODE_SUBMIT_FAIL, e.message.toString())
-            }
-
-            override fun onResponse(call : Call, response : Response)
-            {
-                var emptyBody = true
-                response.body?.let {
-                    emptyBody = false
-                    _godotTdsPlugin.emitPluginSignal("onGiftReturn",
-                        StateCode.GIFT_CODE_SUBMIT_SUCCESS, it.string())
-                }
-                if (emptyBody)
-                {
-                    _godotTdsPlugin.emitPluginSignal("onGiftReturn",
-                        StateCode.GIFT_CODE_SUBMIT_FAIL, "Empty body")
-                }
-            }
-        }
     }
 }

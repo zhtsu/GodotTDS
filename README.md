@@ -55,4 +55,4 @@ GodotTDS 目录下存放的是用于生成***安卓插件***的安卓项目
 
 [B站咲夜大佬](https://space.bilibili.com/2706229)
 
-PukkyCoopie: [#3](https://github.com/zhtsu/GodotTDS/pull/3)
+[PukkyCoopie](https://github.com/PukkyCoopie): [#3](https://github.com/zhtsu/GodotTDS/pull/3)

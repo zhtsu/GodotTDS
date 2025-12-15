@@ -1,27 +1,40 @@
 package cc.zhtsu.godot_tds_plugin
 
-import android.os.Build
 import android.util.Log
 import android.widget.Toast
-import androidx.annotation.RequiresApi
-import cc.zhtsu.godot_tds_plugin.tapadn.BannerAD
-import cc.zhtsu.godot_tds_plugin.tapadn.FeedAD
-import cc.zhtsu.godot_tds_plugin.tapadn.InterstitialAD
-import cc.zhtsu.godot_tds_plugin.tapadn.RewardVideoAD
-import cc.zhtsu.godot_tds_plugin.tapadn.SplashAD
+import cc.zhtsu.godot_tds_plugin.core.tapadn_interface.BannerAdInterface
+import cc.zhtsu.godot_tds_plugin.core.tapadn_interface.FeedAdInterface
+import cc.zhtsu.godot_tds_plugin.core.tapadn_interface.InterstitialAdInterface
+import cc.zhtsu.godot_tds_plugin.core.tapadn_interface.RewardVideoAdInterface
+import cc.zhtsu.godot_tds_plugin.core.tapadn_interface.SplashAdInterface
+import cc.zhtsu.godot_tds_plugin.core.tapadn_interface.TapAdnBootstrapInterface
+import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.AccountInterface
+import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.AchievementInterface
+import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.ComplianceInterface
+import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.GiftInterface
+import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.LeaderboardInterface
+import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.MomentInterface
+import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.TapSdkBootstrapInterface
+import cc.zhtsu.godot_tds_plugin.tapadn.BannerAd
+import cc.zhtsu.godot_tds_plugin.tapadn.FeedAd
+import cc.zhtsu.godot_tds_plugin.tapadn.InterstitialAd
+import cc.zhtsu.godot_tds_plugin.tapadn.RewardVideoAd
+import cc.zhtsu.godot_tds_plugin.tapadn.SplashAd
+import cc.zhtsu.godot_tds_plugin.tapadn.TapAdnBootstrap
 import cc.zhtsu.godot_tds_plugin.tapsdk.Account
 import cc.zhtsu.godot_tds_plugin.tapsdk.Achievement
 import cc.zhtsu.godot_tds_plugin.tapsdk.Compliance
 import cc.zhtsu.godot_tds_plugin.tapsdk.Gift
 import cc.zhtsu.godot_tds_plugin.tapsdk.Leaderboard
 import cc.zhtsu.godot_tds_plugin.tapsdk.Moment
+import cc.zhtsu.godot_tds_plugin.tapsdk.TapSdkBootstrap
 import com.tapsdk.tapad.TapAdConfig
-import com.tapsdk.tapad.TapAdCustomController
 import com.tapsdk.tapad.TapAdManager
 import com.tapsdk.tapad.TapAdNative
 import com.tapsdk.tapad.TapAdSdk
+import com.taptap.sdk.core.TapTapLanguage
+import com.taptap.sdk.core.TapTapRegion
 import org.godotengine.godot.Godot
-import org.godotengine.godot.GodotFragment
 import org.godotengine.godot.plugin.GodotPlugin
 import org.godotengine.godot.plugin.SignalInfo
 import org.godotengine.godot.plugin.UsedByGodot
@@ -48,41 +61,54 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
         )
     }
 
-    private var _isTapSDKConfigValid : Boolean = true
-    private var _isTapADNConfigValid : Boolean = true
+    private var _clientId: String = "Invalid ClientId"
+    private var _requestPermissionIfNecessaryEnabled: Boolean = false
 
-    private val _tapAccount = Account(activity!!, this)
-    private val _tapCompliance = Compliance(activity!!, this)
-    private val _tapMoment = Moment(activity!!, this)
-    private val _tapAchievement = Achievement(activity!!, this)
-    private val _tapGift = Gift(activity!!, this)
-    private val _tapLeaderboard = Leaderboard(activity!!, this)
+    private var _isTapSDKConfigValid: Boolean = true
+    private var _isTapADNConfigValid: Boolean = true
+
+    private val _tapSdkBootstrap: TapSdkBootstrapInterface = TapSdkBootstrap(activity!!, this)
+    private val _tapAccount: AccountInterface = Account(activity!!, this)
+    private val _tapCompliance: ComplianceInterface = Compliance(activity!!, this)
+    private val _tapMoment: MomentInterface = Moment(activity!!, this)
+    private val _tapAchievement: AchievementInterface = Achievement(activity!!, this)
+    private val _tapGift: GiftInterface = Gift(activity!!, this)
+    private val _tapLeaderboard: LeaderboardInterface = Leaderboard(activity!!, this)
 
     private var _tapAdNative : TapAdNative? = null
-    private lateinit var _tapAdnCallback : TapAdCustomController
 
-    private val _bannerAd = BannerAD(activity!!, this)
-    private val _feedAd = FeedAD(activity!!, this)
-    private val _interstitialAd = InterstitialAD(activity!!, this)
-    private val _rewardVideoAd = RewardVideoAD(activity!!, this)
-    private val _splashAd = SplashAD(activity!!, this)
-
-    fun getTapAccount() : Account { return _tapAccount; }
+    private val _tapAdnBootstrap: TapAdnBootstrapInterface = TapAdnBootstrap(activity!!, this)
+    private val _bannerAd: BannerAdInterface = BannerAd(activity!!, this)
+    private val _feedAd: FeedAdInterface = FeedAd(activity!!, this)
+    private val _interstitialAd: InterstitialAdInterface = InterstitialAd(activity!!, this)
+    private val _rewardVideoAd: RewardVideoAdInterface = RewardVideoAd(activity!!, this)
+    private val _splashAd: SplashAdInterface = SplashAd(activity!!, this)
 
     @UsedByGodot
-    fun initTapSdk(clientId: String, clientToken: String)
+    fun initTapSdk(
+        clientId: String,
+        clientToken: String,
+        logEnabled: Boolean,
+        useAgeRangeEnabled: Boolean,
+        requestPermissionIfNecessaryEnabled: Boolean
+    )
     {
         if (clientId == "" || clientToken == "")
         {
             _isTapSDKConfigValid = false
         }
 
+        _clientId = clientId
+        _requestPermissionIfNecessaryEnabled = requestPermissionIfNecessaryEnabled
+
         _checkTapSdkConfig {
-            _tapAccount.init(clientId, clientToken)
-            _tapMoment.init()
-            _tapAchievement.init()
-            _tapGift.init(clientId)
-            _tapLeaderboard.init()
+            _tapSdkBootstrap.initialize(
+                clientId = clientId,
+                clientToken = clientToken,
+                region = TapTapRegion.CN,
+                preferredLanguage = TapTapLanguage.ZH_HANS,
+                enableLog = logEnabled
+            )
         }
     }
 
@@ -100,28 +126,31 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     }
 
     @UsedByGodot
-    fun logIn()
+    fun login(
+        publicProfileEnabled: Boolean,
+        userFriendsEnabled: Boolean
+    )
     {
         _checkTapSdkConfig {
-            _tapAccount.logIn()
+            _tapAccount.login(publicProfileEnabled, userFriendsEnabled)
         }
     }
 
     @UsedByGodot
-    fun logOut()
+    fun logout()
     {
         _checkTapSdkConfig {
-            _tapAccount.logOut()
+            _tapAccount.logout()
         }
     }
 
     @UsedByGodot
     fun getCurrentTapAccountAsString() : String
     {
-        var userProfile = ""
+        var userProfile = "Invalid Account"
 
         _checkTapSdkConfig {
-            userProfile = _tapAccount.getCurrentTapAccountAsString()
+            userProfile = _tapAccount.getCurrentAccountAsString()
         }
 
         return userProfile
@@ -348,6 +377,16 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
         }
     }
 
+    fun getClientId() : String
+    {
+        return _clientId
+    }
+
+    fun getAccountOpenId() : String
+    {
+        return _tapAccount.getAccountOpenId()
+    }
+
     // Useful for emit signal
     fun emitPluginSignal(signal : String, code : Int, msg : String)
     {
@@ -400,9 +439,9 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
 
     private fun _initAdSdk(mediaId : Long, mediaName : String, mediaKey : String, clientId : String)
     {
-        TapAdManager.get().requestPermissionIfNecessary(activity)
-
-        _initTapAdnCallback()
+        // https://github.com/zhtsu/GodotTDS/issues/4
+        if (_requestPermissionIfNecessaryEnabled)
+            TapAdManager.get().requestPermissionIfNecessary(activity)
 
         val config = TapAdConfig.Builder()
             .withMediaId(mediaId)
@@ -413,17 +452,8 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
             .withTapClientId(clientId)
             .shakeEnabled(false)
             .enableDebug(true)
-            .withCustomController(_tapAdnCallback)
             .build()
 
         TapAdSdk.init(activity, config)
-    }
-
-    private fun _initTapAdnCallback()
-    {
-        _tapAdnCallback = object : TapAdCustomController()
-        {
-            // https://developer.taptap.cn/docs/sdk/tap-adn/tds-tapad/#%E5%88%9D%E5%A7%8B%E5%8C%96
-        }
     }
 }
