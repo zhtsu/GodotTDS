@@ -3,50 +3,56 @@ package cc.zhtsu.godot_tds_plugin.tapsdk
 import android.app.Activity
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
 import cc.zhtsu.godot_tds_plugin.core.GodotTdsPluginModule
+import cc.zhtsu.godot_tds_plugin.core.StateCode
 import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.AchievementInterface
 import com.taptap.sdk.achievement.TapAchievementCallback
 import com.taptap.sdk.achievement.TapTapAchievement
 import com.taptap.sdk.achievement.TapTapAchievementResult
 
-class Achievement(activity : Activity, godotTdsPlugin: GodotTdsPlugin) :
+class Achievement(activity : Activity, godotTdsPlugin: GodotTdsPlugin):
     GodotTdsPluginModule(activity, godotTdsPlugin),
     AchievementInterface
 {
-    private var _achievementCallback : TapAchievementCallback = object : TapAchievementCallback
-    {
-        override fun onAchievementSuccess(code: Int, result: TapTapAchievementResult?)
-        {
-            _godotTdsPlugin.emitPluginSignal("onAchievementReturn", code, result!!.achievementId)
-        }
-
-        override fun onAchievementFailure(achievementId: String, errorCode: Int, errorMessage: String)
-        {
-            _godotTdsPlugin.emitPluginSignal("onAchievementReturn", errorCode, errorMessage)
-        }
-    }
-
-    fun init()
+    override fun initialize()
     {
         TapTapAchievement.registerCallback(_achievementCallback)
     }
 
-    fun showAchievementPage()
+    override fun destroy()
+    {
+        TapTapAchievement.unregisterCallback(_achievementCallback)
+    }
+
+    override fun showAchievements()
     {
         TapTapAchievement.showAchievements()
     }
 
-    fun unlockAchievement(achievementId : String)
+    override fun unlock(achievementId : String)
     {
         TapTapAchievement.unlock(achievementId)
     }
 
-    fun growAchievementSteps(achievementId : String, steps : Int)
+    override fun increment(achievementId : String, steps : Int)
     {
         TapTapAchievement.increment(achievementId, steps)
     }
 
-    fun setShowAchievementToast(show : Boolean)
+    override fun setToastEnable(enable : Boolean)
     {
-        TapTapAchievement.setToastEnable(show)
+        TapTapAchievement.setToastEnable(enable)
+    }
+
+    private var _achievementCallback : TapAchievementCallback = object : TapAchievementCallback
+    {
+        override fun onAchievementSuccess(code: Int, result: TapTapAchievementResult?)
+        {
+            _godotTdsPlugin.emitPluginSignal("onAchievementReturn", StateCode.UPDATE_ACHIEVEMENT_SUCCESS, result!!.achievementId)
+        }
+
+        override fun onAchievementFailure(achievementId: String, errorCode: Int, errorMessage: String)
+        {
+            _godotTdsPlugin.emitPluginSignal("onAchievementReturn", StateCode.UPDATE_ACHIEVEMENT_FAIL, errorMessage)
+        }
     }
 }

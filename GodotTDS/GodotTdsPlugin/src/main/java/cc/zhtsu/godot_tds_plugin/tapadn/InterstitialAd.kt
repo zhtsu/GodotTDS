@@ -15,16 +15,16 @@ class InterstitialAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
 {
     private var _interstitialAd : TapInterstitialAd? = null
 
-    fun load(spaceId : Int)
+    override fun load(spaceId : Int)
     {
         val adRequest = AdRequest.Builder()
             .withSpaceId(spaceId)
             .build()
 
-        _godotTdsPlugin.getTapAdNative().loadInterstitialAd(adRequest, _interstitialAdListener)
+        _godotTdsPlugin.getTapAdnBootstrap().getTapAdNative()?.loadInterstitialAd(adRequest, _interstitialAdListener)
     }
 
-    fun show()
+    override fun show()
     {
         if (_interstitialAd != null)
         {

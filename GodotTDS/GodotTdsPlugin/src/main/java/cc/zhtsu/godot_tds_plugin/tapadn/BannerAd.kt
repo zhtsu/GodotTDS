@@ -22,12 +22,12 @@ class BannerAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
 {
     private var _bannerAd : TapBannerAd? = null
 
-    init
+    override fun initialize()
     {
         _activity.runOnUiThread {
-            val rootView = activity.findViewById<ViewGroup>(android.R.id.content)
+            val rootView = _activity.findViewById<ViewGroup>(android.R.id.content)
 
-            val inflater = LayoutInflater.from(activity)
+            val inflater = LayoutInflater.from(_activity)
             val bannerLayout = inflater.inflate(R.layout.banner_container, null) as FrameLayout
 
             bannerLayout.id = R.layout.banner_container
@@ -40,16 +40,16 @@ class BannerAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
         }
     }
 
-    fun load(spaceId : Int)
+    override fun load(spaceId : Int)
     {
         val adRequest = AdRequest.Builder()
             .withSpaceId(spaceId)
             .build()
 
-        _godotTdsPlugin.getTapAdNative().loadBannerAd(adRequest, _bannerAdListener)
+        _godotTdsPlugin.getTapAdnBootstrap().getTapAdNative()?.loadBannerAd(adRequest, _bannerAdListener)
     }
 
-    fun show(gravity : Int, height : Int)
+    override fun show(gravity : Int, height : Int)
     {
         if (_bannerAd != null)
         {
@@ -85,7 +85,7 @@ class BannerAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
         }
     }
 
-    fun dispose()
+    override fun dispose()
     {
         if (_bannerAd != null)
         {

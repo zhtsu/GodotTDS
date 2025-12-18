@@ -6,40 +6,38 @@ Godot plugin for supporting TapTap Developer Services
 
 在 Godot 中使用 TapTap 开发者服务
 
-关于新版 TapSDK 的详细信息：https://developer.taptap.cn/docs/sdk/access/v3-to-v4/
-
-**注意事项：4.4 版本插件开发完成后尚未经过任何测试（2025.05.06）**
-
-**[4.2.2 版本插件](https://github.com/zhtsu/GodotTDS/tree/4.2.2)**
+**注意事项：最新版本的插件正在锐意开发中（2025.12.19）**
 
 # Version
 
 - OpenJDK 17.0.11
-- TapSDK Android 4.5.5
+- TapSDK Android 4.9.1
 - TapADN Android SDK 3.16.3.45
-- Godot 4.4
+- Godot 5.2.1
 
 # Feature
 
 ### TapSDK
 
-- [x] 登录
-- [x] 合规认证
-- [x] 内嵌动态
-- [ ] ~~悬浮窗~~（v4 版本 TapSDK 暂不支持）
-- [x] 成就系统
-- [x] 礼包系统
-- [x] 排行榜（v4 版本文档中没有对应示例，但是老版本接口没有被删除，谨慎使用）
-- [ ] ~~云存档~~（v4 版本 TapSDK 暂不支持）
-- [ ] ~~深度链接~~（不支持）
+- [x] 登录（已完成）
+- [x] 合规认证（已完成）
+- [x] 内嵌动态（已完成）
+- [x] 成就系统（开发中）
+- [x] 礼包系统（已完成）
+- [x] 排行榜（开发中）
+- [x] 云存档（开发中）
+- [x] 深度链接（开发中）
 
 ### TapAD
 
-- [x] 开屏广告
-- [x] 激励广告
-- [x] 横幅广告（目前只支持竖屏显示）
-- [x] 信息流广告（目前只支持模板渲染）
-- [x] 插屏广告
+TapADN 即将全面迁移到新的 Dirichlet 平台，需要认证公司资质才能使用对应服务
+新平台地址：[https://ssp.dirichlet.cn/](https://ssp.dirichlet.cn/)
+
+- [x] 开屏广告（开发中）
+- [x] 激励广告（开发中）
+- [x] 横幅广告（开发中）
+- [x] 信息流广告（开发中）
+- [x] 插屏广告（开发中）
 
 # How to use
 

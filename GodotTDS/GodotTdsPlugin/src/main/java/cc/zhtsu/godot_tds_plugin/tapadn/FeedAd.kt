@@ -35,12 +35,12 @@ class FeedAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
     private var _gravity : Int = 0
     private var _height : Int = -1
 
-    init
+    override fun initialize()
     {
         _activity.runOnUiThread {
-            val rootView = activity.findViewById<ViewGroup>(android.R.id.content)
+            val rootView = _activity.findViewById<ViewGroup>(android.R.id.content)
 
-            val inflater = LayoutInflater.from(activity)
+            val inflater = LayoutInflater.from(_activity)
             val bannerLayout = inflater.inflate(R.layout.feed_container, null) as FrameLayout
 
             bannerLayout.id = R.layout.feed_container
@@ -53,18 +53,18 @@ class FeedAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
         }
     }
 
-    fun load(spaceId : Int, query : String)
+    override fun load(spaceId : Int, query : String)
     {
         val adRequest = AdRequest.Builder()
             .withQuery(query)
             .withSpaceId(spaceId)
             .build()
 
-        _godotTdsPlugin.getTapAdNative().loadFeedAd(adRequest, _feedAdListener)
+        _godotTdsPlugin.getTapAdnBootstrap().getTapAdNative()?.loadFeedAd(adRequest, _feedAdListener)
     }
 
     @SuppressLint("ResourceType")
-    fun show(gravity : Int, height : Int)
+    override fun show(gravity : Int, height : Int)
     {
         if (_feedAd != null)
         {

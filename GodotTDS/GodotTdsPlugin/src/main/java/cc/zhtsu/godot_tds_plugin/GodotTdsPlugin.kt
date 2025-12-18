@@ -10,6 +10,7 @@ import cc.zhtsu.godot_tds_plugin.core.tapadn_interface.SplashAdInterface
 import cc.zhtsu.godot_tds_plugin.core.tapadn_interface.TapAdnBootstrapInterface
 import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.AccountInterface
 import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.AchievementInterface
+import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.CloudSaveInterface
 import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.ComplianceInterface
 import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.GiftInterface
 import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.LeaderboardInterface
@@ -23,15 +24,12 @@ import cc.zhtsu.godot_tds_plugin.tapadn.SplashAd
 import cc.zhtsu.godot_tds_plugin.tapadn.TapAdnBootstrap
 import cc.zhtsu.godot_tds_plugin.tapsdk.Account
 import cc.zhtsu.godot_tds_plugin.tapsdk.Achievement
+import cc.zhtsu.godot_tds_plugin.tapsdk.CloudSave
 import cc.zhtsu.godot_tds_plugin.tapsdk.Compliance
 import cc.zhtsu.godot_tds_plugin.tapsdk.Gift
 import cc.zhtsu.godot_tds_plugin.tapsdk.Leaderboard
 import cc.zhtsu.godot_tds_plugin.tapsdk.Moment
 import cc.zhtsu.godot_tds_plugin.tapsdk.TapSdkBootstrap
-import com.tapsdk.tapad.TapAdConfig
-import com.tapsdk.tapad.TapAdManager
-import com.tapsdk.tapad.TapAdNative
-import com.tapsdk.tapad.TapAdSdk
 import com.taptap.sdk.core.TapTapLanguage
 import com.taptap.sdk.core.TapTapRegion
 import org.godotengine.godot.Godot
@@ -40,19 +38,20 @@ import org.godotengine.godot.plugin.SignalInfo
 import org.godotengine.godot.plugin.UsedByGodot
 
 
-class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
+class GodotTdsPlugin(godot: Godot): GodotPlugin(godot)
 {
     override fun getPluginName() = "GodotTdsPlugin"
 
     override fun getPluginSignals(): MutableSet<SignalInfo>
     {
         return mutableSetOf(
-            SignalInfo("onLogInReturn", Integer::class.java, String::class.java),
+            SignalInfo("onLoginReturn", Integer::class.java, String::class.java),
             SignalInfo("onComplianceReturn", Integer::class.java, String::class.java),
             SignalInfo("onTapMomentReturn", Integer::class.java, String::class.java),
             SignalInfo("onAchievementReturn", Integer::class.java, String::class.java),
             SignalInfo("onGiftReturn", Integer::class.java, String::class.java),
             SignalInfo("onLeaderboardReturn", Integer::class.java, String::class.java),
+            SignalInfo("onCloudSaveReturn", Integer::class.java, String::class.java),
             SignalInfo("onSplashAdReturn", Integer::class.java, String::class.java),
             SignalInfo("onRewardVideoAdReturn", Integer::class.java, String::class.java),
             SignalInfo("onBannerAdReturn", Integer::class.java, String::class.java),
@@ -62,7 +61,6 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     }
 
     private var _clientId: String = "Invalid ClientId"
-    private var _requestPermissionIfNecessaryEnabled: Boolean = false
 
     private var _isTapSDKConfigValid: Boolean = true
     private var _isTapADNConfigValid: Boolean = true
@@ -74,8 +72,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     private val _tapAchievement: AchievementInterface = Achievement(activity!!, this)
     private val _tapGift: GiftInterface = Gift(activity!!, this)
     private val _tapLeaderboard: LeaderboardInterface = Leaderboard(activity!!, this)
-
-    private var _tapAdNative : TapAdNative? = null
+    private val _tapCloudSave: CloudSaveInterface = CloudSave(activity!!, this)
 
     private val _tapAdnBootstrap: TapAdnBootstrapInterface = TapAdnBootstrap(activity!!, this)
     private val _bannerAd: BannerAdInterface = BannerAd(activity!!, this)
@@ -89,8 +86,10 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
         clientId: String,
         clientToken: String,
         logEnabled: Boolean,
+        showSwitchAccountEnabled: Boolean,
         useAgeRangeEnabled: Boolean,
-        requestPermissionIfNecessaryEnabled: Boolean
+        achievementToastEnabled: Boolean,
+        screenOrientation: Int
     )
     {
         if (clientId == "" || clientToken == "")
@@ -99,7 +98,6 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
         }
 
         _clientId = clientId
-        _requestPermissionIfNecessaryEnabled = requestPermissionIfNecessaryEnabled
 
         _checkTapSdkConfig {
             _tapSdkBootstrap.initialize(
@@ -107,29 +105,51 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
                 clientToken = clientToken,
                 region = TapTapRegion.CN,
                 preferredLanguage = TapTapLanguage.ZH_HANS,
-                enableLog = logEnabled
+                enableLog = logEnabled,
+                showSwitchAccountEnabled = showSwitchAccountEnabled,
+                useAgeRangeEnabled = useAgeRangeEnabled,
+                achievementToastEnabled = achievementToastEnabled,
+                screenOrientation = screenOrientation
             )
+
+            _tapAchievement.initialize()
+            _tapCompliance.initialize()
+            _tapLeaderboard.initialize()
+            _tapMoment.initialize()
+            _tapCloudSave.initialize()
         }
     }
 
     @UsedByGodot
-    fun initTapAdn(mediaId: Long, mediaName: String, mediaKey: String, clientId: String)
+    fun initTapAdn(
+        mediaId: Long,
+        mediaName: String,
+        mediaKey: String,
+        clientId: String,
+        requestPermissionIfNecessaryEnabled: Boolean
+    )
     {
-        if (mediaId == -1L || mediaName == "" || mediaKey == "")
+        if (mediaId == -1L || mediaName == "" || mediaKey == "" || clientId == "")
         {
             _isTapADNConfigValid = false
         }
 
         _checkTapSdkConfig {
-            _initAdSdk(mediaId, mediaName, mediaKey, clientId)
+            _tapAdnBootstrap.initialize(
+                mediaId,
+                mediaName,
+                mediaKey,
+                clientId,
+                requestPermissionIfNecessaryEnabled
+            )
+
+            _bannerAd.initialize()
+            _feedAd.initialize()
         }
     }
 
     @UsedByGodot
-    fun login(
-        publicProfileEnabled: Boolean,
-        userFriendsEnabled: Boolean
-    )
+    fun login(publicProfileEnabled: Boolean, userFriendsEnabled: Boolean)
     {
         _checkTapSdkConfig {
             _tapAccount.login(publicProfileEnabled, userFriendsEnabled)
@@ -145,7 +165,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     }
 
     @UsedByGodot
-    fun getCurrentTapAccountAsString() : String
+    fun getCurrentTapAccountAsString(): String
     {
         var userProfile = "Invalid Account"
 
@@ -157,7 +177,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     }
 
     @UsedByGodot
-    fun isLoggedIn() : Boolean
+    fun isLoggedIn(): Boolean
     {
         var loggedIn = false
 
@@ -169,15 +189,15 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     }
 
     @UsedByGodot
-    fun startUpCompliance()
+    fun startupCompliance()
     {
         _checkTapSdkConfig {
-            _tapCompliance.startUp()
+            _tapCompliance.startup()
         }
     }
 
     @UsedByGodot
-    fun tapMoment()
+    fun openTapMoment()
     {
         _checkTapSdkConfig {
             _tapMoment.openPage()
@@ -185,39 +205,39 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     }
 
     @UsedByGodot
-    fun showAchievementPage()
+    fun showAchievements()
     {
         _checkTapSdkConfig {
-            _tapAchievement.showAchievementPage()
+            _tapAchievement.showAchievements()
         }
     }
 
     @UsedByGodot
-    fun unlockAchievement(achievementId : String)
+    fun unlockAchievement(achievementId: String)
     {
         _checkTapSdkConfig {
-            _tapAchievement.unlockAchievement(achievementId)
+            _tapAchievement.unlock(achievementId)
         }
     }
 
     @UsedByGodot
-    fun growAchievementSteps(displayId : String, steps : Int)
+    fun incrementAchievement(displayId: String, steps: Int)
     {
         _checkTapSdkConfig {
-            _tapAchievement.growAchievementSteps(displayId, steps)
+            _tapAchievement.increment(displayId, steps)
         }
     }
 
     @UsedByGodot
-    fun setShowAchievementToast(show : Boolean)
+    fun setAchievementToastEnable(enable: Boolean)
     {
         _checkTapSdkConfig {
-            _tapAchievement.setShowAchievementToast(show)
+            _tapAchievement.setToastEnable(enable)
         }
     }
 
     @UsedByGodot
-    fun submitGiftCode(giftCode : String)
+    fun submitGiftCode(giftCode: String)
     {
         _checkTapSdkConfig {
             _tapGift.submitGiftCode(giftCode)
@@ -225,31 +245,102 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     }
 
     @UsedByGodot
-    fun submitLeaderboardScore(leaderboardName : String, score : Long)
+    fun submitLeaderboardScore(leaderboardId: String, score: Long)
     {
         _checkTapSdkConfig {
-            _tapLeaderboard.submitLeaderboardScore(leaderboardName, score)
+            _tapLeaderboard.submitScore(leaderboardId, score)
         }
     }
 
     @UsedByGodot
-    fun fetchLeaderboardSectionRankings(leaderboardName : String, start : Int, end : Int)
+    fun fetchLeaderboardScores(leaderboardName: String, start: Int, nextPage: String)
     {
         _checkTapSdkConfig {
-            _tapLeaderboard.fetchLeaderboardSectionRankings(leaderboardName, start, end)
+            _tapLeaderboard.loadLeaderboardScores(leaderboardName, start, nextPage)
         }
     }
 
     @UsedByGodot
-    fun fetchLeaderboardUserAroundRankings(leaderboardName : String, count : Int)
+    fun fetchCurrentPlayerLeaderboardScore(leaderboardId: String, leaderboardCollection: Int)
     {
         _checkTapSdkConfig {
-            _tapLeaderboard.fetchLeaderboardUserAroundRankings(leaderboardName, count)
+            _tapLeaderboard.loadCurrentPlayerLeaderboardScore(leaderboardId, leaderboardCollection)
         }
     }
 
     @UsedByGodot
-    fun pushLog(msg : String, error : Boolean)
+    fun fetchPlayerCenteredScores(leaderboardId: String, leaderboardCollection: Int, periodToken: String, maxCount: Int)
+    {
+        _checkTapSdkConfig {
+            _tapLeaderboard.loadPlayerCenteredScores(leaderboardId, leaderboardCollection, periodToken, maxCount)
+        }
+    }
+
+    @UsedByGodot
+    fun createCloudSaveArchive(
+        name: String,
+        summary: String,
+        extra: String,
+        playtime: Int,
+        archiveFilePath: String,
+        archiveCoverPath: String
+    )
+    {
+        _checkTapSdkConfig {
+            _tapCloudSave.createArchive(name, summary, extra, playtime, archiveFilePath, archiveCoverPath)
+        }
+    }
+
+    @UsedByGodot
+    fun fetchCloudSaveArchiveList()
+    {
+        _checkTapSdkConfig {
+            _tapCloudSave.getArchiveList()
+        }
+    }
+
+    @UsedByGodot
+    fun fetchCloudSaveArchiveData(archiveUuid: String, archiveFileId: String)
+    {
+        _checkTapSdkConfig {
+            _tapCloudSave.getArchiveData(archiveUuid, archiveFileId)
+        }
+    }
+
+    @UsedByGodot
+    fun updateCloudSaveArchive(
+        archiveUuid: String,
+        name: String,
+        summary: String,
+        extra: String,
+        playtime: Int,
+        archiveFilePath: String,
+        archiveCoverPath: String
+    )
+    {
+        _checkTapSdkConfig {
+            _tapCloudSave.updateArchive(archiveUuid, name, summary, extra, playtime, archiveFilePath, archiveCoverPath)
+        }
+    }
+
+    @UsedByGodot
+    fun deleteCloudSaveArchive(archiveUuid: String)
+    {
+        _checkTapSdkConfig {
+            _tapCloudSave.deleteArchive(archiveUuid)
+        }
+    }
+
+    @UsedByGodot
+    fun fetchCloudSaveArchiveCover(archiveUuid: String, archiveFileId: String)
+    {
+        _checkTapSdkConfig {
+            _tapCloudSave.getArchiveCover(archiveUuid, archiveFileId)
+        }
+    }
+
+    @UsedByGodot
+    fun pushLog(msg: String, error: Boolean)
     {
         if (error)
         {
@@ -262,13 +353,13 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     }
 
     @UsedByGodot
-    fun getCacheDirPath() : String
+    fun getCacheDirPath(): String
     {
         return activity!!.baseContext.cacheDir.absolutePath
     }
 
     @UsedByGodot
-    fun loadSplashAd(spaceId : Int)
+    fun loadSplashAd(spaceId: Int)
     {
         _checkTapAdnConfig {
             _splashAd.load(spaceId)
@@ -293,11 +384,11 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
 
     @UsedByGodot
     fun loadRewardVideoAd(
-        spaceId : Int,
-        rewardName : String,
-        rewardAmount : Int,
-        extraInfo : String,
-        gameUserId : String,
+        spaceId: Int,
+        rewardName: String,
+        rewardAmount: Int,
+        extraInfo: String,
+        gameUserId: String,
     )
     {
         _checkTapAdnConfig {
@@ -314,7 +405,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     }
 
     @UsedByGodot
-    fun loadBannerAd(spaceId : Int)
+    fun loadBannerAd(spaceId: Int)
     {
         _checkTapAdnConfig {
             _bannerAd.load(spaceId)
@@ -322,7 +413,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     }
 
     @UsedByGodot
-    fun showBannerAd(gravity : Int, height : Int)
+    fun showBannerAd(gravity: Int, height: Int)
     {
         _checkTapAdnConfig {
             _bannerAd.show(gravity, height)
@@ -338,7 +429,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     }
 
     @UsedByGodot
-    fun loadInterstitialAd(spaceId : Int)
+    fun loadInterstitialAd(spaceId: Int)
     {
         _checkTapAdnConfig {
             _interstitialAd.load(spaceId)
@@ -354,7 +445,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     }
 
     @UsedByGodot
-    fun loadFeedAd(spaceId : Int, query : String)
+    fun loadFeedAd(spaceId: Int, query: String)
     {
         _checkTapAdnConfig {
             _feedAd.load(spaceId, query)
@@ -362,7 +453,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     }
 
     @UsedByGodot
-    fun showFeedAd(gravity : Int, height : Int)
+    fun showFeedAd(gravity: Int, height: Int)
     {
         _checkTapAdnConfig {
             _feedAd.show(gravity, height)
@@ -370,42 +461,40 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
     }
 
     @UsedByGodot
-    fun showToast(msg : String)
+    fun showToast(msg: String)
     {
         activity!!.runOnUiThread {
             Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
         }
     }
 
-    fun getClientId() : String
+    fun getClientId(): String
     {
         return _clientId
     }
 
-    fun getAccountOpenId() : String
+    fun getAccountOpenId(): String
     {
         return _tapAccount.getAccountOpenId()
     }
 
+    fun getTapAdnBootstrap(): TapAdnBootstrapInterface
+    {
+        return _tapAdnBootstrap
+    }
+
+    fun exitCompliance()
+    {
+        _tapCompliance.exit()
+    }
+
     // Useful for emit signal
-    fun emitPluginSignal(signal : String, code : Int, msg : String)
+    fun emitPluginSignal(signal: String, code: Int, msg: String)
     {
         emitSignal(signal, code, msg)
     }
 
-    fun getTapAdNative() : TapAdNative
-    {
-        return if (_tapAdNative == null)
-        {
-            TapAdManager.get().createAdNative(activity)
-        }
-        else
-        {
-            _tapAdNative!!
-        }
-    }
-
-    fun _checkTapSdkConfig(block : () -> Unit)
+    private fun _checkTapSdkConfig(block: () -> Unit)
     {
         if (_isTapSDKConfigValid)
         {
@@ -413,7 +502,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
         }
         else
         {
-            val msg : String = "Invalid SDK config!"
+            val msg: String = "Invalid SDK config!"
 
             showToast(msg);
 
@@ -421,7 +510,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
         }
     }
 
-    fun _checkTapAdnConfig(block : () -> Unit)
+    private fun _checkTapAdnConfig(block: () -> Unit)
     {
         if (_isTapADNConfigValid)
         {
@@ -429,7 +518,7 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
         }
         else
         {
-            val msg : String = "Invalid ADN config!"
+            val msg: String = "Invalid ADN config!"
 
             showToast(msg);
 
@@ -437,23 +526,11 @@ class GodotTdsPlugin(godot : Godot) : GodotPlugin(godot)
         }
     }
 
-    private fun _initAdSdk(mediaId : Long, mediaName : String, mediaKey : String, clientId : String)
+    override fun onMainDestroy()
     {
-        // https://github.com/zhtsu/GodotTDS/issues/4
-        if (_requestPermissionIfNecessaryEnabled)
-            TapAdManager.get().requestPermissionIfNecessary(activity)
-
-        val config = TapAdConfig.Builder()
-            .withMediaId(mediaId)
-            .withMediaName(mediaName)
-            .withMediaKey(mediaKey)
-            .withMediaVersion("1")
-            .withGameChannel("taptap2")
-            .withTapClientId(clientId)
-            .shakeEnabled(false)
-            .enableDebug(true)
-            .build()
-
-        TapAdSdk.init(activity, config)
+        _tapAchievement.destroy()
+        _tapCompliance.destroy()
+        _tapLeaderboard.destroy()
+        _tapCloudSave.destroy()
     }
 }

@@ -7,115 +7,190 @@ import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
 import cc.zhtsu.godot_tds_plugin.core.StateCode
 import cc.zhtsu.godot_tds_plugin.core.GodotTdsPluginModule
 import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.LeaderboardInterface
-import com.tapsdk.lc.LCLeaderboard
-import com.tapsdk.lc.LCLeaderboardResult
-import com.tapsdk.lc.LCRanking
-import com.tapsdk.lc.LCStatisticResult
-import com.tapsdk.lc.LCUser
-import io.reactivex.Observer
-import io.reactivex.disposables.Disposable
+import com.taptap.sdk.leaderboard.androidx.TapTapLeaderboard
+import com.taptap.sdk.leaderboard.callback.TapTapLeaderboardCallback
+import com.taptap.sdk.leaderboard.callback.TapTapLeaderboardResponseCallback
+import com.taptap.sdk.leaderboard.data.request.LeaderboardCollection
+import com.taptap.sdk.leaderboard.data.request.SubmitScoresRequest
+import com.taptap.sdk.leaderboard.data.response.LeaderboardScoresResponse
+import com.taptap.sdk.leaderboard.data.response.SubmitScoresResponse
+import com.taptap.sdk.leaderboard.data.response.UserScoreResponse
+import com.taptap.sdk.leaderboard.data.response.common.Score
 import org.json.JSONObject
 
-class Leaderboard(activity : Activity, godotTdsPlugin: GodotTdsPlugin) :
+class Leaderboard(activity : Activity, godotTdsPlugin: GodotTdsPlugin):
     GodotTdsPluginModule(activity, godotTdsPlugin),
     LeaderboardInterface
 {
-    fun submitLeaderboardScore(leaderboardName : String, score : Long)
+    override fun initialize()
     {
-        val statistic = HashMap<String, Double>()
-        statistic[leaderboardName] = score.toDouble()
-        LCLeaderboard.updateStatistic(LCUser.currentUser(), statistic, true).subscribe(_leaderboardSubmitObserver)
+        TapTapLeaderboard.registerLeaderboardCallback(_leaderboardCallback)
     }
 
-    fun fetchLeaderboardSectionRankings(leaderboardName : String, start : Int, end : Int)
+    override fun destroy()
     {
-        val leaderboard = LCLeaderboard.createWithoutData(leaderboardName)
-        val selectKeys : List<String> = listOf("nickname")
-        leaderboard.getResults(start, end, selectKeys, null).subscribe(_leaderboardSectionRankingsObserver)
+        TapTapLeaderboard.unregisterLeaderboardCallback(_leaderboardCallback)
     }
 
-    fun fetchLeaderboardUserAroundRankings(leaderboardName : String, count : Int)
+    override fun openLeaderboard(leaderboardId: String, collection: String)
     {
-        val objectId : String = _godotTdsPlugin.getAccountOpenId()
-        val leaderboard = LCLeaderboard.createWithoutData(leaderboardName)
-        val selectKeys : List<String> = listOf("nickname")
-        leaderboard.getAroundResults(objectId, 0, count, selectKeys, null).subscribe(_leaderboardUserAroundRankingsObserver)
+        TapTapLeaderboard.openLeaderboard(_activity, leaderboardId, collection)
     }
 
-    private var _leaderboardSubmitObserver : Observer<LCStatisticResult> = object : Observer<LCStatisticResult>
+    override fun showTapUserProfile(openId: String)
     {
-        override fun onSubscribe(disposable : Disposable) {}
+        TapTapLeaderboard.showTapUserProfile(_activity, openId)
+    }
 
-        override fun onNext(result : LCStatisticResult)
+    override fun submitScore(leaderboardId: String, score: Long)
+    {
+        val scores = listOf(SubmitScoresRequest.ScoreItem("leaderboardId", score))
+        TapTapLeaderboard.submitScores(scores, _leaderboardSubmitCallback)
+    }
+
+    override fun loadLeaderboardScores(leaderboardId: String, leaderboardCollection: Int, nextPage: String)
+    {
+        val collection = if (leaderboardCollection == 0) LeaderboardCollection.PUBLIC else LeaderboardCollection.FRIENDS
+        val nextPageParam: String? = if (nextPage == "") null else nextPage
+
+        TapTapLeaderboard.loadLeaderboardScores(
+            leaderboardId = leaderboardId,
+            leaderboardCollection = collection,
+            nextPage = nextPageParam,
+            callback = _loadLeaderboardScoresCallback
+        )
+    }
+
+    override fun loadCurrentPlayerLeaderboardScore(leaderboardId: String, leaderboardCollection: Int)
+    {
+        val collection = if (leaderboardCollection == 0) LeaderboardCollection.PUBLIC else LeaderboardCollection.FRIENDS
+
+        TapTapLeaderboard.loadCurrentPlayerLeaderboardScore(
+            leaderboardId = leaderboardId,
+            leaderboardCollection = collection,
+            periodToken = null,
+            callback = _loadCurrentPlayerLeaderboardScoreCallback
+        )
+    }
+
+    override fun loadPlayerCenteredScores(leaderboardId: String, leaderboardCollection: Int, periodToken: String, maxCount: Int)
+    {
+        val collection = if (leaderboardCollection == 0) LeaderboardCollection.PUBLIC else LeaderboardCollection.FRIENDS
+
+        TapTapLeaderboard.loadPlayerCenteredScores(
+            leaderboardId = leaderboardId,
+            leaderboardCollection = collection,
+            periodToken = periodToken,
+            maxCount = maxCount,
+            callback = _loadPlayerCenteredScoresCallback
+        )
+    }
+
+    private var _leaderboardCallback: TapTapLeaderboardCallback = object : TapTapLeaderboardCallback
+    {
+        override fun onLeaderboardResult(code: Int, message: String)
+        {
+            _godotTdsPlugin.emitPluginSignal("onLeaderboardReturn", code, message)
+        }
+    }
+
+    private var _leaderboardSubmitCallback: TapTapLeaderboardResponseCallback<SubmitScoresResponse> = object:
+        TapTapLeaderboardResponseCallback<SubmitScoresResponse>()
+    {
+        override fun onSuccess(data: SubmitScoresResponse)
         {
             _godotTdsPlugin.emitPluginSignal("onLeaderboardReturn",
                 StateCode.LEADERBOARD_SUBMIT_SUCCESS,
-                result.toString()
+                SubmitScoresResponse.toString()
             )
         }
 
-        override fun onError(throwable : Throwable)
+        override fun onFailure(code: Int, message: String)
         {
             _godotTdsPlugin.emitPluginSignal("onLeaderboardReturn",
-                StateCode.LEADERBOARD_SUBMIT_FAIL, throwable.message.toString())
+                StateCode.LEADERBOARD_SUBMIT_FAIL, message)
         }
-
-        override fun onComplete() {}
     }
 
-    private var _leaderboardSectionRankingsObserver : Observer<LCLeaderboardResult> = object : Observer<LCLeaderboardResult>
+    private var _loadLeaderboardScoresCallback: TapTapLeaderboardResponseCallback<LeaderboardScoresResponse> = object:
+        TapTapLeaderboardResponseCallback<LeaderboardScoresResponse>()
     {
-        override fun onSubscribe(disposable : Disposable) {}
-
         @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-        override fun onNext(leaderboardResult : LCLeaderboardResult)
+        override fun onSuccess(data: LeaderboardScoresResponse)
         {
-            val msg : String = _rankingListToJsonObj(leaderboardResult.results).toString()
+            val scores = data.scores
+            val nextPage = data.nextPage
+
+            val retJsonObj: JSONObject = _rankingListToJsonObj(scores)
+            retJsonObj.put("nextPage", nextPage)
+            val msg : String = retJsonObj.toString()
+
             _godotTdsPlugin.emitPluginSignal("onLeaderboardReturn",
-                StateCode.LEADERBOARD_FETCH_SECTION_RANKINGS_SUCCESS, msg)
+                StateCode.LEADERBOARD_FETCH_SCORES_SUCCESS, msg)
         }
 
-        override fun onError(throwable : Throwable)
+        override fun onFailure(code: Int, message: String)
         {
             _godotTdsPlugin.emitPluginSignal("onLeaderboardReturn",
-                StateCode.LEADERBOARD_FETCH_SECTION_RANKINGS_FAIL, throwable.message.toString())
+                StateCode.LEADERBOARD_FETCH_SCORES_FAIL, message)
         }
-
-        override fun onComplete() {}
     }
 
-    private var _leaderboardUserAroundRankingsObserver : Observer<LCLeaderboardResult> = object : Observer<LCLeaderboardResult>
+    private var _loadCurrentPlayerLeaderboardScoreCallback: TapTapLeaderboardResponseCallback<UserScoreResponse> = object:
+        TapTapLeaderboardResponseCallback<UserScoreResponse>()
     {
-        override fun onSubscribe(disposable : Disposable) {}
-
         @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-        override fun onNext(leaderboardResult : LCLeaderboardResult)
+        override fun onSuccess(data: UserScoreResponse)
         {
-            val msg : String = _rankingListToJsonObj(leaderboardResult.results).toString()
+            val scores: List<Score> = if (data.currentUserScore == null) emptyList() else listOf(data.currentUserScore!!)
+
+            val retJsonObj: JSONObject = _rankingListToJsonObj(scores)
+            val msg : String = retJsonObj.toString()
+
             _godotTdsPlugin.emitPluginSignal("onLeaderboardReturn",
-                StateCode.LEADERBOARD_FETCH_USER_RANKING_SUCCESS, msg)
+                StateCode.LEADERBOARD_FETCH_CURRENT_PLAYER_SCORE_SUCCESS, msg)
         }
 
-        override fun onError(throwable : Throwable)
+        override fun onFailure(code: Int, message: String)
         {
             _godotTdsPlugin.emitPluginSignal("onLeaderboardReturn",
-                StateCode.LEADERBOARD_FETCH_USER_RANKING_FAIL, throwable.message.toString())
+                StateCode.LEADERBOARD_FETCH_CURRENT_PLAYER_SCORE_FAIL, message)
+        }
+    }
+
+    private var _loadPlayerCenteredScoresCallback: TapTapLeaderboardResponseCallback<LeaderboardScoresResponse> = object:
+        TapTapLeaderboardResponseCallback<LeaderboardScoresResponse>()
+    {
+        @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+        override fun onSuccess(data: LeaderboardScoresResponse)
+        {
+            val scores = data.scores
+
+            val retJsonObj: JSONObject = _rankingListToJsonObj(scores)
+            val msg : String = retJsonObj.toString()
+
+            _godotTdsPlugin.emitPluginSignal("onLeaderboardReturn",
+                StateCode.LEADERBOARD_FETCH_CURRENT_PLAYER_CENTERED_SCORE_SUCCESS, msg)
         }
 
-        override fun onComplete() {}
+        override fun onFailure(code: Int, message: String)
+        {
+            _godotTdsPlugin.emitPluginSignal("onLeaderboardReturn",
+                StateCode.LEADERBOARD_FETCH_CURRENT_PLAYER_CENTERED_SCORE_FAIL, message)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun _rankingListToJsonObj(rankingList : List<LCRanking>) : JSONObject
+    private fun _rankingListToJsonObj(rankingList : List<Score>) : JSONObject
     {
         val jsonObject = JSONObject()
         for (ranking in rankingList)
         {
             val tempJsonObject = JSONObject()
             tempJsonObject.put("rank", ranking.rank)
-            tempJsonObject.put("nickname", ranking.user.toJSONObject()["nickname"])
-            tempJsonObject.put("statisticValue", ranking.statisticValue)
-            jsonObject.append("list", tempJsonObject)
+            tempJsonObject.put("username", ranking.user?.name ?: "Invalid Username")
+            tempJsonObject.put("score", ranking.score)
+            jsonObject.append("scores", tempJsonObject)
         }
         return jsonObject
     }

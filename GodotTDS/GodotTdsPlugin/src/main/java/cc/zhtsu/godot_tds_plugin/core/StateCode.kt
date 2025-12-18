@@ -1,117 +1,73 @@
 package cc.zhtsu.godot_tds_plugin.core
 
-class StateCode
+object StateCode
 {
-    companion object
-    {
-        @JvmStatic
-        val LOG_IN_FAIL : Int = 2001
-        @JvmStatic
-        val LOG_IN_CANCEL : Int = 2001
+    const val LOGIN_SUCCESS = 1001
+    const val LOGIN_FAIL = 1002
+    const val LOGIN_CANCEL = 1003
 
-        @JvmStatic
-        val LOG_IN_SUCCESS : Int = 1001
-        @JvmStatic
-        val ACHIEVEMENT_INIT_SUCCESS : Int = 1002
-        @JvmStatic
-        val ACHIEVEMENT_INIT_FAIL : Int = 1003
-        @JvmStatic
-        val ACHIEVEMENT_UPDATE_SUCCESS : Int = 1004
-        @JvmStatic
-        val ACHIEVEMENT_UPDATE_FAIL : Int = 1005
-        @JvmStatic
-        val ACHIEVEMENT_LIST_FETCH_SUCCESS : Int = 1006
-        @JvmStatic
-        val GIFT_CODE_SUBMIT_SUCCESS : Int = 1007
-        @JvmStatic
-        val GIFT_CODE_SUBMIT_FAIL : Int = 1008
-        @JvmStatic
-        val LEADERBOARD_SUBMIT_SUCCESS : Int = 1009
-        @JvmStatic
-        val LEADERBOARD_SUBMIT_FAIL : Int = 1010
-        @JvmStatic
-        val LEADERBOARD_FETCH_SECTION_RANKINGS_SUCCESS : Int = 1011
-        @JvmStatic
-        val LEADERBOARD_FETCH_SECTION_RANKINGS_FAIL : Int = 1012
-        @JvmStatic
-        val LEADERBOARD_FETCH_USER_RANKING_SUCCESS : Int = 1013
-        @JvmStatic
-        val LEADERBOARD_FETCH_USER_RANKING_FAIL : Int = 1014
-        @JvmStatic
-        val GAME_SAVE_SUBMIT_SUCCESS : Int = 1015
-        @JvmStatic
-        val GAME_SAVE_SUBMIT_FAIL : Int = 1016
-        @JvmStatic
-        val GAME_SAVE_FETCH_SUCCESS : Int = 1017
-        @JvmStatic
-        val GAME_SAVE_FETCH_FAIL : Int = 1018
-        @JvmStatic
-        val GAME_SAVE_DELETE_SUCCESS : Int = 1019
-        @JvmStatic
-        val GAME_SAVE_DELETE_FAIL : Int = 1020
-        @JvmStatic
-        val AD_SPLASH_LOAD_SUCCESS : Int = 1021
-        @JvmStatic
-        val AD_SPLASH_LOAD_FAIL : Int = 1022
-        @JvmStatic
-        val AD_SPLASH_CLICKED : Int = 1023
-        @JvmStatic
-        val AD_SPLASH_SKIPPED : Int = 1024
-        @JvmStatic
-        val AD_SPLASH_TIME_OVER : Int = 1025
-        @JvmStatic
-        val AD_REWARD_VIDEO_LOAD_SUCCESS : Int = 1026
-        @JvmStatic
-        val AD_REWARD_VIDEO_CACHE_SUCCESS : Int = 1027
-        @JvmStatic
-        val AD_REWARD_VIDEO_LOAD_FAIL : Int = 1028
-        @JvmStatic
-        val AD_REWARD_VIDEO_SHOWN : Int = 1029
-        @JvmStatic
-        val AD_REWARD_VIDEO_CLOSED : Int = 1030
-        @JvmStatic
-        val AD_REWARD_VIDEO_COMPLETED : Int = 1031
-        @JvmStatic
-        val AD_REWARD_VIDEO_ERROR : Int = 1032
-        @JvmStatic
-        val AD_REWARD_VIDEO_VERIFIED : Int = 1033
-        @JvmStatic
-        val AD_REWARD_VIDEO_SKIPPED : Int = 1034
-        @JvmStatic
-        val AD_REWARD_VIDEO_CLICKED : Int = 1035
-        @JvmStatic
-        val AD_BANNER_LOAD_SUCCESS : Int = 1036
-        @JvmStatic
-        val AD_BANNER_LOAD_FAIL : Int = 1037
-        @JvmStatic
-        val AD_BANNER_SHOWN : Int = 1038
-        @JvmStatic
-        val AD_BANNER_CLOSED : Int = 1039
-        @JvmStatic
-        val AD_BANNER_CLICKED : Int = 1040
-        @JvmStatic
-        val AD_BANNER_DOWNLOAD_CLICKED : Int = 1041
-        @JvmStatic
-        val AD_INTERSTITIAL_LOAD_SUCCESS : Int = 1042
-        @JvmStatic
-        val AD_INTERSTITIAL_LOAD_FAIL : Int = 1043
-        @JvmStatic
-        val AD_INTERSTITIAL_SHOWN : Int = 1044
-        @JvmStatic
-        val AD_INTERSTITIAL_CLOSED : Int = 1045
-        @JvmStatic
-        val AD_INTERSTITIAL_ERROR : Int = 1046
-        @JvmStatic
-        val AD_FEED_LOAD_SUCCESS : Int = 1047
-        @JvmStatic
-        val AD_FEED_LOAD_FAIL : Int = 1048
-        @JvmStatic
-        val AD_FEED_RENDER_SUCCESS : Int = 1049
-        @JvmStatic
-        val AD_FEED_SHOWN : Int = 1050
-        @JvmStatic
-        val AD_FEED_CLICKED : Int = 1051
-        @JvmStatic
-        val AD_FEED_CLOSED : Int = 1052
-    }
+    const val UPDATE_ACHIEVEMENT_SUCCESS = 1005
+    const val UPDATE_ACHIEVEMENT_FAIL = 1006
+
+    const val GIFT_CODE_SUBMIT_SUCCESS = 1007
+    const val GIFT_CODE_SUBMIT_FAIL = 1008
+
+    const val LEADERBOARD_SUBMIT_SUCCESS = 1009
+    const val LEADERBOARD_SUBMIT_FAIL = 1010
+    const val LEADERBOARD_FETCH_SCORES_SUCCESS = 1011
+    const val LEADERBOARD_FETCH_SCORES_FAIL = 1012
+    const val LEADERBOARD_FETCH_CURRENT_PLAYER_SCORE_SUCCESS = 1013
+    const val LEADERBOARD_FETCH_CURRENT_PLAYER_SCORE_FAIL = 1014
+    const val LEADERBOARD_FETCH_CURRENT_PLAYER_CENTERED_SCORE_SUCCESS = 2013
+    const val LEADERBOARD_FETCH_CURRENT_PLAYER_CENTERED_SCORE_FAIL = 2014
+
+    const val CLOUD_SAVE_CREATE_ARCHIVE_SUCCESS = 3013
+    const val CLOUD_SAVE_CREATE_ARCHIVE_FAIL = 3014
+    const val CLOUD_SAVE_GET_ARCHIVE_LIST_SUCCESS = 3015
+    const val CLOUD_SAVE_GET_ARCHIVE_LIST_FAIL = 3016
+    const val CLOUD_SAVE_GET_ARCHIVE_DATA_SUCCESS = 3017
+    const val CLOUD_SAVE_GET_ARCHIVE_DATA_FAIL = 3018
+    const val CLOUD_SAVE_DELETE_ARCHIVE_SUCCESS = 3019
+    const val CLOUD_SAVE_DELETE_ARCHIVE_FAIL = 3020
+    const val CLOUD_SAVE_UPDATE_ARCHIVE_SUCCESS = 3021
+    const val CLOUD_SAVE_UPDATE_ARCHIVE_FAIL = 3022
+    const val CLOUD_SAVE_GET_ARCHIVE_COVER_SUCCESS = 3023
+    const val CLOUD_SAVE_GET_ARCHIVE_COVER_FAIL = 3024
+
+    const val AD_SPLASH_LOAD_SUCCESS = 1021
+    const val AD_SPLASH_LOAD_FAIL = 1022
+    const val AD_SPLASH_CLICKED = 1023
+    const val AD_SPLASH_SKIPPED = 1024
+    const val AD_SPLASH_TIME_OVER = 1025
+
+    const val AD_REWARD_VIDEO_LOAD_SUCCESS = 1026
+    const val AD_REWARD_VIDEO_CACHE_SUCCESS = 1027
+    const val AD_REWARD_VIDEO_LOAD_FAIL = 1028
+    const val AD_REWARD_VIDEO_SHOWN = 1029
+    const val AD_REWARD_VIDEO_CLOSED = 1030
+    const val AD_REWARD_VIDEO_COMPLETED = 1031
+    const val AD_REWARD_VIDEO_ERROR = 1032
+    const val AD_REWARD_VIDEO_VERIFIED = 1033
+    const val AD_REWARD_VIDEO_SKIPPED = 1034
+    const val AD_REWARD_VIDEO_CLICKED = 1035
+
+    const val AD_BANNER_LOAD_SUCCESS = 1036
+    const val AD_BANNER_LOAD_FAIL = 1037
+    const val AD_BANNER_SHOWN = 1038
+    const val AD_BANNER_CLOSED = 1039
+    const val AD_BANNER_CLICKED = 1040
+    const val AD_BANNER_DOWNLOAD_CLICKED = 1041
+
+    const val AD_INTERSTITIAL_LOAD_SUCCESS = 1042
+    const val AD_INTERSTITIAL_LOAD_FAIL = 1043
+    const val AD_INTERSTITIAL_SHOWN = 1044
+    const val AD_INTERSTITIAL_CLOSED = 1045
+    const val AD_INTERSTITIAL_ERROR = 1046
+
+    const val AD_FEED_LOAD_SUCCESS = 1047
+    const val AD_FEED_LOAD_FAIL = 1048
+    const val AD_FEED_RENDER_SUCCESS = 1049
+    const val AD_FEED_SHOWN = 1050
+    const val AD_FEED_CLICKED = 1051
+    const val AD_FEED_CLOSED = 1052
 }

@@ -6,16 +6,16 @@ import cc.zhtsu.godot_tds_plugin.core.GodotTdsPluginModule
 import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.MomentInterface
 import com.taptap.sdk.moment.TapTapMoment
 
-class Moment(activity : Activity, godotTdsPlugin: GodotTdsPlugin) :
+class Moment(activity : Activity, godotTdsPlugin: GodotTdsPlugin):
     GodotTdsPluginModule(activity, godotTdsPlugin),
     MomentInterface
 {
-    fun init()
+    override fun initialize()
     {
         TapTapMoment.setCallback(_tapMomentCallback)
     }
 
-    fun openPage()
+    override fun openPage()
     {
         TapTapMoment.open()
     }

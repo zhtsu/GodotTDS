@@ -15,12 +15,12 @@ class RewardVideoAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
 {
     private var _rewardVideoAd : TapRewardVideoAd? = null
 
-    fun load(
+    override fun load(
         spaceId: Int,
         rewardName: String,
         rewardAmount: Int,
         extraInfo: String,
-        gameUserId: String,
+        gameUserId: String
     )
     {
         val adRequest = AdRequest.Builder()
@@ -31,10 +31,10 @@ class RewardVideoAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
             .withUserId(gameUserId)
             .build()
 
-        _godotTdsPlugin.getTapAdNative().loadRewardVideoAd(adRequest, _rewardVideoAdListener)
+        _godotTdsPlugin.getTapAdnBootstrap().getTapAdNative()?.loadRewardVideoAd(adRequest, _rewardVideoAdListener)
     }
 
-    fun show()
+    override fun show()
     {
         if (_rewardVideoAd != null)
         {

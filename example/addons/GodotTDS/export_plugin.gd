@@ -2,7 +2,7 @@
 extends EditorPlugin
 
 
-var export_plugin : AndroidExportPlugin
+var export_plugin: AndroidExportPlugin
 
 
 func _enter_tree():
@@ -24,20 +24,21 @@ class AndroidExportPlugin extends EditorExportPlugin:
 		if platform is EditorExportPlatformAndroid:
 			return true
 		return false
-		
-	const tap_ad_version : String = "3.16.3.45"
-	var tap_sdk_libs : PackedStringArray = [
-		"GodotTDS/bin/TapSDK/TapAD_{0}.aar".format([tap_ad_version])
+	
+	const tap_sdk_version: String = "4.9.1"
+	const tap_adn_version: String = "3.16.3.45"
+	var tap_adn_libs: PackedStringArray = [
+		"GodotTDS/bin/TapAD_{0}.aar".format([tap_adn_version])
 	]
 
 	func _get_android_libraries(platform, debug):
-		var android_libs : PackedStringArray = []
+		var android_libs: PackedStringArray = []
 		if debug:
 			android_libs.append("GodotTDS/bin/GodotTdsPlugin-debug.aar")
-			android_libs.append_array(tap_sdk_libs)
+			android_libs.append_array(tap_adn_libs)
 		else:
 			android_libs.append("GodotTDS/bin/GodotTdsPlugin-release.aar")
-			android_libs.append_array(tap_sdk_libs)
+			android_libs.append_array(tap_adn_libs)
 		return android_libs
 		
 	func _get_android_dependencies(platform: EditorExportPlatform, debug: bool) -> PackedStringArray:
@@ -49,19 +50,19 @@ class AndroidExportPlugin extends EditorExportPlugin:
 			"com.squareup.okhttp3:okhttp:4.9.2",
 			"io.reactivex.rxjava2:rxandroid:2.1.1",
 			"io.reactivex.rxjava2:rxjava:2.2.19",
-			"com.squareup.okhttp3:okhttp:3.12.1",
 			"com.android.support:appcompat-v7:28.0.0",
 			"com.android.support:support-annotations:28.0.0",
 			"com.android.support:support-v4:28.0.0",
-			"com.github.bumptech.glide:glide:4.9.0",
+			"com.github.bumptech.glide:glide:4.16.0",
 			"com.android.support:recyclerview-v7:28.0.0",
 			
-			"com.taptap.sdk:tap-core:4.5.5",
-			"com.taptap.sdk:tap-kit:4.5.5",
-			"com.taptap.sdk:tap-compliance:4.5.5",
-			"com.taptap.sdk:tap-login:4.5.5",
-			"com.taptap.sdk:tap-moment:4.5.5",
-			"com.taptap.sdk:tap-achievement:4.5.5",
+			"com.taptap.sdk:tap-core:{0}".format([tap_sdk_version]),
+			"com.taptap.sdk:tap-compliance:{0}".format([tap_sdk_version]),
+			"com.taptap.sdk:tap-login:{0}".format([tap_sdk_version]),
+			"com.taptap.sdk:tap-moment:{0}".format([tap_sdk_version]),
+			"com.taptap.sdk:tap-achievement:{0}".format([tap_sdk_version]),
+			"com.taptap.sdk:tap-leaderboard-androidx:{0}".format([tap_sdk_version]),
+			"com.taptap.sdk:tap-cloudsave:{0}".format([tap_sdk_version]),
 			"org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1"
 		])
 		

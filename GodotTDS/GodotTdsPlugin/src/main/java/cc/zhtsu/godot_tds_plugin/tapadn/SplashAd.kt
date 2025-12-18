@@ -15,16 +15,16 @@ class SplashAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
 {
     private var _splashAd : TapSplashAd? = null
 
-    fun load(spaceId : Int)
+    override fun load(spaceId : Int)
     {
         val adRequest = AdRequest.Builder()
             .withSpaceId(spaceId)
             .build()
 
-        _godotTdsPlugin.getTapAdNative().loadSplashAd(adRequest, _loadListener)
+        _godotTdsPlugin.getTapAdnBootstrap().getTapAdNative()?.loadSplashAd(adRequest, _loadListener)
     }
 
-    fun show()
+    override fun show()
     {
         if (_splashAd != null)
         {
@@ -40,7 +40,7 @@ class SplashAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
         }
     }
 
-    fun dispose()
+    override fun dispose()
     {
         if (_splashAd != null)
         {

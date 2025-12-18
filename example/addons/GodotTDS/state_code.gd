@@ -3,23 +3,18 @@ extends Node
 
 enum
 {
-	# 登录失败
-	LOG_IN_FAIL = 2001,
-	# 取消登录
-	LOG_IN_CANCEL = 2001,
-	
 	# 登录成功
-	LOG_IN_SUCCESS = 1001,
-	# 成就数据初始化成功
-	ACHIEVEMENT_INIT_SUCCESS = 1002,
-	# 成就数据初始化失败
-	ACHIEVEMENT_INIT_FAIL = 1003,
-	# 成就更新成功（达成成就时触发）
-	ACHIEVEMENT_UPDATE_SUCCESS = 1004,
-	# 成就更新失败
-	ACHIEVEMENT_UPDATE_FAIL = 1005,
-	# 成就数据拉取成功
-	ACHIEVEMENT_LIST_FETCH_SUCCESS = 1006,
+	LOGIN_SUCCESS = 2001,
+	# 登录失败
+	LOGIN_FAIL = 2002,
+	# 取消登录
+	LOGIN_CANCEL = 2003,
+	
+	# 更新成功进度成功
+	UPDATE_ACHIEVEMENT_SUCCESS = 1005,
+	# 更新成功进度失败
+	UPDATE_ACHIEVEMENT_FAIL = 1006,
+	
 	# 礼品码提交成功
 	GIFT_CODE_SUBMIT_SUCCESS = 1007,
 	# 礼品码提交失败

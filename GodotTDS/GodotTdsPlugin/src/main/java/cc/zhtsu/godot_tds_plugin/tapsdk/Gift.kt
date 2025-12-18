@@ -18,11 +18,11 @@ import java.io.IOException
 import java.security.MessageDigest
 import java.security.SecureRandom
 
-class Gift(activity : Activity, godotTdsPlugin: GodotTdsPlugin) :
+class Gift(activity : Activity, godotTdsPlugin: GodotTdsPlugin):
     GodotTdsPluginModule(activity, godotTdsPlugin),
     GiftInterface
 {
-    fun submitGiftCode(giftCode : String)
+    override fun submitGiftCode(giftCode : String)
     {
         val okHttpClient = OkHttpClient()
         val jsonObject = JSONObject()
@@ -67,13 +67,11 @@ class Gift(activity : Activity, godotTdsPlugin: GodotTdsPlugin) :
             var emptyBody = true
             response.body?.let {
                 emptyBody = false
-                _godotTdsPlugin.emitPluginSignal("onGiftReturn",
-                    StateCode.GIFT_CODE_SUBMIT_SUCCESS, it.string())
+                _godotTdsPlugin.emitPluginSignal("onGiftReturn", StateCode.GIFT_CODE_SUBMIT_SUCCESS, it.string())
             }
             if (emptyBody)
             {
-                _godotTdsPlugin.emitPluginSignal("onGiftReturn",
-                    StateCode.GIFT_CODE_SUBMIT_FAIL, "Empty body")
+                _godotTdsPlugin.emitPluginSignal("onGiftReturn", StateCode.GIFT_CODE_SUBMIT_FAIL, "Empty body")
             }
         }
     }

@@ -2,4 +2,10 @@ package cc.zhtsu.godot_tds_plugin.core.tapsdk_interface
 
 interface ComplianceInterface
 {
+    fun initialize()
+    fun destroy()
+    fun startup()
+    fun exit()
+    fun getAgeRange() : Int
+    fun getRemainingTime() : Int
 }

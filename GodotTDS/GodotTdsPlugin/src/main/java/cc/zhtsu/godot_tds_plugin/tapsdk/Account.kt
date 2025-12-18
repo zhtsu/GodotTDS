@@ -14,7 +14,7 @@ import com.taptap.sdk.login.TapTapAccount
 import com.taptap.sdk.login.TapTapLogin
 import com.taptap.sdk.login.TapTapLogin.loginWithScopes
 
-class Account(activity : Activity, godotTdsPlugin: GodotTdsPlugin) :
+class Account(activity : Activity, godotTdsPlugin: GodotTdsPlugin):
     GodotTdsPluginModule(activity, godotTdsPlugin),
     AccountInterface
 {
@@ -30,12 +30,13 @@ class Account(activity : Activity, godotTdsPlugin: GodotTdsPlugin) :
         if (userFriendsEnabled)
             scopes.add(SCOPE_USER_FRIENDS)
 
-        loginWithScopes(_activity, scopes.toTypedArray(), _logInCallback);
+        loginWithScopes(_activity, scopes.toTypedArray(), _loginCallback);
     }
 
     override fun logout()
     {
         TapTapLogin.logout()
+        _godotTdsPlugin.exitCompliance()
     }
 
     override fun isLoggedIn() : Boolean
@@ -58,21 +59,21 @@ class Account(activity : Activity, godotTdsPlugin: GodotTdsPlugin) :
         return "Invalid Account"
     }
 
-    private var _logInCallback : TapTapCallback<TapTapAccount> = object : TapTapCallback<TapTapAccount>
+    private var _loginCallback : TapTapCallback<TapTapAccount> = object : TapTapCallback<TapTapAccount>
     {
         override fun onSuccess(result: TapTapAccount)
         {
-            _godotTdsPlugin.emitPluginSignal("onLogInReturn", StateCode.LOG_IN_SUCCESS, result.name!!)
+            _godotTdsPlugin.emitPluginSignal("onLoginReturn", StateCode.LOGIN_SUCCESS, result.name!!)
         }
 
         override fun onFail(exception: TapTapException)
         {
-            _godotTdsPlugin.emitPluginSignal("onLogInReturn", StateCode.LOG_IN_FAIL, exception.message.toString())
+            _godotTdsPlugin.emitPluginSignal("onLoginReturn", StateCode.LOGIN_FAIL, exception.message.toString())
         }
 
         override fun onCancel()
         {
-            _godotTdsPlugin.emitPluginSignal("onLogInReturn", StateCode.LOG_IN_CANCEL, "onCancel")
+            _godotTdsPlugin.emitPluginSignal("onLoginReturn", StateCode.LOGIN_CANCEL, "onCancel")
         }
     }
 }

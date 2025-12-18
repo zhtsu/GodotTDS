@@ -9,6 +9,10 @@ interface TapSdkBootstrapInterface
         clientToken: String,
         region: Int,
         preferredLanguage: TapTapLanguage,
-        enableLog: Boolean
+        enableLog: Boolean,
+        showSwitchAccountEnabled: Boolean,
+        useAgeRangeEnabled: Boolean,
+        achievementToastEnabled: Boolean,
+        screenOrientation: Int
     )
 }

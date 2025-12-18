@@ -58,6 +58,8 @@ dependencies {
     implementation(libs.tap.login)
     implementation(libs.tap.moment)
     implementation(libs.tap.achievement)
+    implementation(libs.tap.leaderboard.androidx)
+    implementation(libs.tap.cloudsave)
     implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.androidx.core.ktx)

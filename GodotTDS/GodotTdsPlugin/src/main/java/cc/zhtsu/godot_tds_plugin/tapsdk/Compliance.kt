@@ -7,7 +7,7 @@ import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.ComplianceInterface
 import com.taptap.sdk.compliance.TapTapCompliance
 import com.taptap.sdk.compliance.TapTapComplianceCallback
 
-class Compliance(activity : Activity, godotTdsPlugin: GodotTdsPlugin) :
+class Compliance(activity : Activity, godotTdsPlugin: GodotTdsPlugin):
     GodotTdsPluginModule(activity, godotTdsPlugin),
     ComplianceInterface
 {
@@ -19,17 +19,37 @@ class Compliance(activity : Activity, godotTdsPlugin: GodotTdsPlugin) :
         }
     }
 
-    init
+    override fun initialize()
     {
         TapTapCompliance.registerComplianceCallback(_complianceCallback)
     }
 
-    fun startUp()
+    override fun destroy()
+    {
+        TapTapCompliance.unregisterComplianceCallback(_complianceCallback)
+    }
+
+    override fun startup()
     {
         if (_godotTdsPlugin.isLoggedIn())
         {
             val userIdentifier = _godotTdsPlugin.getAccountOpenId()
             TapTapCompliance.startup(activity = _activity, userId = userIdentifier)
         }
+    }
+
+    override fun exit()
+    {
+        TapTapCompliance.exit()
+    }
+
+    override fun getAgeRange(): Int
+    {
+        return TapTapCompliance.getAgeRange()
+    }
+
+    override fun getRemainingTime() : Int
+    {
+        return TapTapCompliance.getRemainingTime()
     }
 }

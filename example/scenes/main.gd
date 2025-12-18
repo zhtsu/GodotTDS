@@ -27,11 +27,11 @@ func _on_login_button_down() -> void:
 	
 
 func _on_compliance_button_down() -> void:
-	GodotTDS.start_up_compliance()
+	GodotTDS.startup_compliance()
 
 
 func _on_tap_moment_button_down() -> void:
-	GodotTDS.tap_moment()
+	GodotTDS.open_tap_moment()
 
 
 func _on_logout_button_down() -> void:
@@ -43,7 +43,7 @@ func _on_get_user_profile_button_down() -> void:
 
 
 func _on_achievement_page_button_down() -> void:
-	GodotTDS.show_achievement_page()
+	GodotTDS.show_achievements()
 
 
 func _on_unlock_achievement_button_down() -> void:
@@ -51,19 +51,19 @@ func _on_unlock_achievement_button_down() -> void:
 
 
 func _on_grow_achievement_button_down() -> void:
-	GodotTDS.grow_achievement_steps("robot_dash_04", 1)
+	GodotTDS.increment_achievement("robot_dash_04", 1)
 
 
-var show_achievement_toast : bool = true
+var achievement_toast_enable : bool = true
 
 func _on_achievement_toast_button_down() -> void:
-	show_achievement_toast = not show_achievement_toast
-	if show_achievement_toast:
+	achievement_toast_enable = not achievement_toast_enable
+	if achievement_toast_enable:
 		$TabContainer/TapSDK/AchievementToast.text = "成就弹窗(开)"
-		GodotTDS.set_show_achievement_toast(show_achievement_toast)
+		GodotTDS.set_achievement_toast_enable(achievement_toast_enable)
 	else:
 		$TabContainer/TapSDK/AchievementToast.text = "成就弹窗(关)"
-		GodotTDS.set_show_achievement_toast(show_achievement_toast)
+		GodotTDS.set_achievement_toast_enable(achievement_toast_enable)
 
 
 func _on_submit_gift_code_button_down() -> void:
