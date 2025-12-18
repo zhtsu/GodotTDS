@@ -1,8 +1,8 @@
 extends Node
 
 # TapTapSDK配置
-const client_id : String = "e76genhzsfsefyozva"
-const client_token : String = "B1OQ8oUpVzpIMQQD1hOjvROdadCpxUXhs1dQ1sy0"
+const client_id : String = ""
+const client_token : String = ""
 const server_url : String = ""
 # TapTapADN配置
 const media_id : int = -1
