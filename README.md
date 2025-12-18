@@ -8,7 +8,7 @@ Godot plugin for supporting TapTap Developer Services
 
 **注意事项：最新版本的插件正在锐意开发中（2025.12.19）**
 
-# Version
+# Environment
 
 - OpenJDK 17.0.11
 - TapSDK Android 4.9.1
@@ -22,22 +22,23 @@ Godot plugin for supporting TapTap Developer Services
 - [x] 登录（已完成）
 - [x] 合规认证（已完成）
 - [x] 内嵌动态（已完成）
-- [x] 成就系统（开发中）
+- [ ] 成就系统（开发中）
 - [x] 礼包系统（已完成）
-- [x] 排行榜（开发中）
-- [x] 云存档（开发中）
-- [x] 深度链接（开发中）
+- [ ] 排行榜（开发中）
+- [ ] 云存档（开发中）
+- [ ] 深度链接（开发中）
 
 ### TapAD
 
-TapADN 即将全面迁移到新的 Dirichlet 平台，需要认证公司资质才能使用对应服务
+**注意事项：TapADN 即将全面迁移到新的 Dirichlet 平台，需要认证公司资质才能使用对应服务**
+
 新平台地址：[https://ssp.dirichlet.cn/](https://ssp.dirichlet.cn/)
 
-- [x] 开屏广告（开发中）
-- [x] 激励广告（开发中）
-- [x] 横幅广告（开发中）
-- [x] 信息流广告（开发中）
-- [x] 插屏广告（开发中）
+- [ ] 开屏广告（开发中）
+- [ ] 激励广告（开发中）
+- [ ] 横幅广告（开发中）
+- [ ] 信息流广告（开发中）
+- [ ] 插屏广告（开发中）
 
 # How to use
 
@@ -53,4 +54,4 @@ GodotTDS 目录下存放的是用于生成***安卓插件***的安卓项目
 
 [B站咲夜大佬](https://space.bilibili.com/2706229)
 
-[PukkyCoopie](https://github.com/PukkyCoopie): [#3](https://github.com/zhtsu/GodotTDS/pull/3)
+[PukkyCoopie:](https://github.com/PukkyCoopie) [#3](https://github.com/zhtsu/GodotTDS/pull/3)
