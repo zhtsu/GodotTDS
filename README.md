@@ -32,7 +32,7 @@ Godot plugin for supporting TapTap Developer Services
 
 **注意事项：TapADN 即将全面迁移到新的 Dirichlet 平台，需要认证公司资质才能使用对应服务**
 
-新平台地址：[https://ssp.dirichlet.cn/](https://ssp.dirichlet.cn/)
+新平台地址：[https://www.dirichlet.cn/](https://www.dirichlet.cn/)
 
 - [ ] 开屏广告（开发中）
 - [ ] 激励广告（开发中）
