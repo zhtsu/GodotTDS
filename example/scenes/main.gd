@@ -39,7 +39,7 @@ func _on_logout_button_down() -> void:
 
 
 func _on_get_user_profile_button_down() -> void:
-	$Text.text = GodotTDS.get_user_profile()
+	$Text.text = str(GodotTDS.get_current_tap_account())
 
 
 func _on_achievement_page_button_down() -> void:
@@ -47,43 +47,14 @@ func _on_achievement_page_button_down() -> void:
 
 
 func _on_unlock_achievement_button_down() -> void:
-	GodotTDS.unlock_achievement("robot_dash_02")
+	GodotTDS.unlock_achievement($Text.text)
 
 
 func _on_grow_achievement_button_down() -> void:
-	GodotTDS.increment_achievement("robot_dash_04", 1)
-
-
-var achievement_toast_enable : bool = true
-
-func _on_achievement_toast_button_down() -> void:
-	achievement_toast_enable = not achievement_toast_enable
-	if achievement_toast_enable:
-		$TabContainer/TapSDK/AchievementToast.text = "成就弹窗(开)"
-		GodotTDS.set_achievement_toast_enable(achievement_toast_enable)
-	else:
-		$TabContainer/TapSDK/AchievementToast.text = "成就弹窗(关)"
-		GodotTDS.set_achievement_toast_enable(achievement_toast_enable)
-
+	GodotTDS.increment_achievement($Text.text, 1)
 
 func _on_submit_gift_code_button_down() -> void:
-	GodotTDS.submit_gift_code("114514")
-
-
-func _on_sync_achievement_button_down() -> void:
-	$Text.text = str(GodotTDS.get_network_all_achievement_list())
-
-
-func _on_submit_leaderboard_score_button_down() -> void:
-	GodotTDS.submit_leaderboard_score("Score", 100)
-
-
-func _on_fetch_section_rankings_button_down() -> void:
-	GodotTDS.fetch_leaderboard_section_rankings("Score", 0, 10)
-
-
-func _on_fetch_user_ranking_button_down() -> void:
-	GodotTDS.fetch_leaderboard_user_around_rankings("Score")
+	GodotTDS.submit_gift_code($Text.text)
 
 
 func _on_load_splash_ad_button_down() -> void:
@@ -130,3 +101,28 @@ func _on_load_interstitial_ad_button_down() -> void:
 
 func _on_show_interstitial_ad_button_down() -> void:
 	GodotTDS.show_interstitial_ad()
+
+
+func _on_open_user_page_button_down() -> void:
+	GodotTDS.show_tap_user_profile($Text.text)
+
+
+func _on_open_leaderboard_button_down() -> void:
+	GodotTDS.open_leaderboard($Text.text, 0)
+
+
+func _on_submit_leaderboard_score_button_down() -> void:
+	print_debug($Text.text)
+	GodotTDS.submit_leaderboard_score($Text.text, 100)
+
+
+func _on_load_leaderboard_scores_button_down() -> void:
+	GodotTDS.load_leaderboard_scores($Text.text, 0)
+
+
+func _on_load_current_player_leaderboard_score_button_down() -> void:
+	GodotTDS.load_current_player_leaderboard_score($Text.text, 0)
+
+
+func _on_load_player_centered_leaderboard_scores_button_down() -> void:
+	GodotTDS.load_player_centered_leaderboard_scores($Text.text, 0, "weekly", 100)

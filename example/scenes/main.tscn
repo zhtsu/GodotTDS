@@ -94,12 +94,12 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "用户信息"
 
-[node name="AchievementToast" type="Button" parent="TabContainer/TapSDK"]
+[node name="OpenUserPage" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
-text = "成就弹窗(开)"
+text = "用户界面"
 
 [node name="AchievementPage" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
@@ -129,28 +129,56 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "提交礼品码"
 
+[node name="OpenLeaderboard" type="Button" parent="TabContainer/TapSDK"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 48
+text = "打开排行榜界面"
+
 [node name="SubmitLeaderboardScore" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
-text = "更新排行榜分数"
+text = "提交排行榜分数"
 
-[node name="FetchSectionRankings" type="Button" parent="TabContainer/TapSDK"]
+[node name="LoadLeaderboardScores" type="Button" parent="TabContainer/TapSDK"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 48
+text = "所有排行榜数据"
+
+[node name="LoadCurrentPlayerLeaderboardScore" type="Button" parent="TabContainer/TapSDK"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 48
+text = "玩家排行榜数据"
+
+[node name="LoadPlayerCenteredLeaderboardScores" type="Button" parent="TabContainer/TapSDK"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 36
+text = "玩家周围排行榜数据"
+
+[node name="LoadArchiveList" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "获取区间排行"
 
-[node name="FetchUserRanking" type="Button" parent="TabContainer/TapSDK"]
+[node name="LoadUserList" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "获取玩家排行"
 
-[node name="TapAD" type="GridContainer" parent="TabContainer"]
+[node name="TapADN" type="GridContainer" parent="TabContainer"]
 visible = false
 layout_mode = 2
 theme_override_constants/h_separation = 20
@@ -159,7 +187,7 @@ columns = 2
 metadata/_edit_group_ = true
 metadata/_tab_index = 1
 
-[node name="LoadSplashAD" type="Button" parent="TabContainer/TapAD"]
+[node name="LoadSplashAD" type="Button" parent="TabContainer/TapADN"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -167,7 +195,7 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "加载开屏广告"
 
-[node name="ShowSplashAD" type="Button" parent="TabContainer/TapAD"]
+[node name="ShowSplashAD" type="Button" parent="TabContainer/TapADN"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -175,56 +203,56 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "显示开屏广告"
 
-[node name="LoadRewardVideoAD" type="Button" parent="TabContainer/TapAD"]
+[node name="LoadRewardVideoAD" type="Button" parent="TabContainer/TapADN"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "加载激励广告"
 
-[node name="ShowRewardVideoAD" type="Button" parent="TabContainer/TapAD"]
+[node name="ShowRewardVideoAD" type="Button" parent="TabContainer/TapADN"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "显示激励广告"
 
-[node name="LoadBannerAD" type="Button" parent="TabContainer/TapAD"]
+[node name="LoadBannerAD" type="Button" parent="TabContainer/TapADN"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "加载横幅广告"
 
-[node name="ShowBannerAD" type="Button" parent="TabContainer/TapAD"]
+[node name="ShowBannerAD" type="Button" parent="TabContainer/TapADN"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "显示横幅广告"
 
-[node name="LoadFeedAD" type="Button" parent="TabContainer/TapAD"]
+[node name="LoadFeedAD" type="Button" parent="TabContainer/TapADN"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "加载信息流广告"
 
-[node name="ShowFeedAD" type="Button" parent="TabContainer/TapAD"]
+[node name="ShowFeedAD" type="Button" parent="TabContainer/TapADN"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "显示信息流广告"
 
-[node name="LoadInterstitialAD" type="Button" parent="TabContainer/TapAD"]
+[node name="LoadInterstitialAD" type="Button" parent="TabContainer/TapADN"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
 text = "加载插屏广告"
 
-[node name="ShowInterstitialAD" type="Button" parent="TabContainer/TapAD"]
+[node name="ShowInterstitialAD" type="Button" parent="TabContainer/TapADN"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
@@ -259,21 +287,23 @@ text = "从深度链接启动"
 [connection signal="button_down" from="TabContainer/TapSDK/Compliance" to="." method="_on_compliance_button_down"]
 [connection signal="button_down" from="TabContainer/TapSDK/TapMoment" to="." method="_on_tap_moment_button_down"]
 [connection signal="button_down" from="TabContainer/TapSDK/GetUserProfile" to="." method="_on_get_user_profile_button_down"]
-[connection signal="button_down" from="TabContainer/TapSDK/AchievementToast" to="." method="_on_achievement_toast_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/OpenUserPage" to="." method="_on_open_user_page_button_down"]
 [connection signal="button_down" from="TabContainer/TapSDK/AchievementPage" to="." method="_on_achievement_page_button_down"]
 [connection signal="button_down" from="TabContainer/TapSDK/UnlockAchievement" to="." method="_on_unlock_achievement_button_down"]
 [connection signal="button_down" from="TabContainer/TapSDK/GrowAchievement" to="." method="_on_grow_achievement_button_down"]
 [connection signal="button_down" from="TabContainer/TapSDK/SubmitGiftCode" to="." method="_on_submit_gift_code_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/OpenLeaderboard" to="." method="_on_open_leaderboard_button_down"]
 [connection signal="button_down" from="TabContainer/TapSDK/SubmitLeaderboardScore" to="." method="_on_submit_leaderboard_score_button_down"]
-[connection signal="button_down" from="TabContainer/TapSDK/FetchSectionRankings" to="." method="_on_fetch_section_rankings_button_down"]
-[connection signal="button_down" from="TabContainer/TapSDK/FetchUserRanking" to="." method="_on_fetch_user_ranking_button_down"]
-[connection signal="button_down" from="TabContainer/TapAD/LoadSplashAD" to="." method="_on_load_splash_ad_button_down"]
-[connection signal="button_down" from="TabContainer/TapAD/ShowSplashAD" to="." method="_on_show_splash_ad_button_down"]
-[connection signal="button_down" from="TabContainer/TapAD/LoadRewardVideoAD" to="." method="_on_load_reward_video_ad_button_down"]
-[connection signal="button_down" from="TabContainer/TapAD/ShowRewardVideoAD" to="." method="_on_show_reward_video_ad_button_down"]
-[connection signal="button_down" from="TabContainer/TapAD/LoadBannerAD" to="." method="_on_load_banner_ad_button_down"]
-[connection signal="button_down" from="TabContainer/TapAD/ShowBannerAD" to="." method="_on_show_banner_ad_button_down"]
-[connection signal="button_down" from="TabContainer/TapAD/LoadFeedAD" to="." method="_on_load_feed_ad_button_down"]
-[connection signal="button_down" from="TabContainer/TapAD/ShowFeedAD" to="." method="_on_show_feed_ad_button_down"]
-[connection signal="button_down" from="TabContainer/TapAD/LoadInterstitialAD" to="." method="_on_load_interstitial_ad_button_down"]
-[connection signal="button_down" from="TabContainer/TapAD/ShowInterstitialAD" to="." method="_on_show_interstitial_ad_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/LoadLeaderboardScores" to="." method="_on_load_leaderboard_scores_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/LoadCurrentPlayerLeaderboardScore" to="." method="_on_load_current_player_leaderboard_score_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/LoadPlayerCenteredLeaderboardScores" to="." method="_on_load_player_centered_leaderboard_scores_button_down"]
+[connection signal="button_down" from="TabContainer/TapADN/LoadSplashAD" to="." method="_on_load_splash_ad_button_down"]
+[connection signal="button_down" from="TabContainer/TapADN/ShowSplashAD" to="." method="_on_show_splash_ad_button_down"]
+[connection signal="button_down" from="TabContainer/TapADN/LoadRewardVideoAD" to="." method="_on_load_reward_video_ad_button_down"]
+[connection signal="button_down" from="TabContainer/TapADN/ShowRewardVideoAD" to="." method="_on_show_reward_video_ad_button_down"]
+[connection signal="button_down" from="TabContainer/TapADN/LoadBannerAD" to="." method="_on_load_banner_ad_button_down"]
+[connection signal="button_down" from="TabContainer/TapADN/ShowBannerAD" to="." method="_on_show_banner_ad_button_down"]
+[connection signal="button_down" from="TabContainer/TapADN/LoadFeedAD" to="." method="_on_load_feed_ad_button_down"]
+[connection signal="button_down" from="TabContainer/TapADN/ShowFeedAD" to="." method="_on_show_feed_ad_button_down"]
+[connection signal="button_down" from="TabContainer/TapADN/LoadInterstitialAD" to="." method="_on_load_interstitial_ad_button_down"]
+[connection signal="button_down" from="TabContainer/TapADN/ShowInterstitialAD" to="." method="_on_show_interstitial_ad_button_down"]

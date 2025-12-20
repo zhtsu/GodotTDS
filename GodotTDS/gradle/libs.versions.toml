@@ -18,7 +18,8 @@ support-annotations = "28.0.0"
 support-v4 = "28.0.0"
 glide = "4.16.0"
 recyclerview-v7 = "28.0.0"
-taptap = "4.9.1"
+taptap = "4.9.2"
+taptap-old = "4.9.1"
 kotlinxSerialization = "1.4.1"
 
 [libraries]
@@ -46,7 +47,7 @@ tap-compliance = { group = "com.taptap.sdk", name = "tap-compliance", version.re
 tap-moment = { group = "com.taptap.sdk", name = "tap-moment", version.ref = "taptap" }
 tap-achievement = { group = "com.taptap.sdk", name = "tap-achievement", version.ref = "taptap" }
 tap-leaderboard-androidx = { group = "com.taptap.sdk", name = "tap-leaderboard-androidx", version.ref = "taptap" }
-tap-cloudsave = { group = "com.taptap.sdk", name = "tap-cloudsave", version.ref = "taptap" }
+tap-cloudsave = { group = "com.taptap.sdk", name = "tap-cloudsave", version.ref = "taptap-old" }
 
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 

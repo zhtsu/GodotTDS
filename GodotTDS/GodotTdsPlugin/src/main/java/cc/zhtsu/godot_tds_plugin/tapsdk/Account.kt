@@ -7,6 +7,7 @@ import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.AccountInterface
 import cc.zhtsu.godot_tds_plugin.core.GodotTdsPluginModule
 import com.taptap.sdk.kit.internal.callback.TapTapCallback
 import com.taptap.sdk.kit.internal.exception.TapTapException
+import com.taptap.sdk.kit.internal.extensions.toJson
 import com.taptap.sdk.login.Scopes.SCOPE_BASIC_INFO
 import com.taptap.sdk.login.Scopes.SCOPE_PUBLIC_PROFILE
 import com.taptap.sdk.login.Scopes.SCOPE_USER_FRIENDS
@@ -46,7 +47,7 @@ class Account(activity : Activity, godotTdsPlugin: GodotTdsPlugin):
 
     override fun getCurrentAccountAsString() : String
     {
-        return TapTapLogin.getCurrentTapAccount().toString()
+        return TapTapLogin.getCurrentTapAccount().toJson()
     }
 
     override fun getAccountOpenId(): String

@@ -4,7 +4,7 @@ interface LeaderboardInterface
 {
     fun initialize()
     fun destroy()
-    fun openLeaderboard(leaderboardId: String, collection: String)
+    fun openLeaderboard(leaderboardId: String, leaderboardCollection: Int)
     fun showTapUserProfile(openId: String)
     fun submitScore(leaderboardId: String, score: Long)
     fun loadLeaderboardScores(leaderboardId: String, leaderboardCollection: Int, nextPage: String)

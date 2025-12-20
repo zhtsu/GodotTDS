@@ -32,8 +32,10 @@ class Leaderboard(activity : Activity, godotTdsPlugin: GodotTdsPlugin):
         TapTapLeaderboard.unregisterLeaderboardCallback(_leaderboardCallback)
     }
 
-    override fun openLeaderboard(leaderboardId: String, collection: String)
+    override fun openLeaderboard(leaderboardId: String, leaderboardCollection: Int)
     {
+        val collection: String = if (leaderboardCollection == 0) "public" else "friends"
+
         TapTapLeaderboard.openLeaderboard(_activity, leaderboardId, collection)
     }
 
@@ -44,7 +46,7 @@ class Leaderboard(activity : Activity, godotTdsPlugin: GodotTdsPlugin):
 
     override fun submitScore(leaderboardId: String, score: Long)
     {
-        val scores = listOf(SubmitScoresRequest.ScoreItem("leaderboardId", score))
+        val scores = listOf(SubmitScoresRequest.ScoreItem(leaderboardId, score))
         TapTapLeaderboard.submitScores(scores, _leaderboardSubmitCallback)
     }
 
@@ -142,10 +144,12 @@ class Leaderboard(activity : Activity, godotTdsPlugin: GodotTdsPlugin):
         @RequiresApi(Build.VERSION_CODES.TIRAMISU)
         override fun onSuccess(data: UserScoreResponse)
         {
-            val scores: List<Score> = if (data.currentUserScore == null) emptyList() else listOf(data.currentUserScore!!)
+            val tempJsonObject = JSONObject()
+            tempJsonObject.put("rank", data.currentUserScore?.rank)
+            tempJsonObject.put("username", data.currentUserScore?.user?.name ?: "Invalid Username")
+            tempJsonObject.put("score", data.currentUserScore?.score)
 
-            val retJsonObj: JSONObject = _rankingListToJsonObj(scores)
-            val msg : String = retJsonObj.toString()
+            val msg : String = tempJsonObject.toString()
 
             _godotTdsPlugin.emitPluginSignal("onLeaderboardReturn",
                 StateCode.LEADERBOARD_FETCH_CURRENT_PLAYER_SCORE_SUCCESS, msg)
@@ -188,7 +192,7 @@ class Leaderboard(activity : Activity, godotTdsPlugin: GodotTdsPlugin):
         {
             val tempJsonObject = JSONObject()
             tempJsonObject.put("rank", ranking.rank)
-            tempJsonObject.put("username", ranking.user?.name ?: "Invalid Username")
+            tempJsonObject.put("username", ranking.user?.name)
             tempJsonObject.put("score", ranking.score)
             jsonObject.append("scores", tempJsonObject)
         }

@@ -7,13 +7,11 @@ import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
 import cc.zhtsu.godot_tds_plugin.core.GodotTdsPluginModule
 import cc.zhtsu.godot_tds_plugin.core.StateCode
 import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.CloudSaveInterface
-import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.MomentInterface
 import com.taptap.sdk.cloudsave.ArchiveData
 import com.taptap.sdk.cloudsave.ArchiveMetadata
 import com.taptap.sdk.cloudsave.TapTapCloudSave
 import com.taptap.sdk.cloudsave.internal.TapCloudSaveCallback
 import com.taptap.sdk.cloudsave.internal.TapCloudSaveRequestCallback
-import com.taptap.sdk.moment.TapTapMoment
 import org.json.JSONObject
 
 class CloudSave(activity: Activity, godotTdsPlugin: GodotTdsPlugin):

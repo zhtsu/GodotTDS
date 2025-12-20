@@ -197,7 +197,7 @@ class GodotTdsPlugin(godot: Godot): GodotPlugin(godot)
     }
 
     @UsedByGodot
-    fun openTapMoment()
+    fun openMomentPage()
     {
         _checkTapSdkConfig {
             _tapMoment.openPage()
@@ -253,15 +253,15 @@ class GodotTdsPlugin(godot: Godot): GodotPlugin(godot)
     }
 
     @UsedByGodot
-    fun fetchLeaderboardScores(leaderboardName: String, start: Int, nextPage: String)
+    fun loadLeaderboardScores(leaderboardName: String, leaderboardCollection: Int, nextPage: String)
     {
         _checkTapSdkConfig {
-            _tapLeaderboard.loadLeaderboardScores(leaderboardName, start, nextPage)
+            _tapLeaderboard.loadLeaderboardScores(leaderboardName, leaderboardCollection, nextPage)
         }
     }
 
     @UsedByGodot
-    fun fetchCurrentPlayerLeaderboardScore(leaderboardId: String, leaderboardCollection: Int)
+    fun loadCurrentPlayerLeaderboardScore(leaderboardId: String, leaderboardCollection: Int)
     {
         _checkTapSdkConfig {
             _tapLeaderboard.loadCurrentPlayerLeaderboardScore(leaderboardId, leaderboardCollection)
@@ -269,10 +269,26 @@ class GodotTdsPlugin(godot: Godot): GodotPlugin(godot)
     }
 
     @UsedByGodot
-    fun fetchPlayerCenteredScores(leaderboardId: String, leaderboardCollection: Int, periodToken: String, maxCount: Int)
+    fun loadPlayerCenteredLeaderboardScores(leaderboardId: String, leaderboardCollection: Int, periodToken: String, maxCount: Int)
     {
         _checkTapSdkConfig {
             _tapLeaderboard.loadPlayerCenteredScores(leaderboardId, leaderboardCollection, periodToken, maxCount)
+        }
+    }
+
+    @UsedByGodot
+    fun openLeaderboard(leaderboardId: String, leaderboardCollection: Int)
+    {
+        _checkTapSdkConfig {
+            _tapLeaderboard.openLeaderboard(leaderboardId, leaderboardCollection)
+        }
+    }
+
+    @UsedByGodot
+    fun showTapUserProfile(openId: String)
+    {
+        _checkTapSdkConfig {
+            _tapLeaderboard.showTapUserProfile(openId)
         }
     }
 
@@ -292,7 +308,7 @@ class GodotTdsPlugin(godot: Godot): GodotPlugin(godot)
     }
 
     @UsedByGodot
-    fun fetchCloudSaveArchiveList()
+    fun getCloudSaveArchiveList()
     {
         _checkTapSdkConfig {
             _tapCloudSave.getArchiveList()
@@ -300,7 +316,7 @@ class GodotTdsPlugin(godot: Godot): GodotPlugin(godot)
     }
 
     @UsedByGodot
-    fun fetchCloudSaveArchiveData(archiveUuid: String, archiveFileId: String)
+    fun getCloudSaveArchiveData(archiveUuid: String, archiveFileId: String)
     {
         _checkTapSdkConfig {
             _tapCloudSave.getArchiveData(archiveUuid, archiveFileId)
@@ -332,7 +348,7 @@ class GodotTdsPlugin(godot: Godot): GodotPlugin(godot)
     }
 
     @UsedByGodot
-    fun fetchCloudSaveArchiveCover(archiveUuid: String, archiveFileId: String)
+    fun getCloudSaveArchiveCover(archiveUuid: String, archiveFileId: String)
     {
         _checkTapSdkConfig {
             _tapCloudSave.getArchiveCover(archiveUuid, archiveFileId)

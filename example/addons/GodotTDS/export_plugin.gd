@@ -25,7 +25,8 @@ class AndroidExportPlugin extends EditorExportPlugin:
 			return true
 		return false
 	
-	const tap_sdk_version: String = "4.9.1"
+	const tap_sdk_version: String = "4.9.2"
+	const old_tap_sdk_version: String = "4.9.1"
 	const tap_adn_version: String = "3.16.3.45"
 	var tap_adn_libs: PackedStringArray = [
 		"GodotTDS/bin/TapAD_{0}.aar".format([tap_adn_version])
@@ -62,7 +63,7 @@ class AndroidExportPlugin extends EditorExportPlugin:
 			"com.taptap.sdk:tap-moment:{0}".format([tap_sdk_version]),
 			"com.taptap.sdk:tap-achievement:{0}".format([tap_sdk_version]),
 			"com.taptap.sdk:tap-leaderboard-androidx:{0}".format([tap_sdk_version]),
-			"com.taptap.sdk:tap-cloudsave:{0}".format([tap_sdk_version]),
+			"com.taptap.sdk:tap-cloudsave:{0}".format([old_tap_sdk_version]),
 			"org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1"
 		])
 		

@@ -15,6 +15,8 @@ signal on_achievement_return(code: int, msg: String)
 signal on_gift_return(code: int, msg: String)
 # 排行榜相关操作的信号
 signal on_leaderboard_return(code: int, msg: String)
+# 云储存相关操作的信号
+signal on_cloud_save_return(code: int, msg: String)
 # 开屏广告相关的信号
 signal on_splash_ad_return(code: int, msg: String)
 # 视频激励广告相关的信号
@@ -100,6 +102,10 @@ func _ready() -> void:
 			func(code: int, msg: String):
 				on_leaderboard_return.emit(code, msg)
 		)
+		_plugin_singleton.connect("onCloudSaveReturn",
+			func(code: int, msg: String):
+				on_cloud_save_return.emit(code, msg)
+		)
 		_plugin_singleton.connect("onSplashAdReturn",
 			func(code: int, msg: String):
 				on_splash_ad_return.emit(code, msg)
@@ -157,10 +163,10 @@ func startup_compliance() -> void:
 		
 # 打开内嵌动态
 func open_tap_moment() -> void:
-	_call_android_function("openTapMoment")
+	_call_android_function("openMomentPage")
 	
 # 得到当前登录用户的信息
-func get_user_profile() -> Dictionary:
+func get_current_tap_account() -> Dictionary:
 	var json_string: Variant = _call_android_function("getCurrentTapAccountAsString")
 	return {} if json_string == null else JSON.parse_string(json_string)
 	
@@ -169,13 +175,11 @@ func show_achievements() -> void:
 	_call_android_function("showAchievements")
 	
 # 达成对应的单步成就
-# 这是一个异步操作，请处理对应的信号以获取成就更新结果
 func unlock_achievement(achievement_id: String) -> void:
 	_call_android_function("unlockAchievement", [achievement_id])
 	
-# 增加分步成就的步数（累加）
+# 增加分步成就的进度
 # 默认增加步数为 1
-# 这是一个异步操作，请处理对应的信号以获取成就更新结果
 func increment_achievement(achievement_id: String, steps: int = 1) -> void:
 	_call_android_function("incrementAchievement", [achievement_id, steps])
 	
@@ -184,25 +188,75 @@ func set_achievement_toast_enable(enable: bool) -> void:
 	_call_android_function("setAchievementToastEnable", [enable])
 	
 # 提交礼包兑换码（无服务器兑换）
-# 这是一个异步操作，请处理对应的信号以获取兑换结果
 func submit_gift_code(gift_code: String) -> void:
 	_call_android_function("submitGiftCode", [gift_code])
 	
 # 向目标排行榜中提交数据
-# 这是一个异步操作，请处理对应的信号以获取提交结果
-func submit_leaderboard_score(leaderboard_name: String, score: int) -> void:
-	_call_android_function("submitLeaderboardScore", [leaderboard_name, score])
+func submit_leaderboard_score(leaderboard_id: String, score: int) -> void:
+	_call_android_function("submitLeaderboardScore", [leaderboard_id, score])
 	
-# 获取目标排行榜中指定区间的排名
-# 这是一个异步操作，请处理对应的信号以获取返回数据
-func fetch_leaderboard_section_rankings(leaderboard_name: String, start: int, end: int) -> void:
-	_call_android_function("fetchLeaderboardSectionRankings", [leaderboard_name, start, end])
+# 打开排行榜H5页面对话框，支持总榜和好友榜两种类型
+# leaderboard_collection 用来指定排行榜的类型
+# 0: Public
+# 1: Friends
+func open_leaderboard(leaderboard_id: String, leaderboard_collection: int) -> void:
+	_call_android_function("openLeaderboard", [leaderboard_id, leaderboard_collection])
+
+# 展示指定用户的个人资料对话框，传入用户的openId
+func show_tap_user_profile(open_id: String) -> void:
+	_call_android_function("showTapUserProfile", [open_id])
 	
-# 获取目标排行榜中用户周围指定个数的排名（包括用户自己）
-# 如果不指定个数（count 使用默认数值 1），则代表只获取当前用户的排名
-# 这是一个异步操作，请处理对应的信号以获取返回数据
-func fetch_leaderboard_user_around_rankings(leaderboard_name: String, count: int = 1) -> void:
-	_call_android_function("fetchLeaderboardUserAroundRankings", [leaderboard_name, count])
+# 分页获取排行榜数据，支持总榜和好友榜
+# 首次请求 next_page 留空即可
+func load_leaderboard_scores(leaderboard_id: String, leaderboard_collection: int, next_page: String = "") -> void:
+	_call_android_function("loadLeaderboardScores", [leaderboard_id, leaderboard_collection, next_page])
+
+# 获取当前登录用户在指定排行榜的分数和排名
+func load_current_player_leaderboard_score(leaderboard_id: String, leaderboard_collection: int):
+	_call_android_function("loadCurrentPlayerLeaderboardScore", [leaderboard_id, leaderboard_collection])
+	
+# 查询当前用户相近的其他用户成绩（上下X位）
+func load_player_centered_leaderboard_scores(leaderboard_id: String, leaderboard_collection: int, period_token: String, max_count: int) -> void:
+	_call_android_function("loadPlayerCenteredLeaderboardScores", [leaderboard_id, leaderboard_collection, period_token, max_count])
+	
+# 创建游戏存档并上传云端
+func create_cloud_save_archive(
+		name: String,
+		summary: String,
+		extra: String,
+		playtime: int,
+		archive_file_path: String,
+		archive_cover_path: String
+	):
+	_call_android_function("createCloudSaveArchive", [name, summary, extra, playtime, archive_file_path, archive_cover_path])
+	
+# 获取当前用户的存档列表
+func get_cloud_save_archive_list():
+	_call_android_function("getCloudSaveArchiveList", [])
+	
+# 下载指定的存档文件
+func get_cloud_save_archive_data(archive_uuid: String, archive_file_id: String):
+	_call_android_function("getCloudSaveArchiveData", [archive_uuid, archive_file_id])
+	
+# 更新指定的存档文件
+func update_cloud_save_archive(
+		archive_uuid: String,
+		name: String,
+		summary: String,
+		extra: String,
+		playtime: int,
+		archive_file_path: String,
+		archive_cover_path: String
+	):
+	_call_android_function("updateCloudSaveArchive", [archive_uuid, name, summary, extra, playtime, archive_file_path, archive_cover_path])
+	
+# 删除指定的存档文件
+func delete_cloud_save_archive(archive_uuid: String):
+	_call_android_function("deleteCloudSaveArchive", [archive_uuid])
+	
+# 获取指定存档的封面图片
+func get_cloud_save_archive_cover(archive_uuid: String, archive_file_id: String):
+	_call_android_function("getCloudSaveArchiveCover", [archive_uuid, archive_file_id])
 	
 func load_splash_ad(space_id: int) -> void:
 	_call_android_function("loadSplashAd", [space_id])
