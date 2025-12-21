@@ -28,7 +28,7 @@ Godot plugin for supporting TapTap Developer Services
 - 目前在测试应用中获取云存档封面时存在明显卡顿
 - [ ] ~~深度链接（目前不在开发计划中）~~
 
-### TapAD
+### TapADN
 
 **注意事项：TapADN 即将全面迁移到新的 Dirichlet 平台，需要认证公司资质才能使用对应服务**
 
