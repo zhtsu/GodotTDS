@@ -6,8 +6,6 @@ Godot plugin for supporting TapTap Developer Services
 
 在 Godot 中使用 TapTap 开发者服务
 
-**注意事项：最新版本的插件正在锐意开发中（2025.12.19）**
-
 # Environment
 
 - OpenJDK 17.0.11
@@ -24,9 +22,11 @@ Godot plugin for supporting TapTap Developer Services
 - [x] 内嵌动态（已完成）
 - [x] 成就系统（已完成）
 - [x] 礼包系统（已完成）
-- [x] 排行榜（获取玩家周围数据不可用，其余已完成）
-- [ ] 云存档（开发中）
-- [ ] 深度链接（开发中）
+- [x] 排行榜（已完成）
+- 获取玩家周围排名数据的接口目前存在问题，无法使用
+- [x] 云存档（已完成）
+- 目前在测试应用中获取云存档封面时存在明显卡顿
+- [ ] ~~深度链接（目前不在开发计划中）~~
 
 ### TapAD
 
@@ -34,11 +34,11 @@ Godot plugin for supporting TapTap Developer Services
 
 新平台地址：[https://www.dirichlet.cn/](https://www.dirichlet.cn/)
 
-- [ ] 开屏广告（开发中）
-- [ ] 激励广告（开发中）
-- [ ] 横幅广告（开发中）
-- [ ] 信息流广告（开发中）
-- [ ] 插屏广告（开发中）
+- [ ] ~~开屏广告（目前不在开发计划中）~~
+- [ ] ~~激励广告（目前不在开发计划中）~~
+- [ ] ~~横幅广告（目前不在开发计划中）~~
+- [ ] ~~信息流广告（目前不在开发计划中）~~
+- [ ] ~~插屏广告（目前不在开发计划中）~~
 
 # How to use
 
