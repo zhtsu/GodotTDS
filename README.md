@@ -9,9 +9,10 @@ Godot plugin for supporting TapTap Developer Services
 # Environment
 
 - OpenJDK 17.0.11
-- TapSDK Android 4.9.1
+- TapSDK Android 4.9.2
+  - 最新版本的云存储相关依赖存在问题，因此使用 4.9.1 版本
 - TapADN Android SDK 3.16.3.45
-- Godot 5.2.1
+- Godot 4.5.1
 
 # Feature
 
@@ -23,9 +24,9 @@ Godot plugin for supporting TapTap Developer Services
 - [x] 成就系统（已完成）
 - [x] 礼包系统（已完成）
 - [x] 排行榜（已完成）
-- 获取玩家周围排名数据的接口目前存在问题，无法使用
+  - 获取玩家周围排名数据的接口目前存在问题，无法使用
 - [x] 云存档（已完成）
-- 目前在测试应用中获取云存档封面时存在明显卡顿
+  - 目前在测试应用中获取云存档封面时存在明显卡顿
 - [ ] ~~深度链接（目前不在开发计划中）~~
 
 ### TapADN
