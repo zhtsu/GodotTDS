@@ -156,7 +156,8 @@ class CloudSave(activity: Activity, godotTdsPlugin: GodotTdsPlugin):
     {
         override fun onArchiveDataResult(archiveData: ByteArray)
         {
-            _godotTdsPlugin.emitPluginSignal("onCloudSaveReturn", StateCode.CLOUD_SAVE_GET_ARCHIVE_DATA_SUCCESS, archiveData.decodeToString())
+            val base64String = android.util.Base64.encodeToString(archiveData, android.util.Base64.NO_WRAP)
+            _godotTdsPlugin.emitPluginSignal("onCloudSaveReturn", StateCode.CLOUD_SAVE_GET_ARCHIVE_DATA_SUCCESS, base64String)
         }
 
         override fun onRequestError(errorCode: Int, errorMessage: String)
@@ -182,7 +183,8 @@ class CloudSave(activity: Activity, godotTdsPlugin: GodotTdsPlugin):
     {
         override fun onArchiveCoverResult(coverData: ByteArray)
         {
-            _godotTdsPlugin.emitPluginSignal("onCloudSaveReturn", StateCode.CLOUD_SAVE_GET_ARCHIVE_COVER_SUCCESS, coverData.decodeToString())
+            val base64String = android.util.Base64.encodeToString(coverData, android.util.Base64.NO_WRAP)
+            _godotTdsPlugin.emitPluginSignal("onCloudSaveReturn", StateCode.CLOUD_SAVE_GET_ARCHIVE_COVER_SUCCESS, base64String)
         }
 
         override fun onRequestError(errorCode: Int, errorMessage: String)

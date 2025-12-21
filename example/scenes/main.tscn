@@ -164,19 +164,47 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 36
 text = "玩家周围排行榜数据"
 
-[node name="LoadArchiveList" type="Button" parent="TabContainer/TapSDK"]
+[node name="CreateArchive" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
-text = "获取区间排行"
+text = "创建云存档"
 
-[node name="LoadUserList" type="Button" parent="TabContainer/TapSDK"]
+[node name="GetArchiveList" type="Button" parent="TabContainer/TapSDK"]
 custom_minimum_size = Vector2(200, 80)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 48
-text = "获取玩家排行"
+text = "获取云存档列表"
+
+[node name="GetArchiveData" type="Button" parent="TabContainer/TapSDK"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 48
+text = "获取云存档文件"
+
+[node name="UpdateArchive" type="Button" parent="TabContainer/TapSDK"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 48
+text = "更新云存档"
+
+[node name="DeleteArchive" type="Button" parent="TabContainer/TapSDK"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 48
+text = "删除云存档"
+
+[node name="GetArchiveCover" type="Button" parent="TabContainer/TapSDK"]
+custom_minimum_size = Vector2(200, 80)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 48
+text = "获取云存档封面"
 
 [node name="TapADN" type="GridContainer" parent="TabContainer"]
 visible = false
@@ -282,6 +310,12 @@ offset_bottom = 476.0
 theme_override_font_sizes/font_size = 80
 text = "从深度链接启动"
 
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_left = 293.0
+offset_top = 1507.0
+offset_right = 438.0
+offset_bottom = 1605.0
+
 [connection signal="button_down" from="TabContainer/TapSDK/Login" to="." method="_on_login_button_down"]
 [connection signal="button_down" from="TabContainer/TapSDK/Logout" to="." method="_on_logout_button_down"]
 [connection signal="button_down" from="TabContainer/TapSDK/Compliance" to="." method="_on_compliance_button_down"]
@@ -297,6 +331,12 @@ text = "从深度链接启动"
 [connection signal="button_down" from="TabContainer/TapSDK/LoadLeaderboardScores" to="." method="_on_load_leaderboard_scores_button_down"]
 [connection signal="button_down" from="TabContainer/TapSDK/LoadCurrentPlayerLeaderboardScore" to="." method="_on_load_current_player_leaderboard_score_button_down"]
 [connection signal="button_down" from="TabContainer/TapSDK/LoadPlayerCenteredLeaderboardScores" to="." method="_on_load_player_centered_leaderboard_scores_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/CreateArchive" to="." method="_on_create_archive_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/GetArchiveList" to="." method="_on_get_archive_list_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/GetArchiveData" to="." method="_on_get_archive_data_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/UpdateArchive" to="." method="_on_update_archive_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/DeleteArchive" to="." method="_on_delete_archive_button_down"]
+[connection signal="button_down" from="TabContainer/TapSDK/GetArchiveCover" to="." method="_on_get_archive_cover_button_down"]
 [connection signal="button_down" from="TabContainer/TapADN/LoadSplashAD" to="." method="_on_load_splash_ad_button_down"]
 [connection signal="button_down" from="TabContainer/TapADN/ShowSplashAD" to="." method="_on_show_splash_ad_button_down"]
 [connection signal="button_down" from="TabContainer/TapADN/LoadRewardVideoAD" to="." method="_on_load_reward_video_ad_button_down"]

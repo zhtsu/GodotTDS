@@ -228,7 +228,21 @@ func create_cloud_save_archive(
 		archive_file_path: String,
 		archive_cover_path: String
 	):
-	_call_android_function("createCloudSaveArchive", [name, summary, extra, playtime, archive_file_path, archive_cover_path])
+	if not OS.has_feature("android"):
+		push_warning("Only works on Android")
+		return
+		
+	var image_cache_result : Array = _cache_image_get_path(archive_cover_path)
+	if image_cache_result[0] == false:
+		push_log("Invalid image! Failed to cache image!", true)
+		return
+		
+	var file_cache_result : Array = _cache_file_get_path(archive_file_path)
+	if file_cache_result[0] == false:
+		push_log("Invalid file! Failed to cache file!", true)
+		return
+		
+	_call_android_function("createCloudSaveArchive", [name, summary, extra, playtime, file_cache_result[1], image_cache_result[1]])
 	
 # 获取当前用户的存档列表
 func get_cloud_save_archive_list():
@@ -248,7 +262,21 @@ func update_cloud_save_archive(
 		archive_file_path: String,
 		archive_cover_path: String
 	):
-	_call_android_function("updateCloudSaveArchive", [archive_uuid, name, summary, extra, playtime, archive_file_path, archive_cover_path])
+	if not OS.has_feature("android"):
+		push_warning("Only works on Android")
+		return
+		
+	var image_cache_result : Array = _cache_image_get_path(archive_cover_path)
+	if image_cache_result[0] == false:
+		push_log("Invalid image! Failed to cache image!", true)
+		return
+		
+	var file_cache_result : Array = _cache_file_get_path(archive_file_path)
+	if file_cache_result[0] == false:
+		push_log("Invalid file! Failed to cache file!", true)
+		return
+		
+	_call_android_function("updateCloudSaveArchive", [archive_uuid, name, summary, extra, playtime, file_cache_result[1], image_cache_result[1]])
 	
 # 删除指定的存档文件
 func delete_cloud_save_archive(archive_uuid: String):
@@ -257,7 +285,7 @@ func delete_cloud_save_archive(archive_uuid: String):
 # 获取指定存档的封面图片
 func get_cloud_save_archive_cover(archive_uuid: String, archive_file_id: String):
 	_call_android_function("getCloudSaveArchiveCover", [archive_uuid, archive_file_id])
-	
+
 func load_splash_ad(space_id: int) -> void:
 	_call_android_function("loadSplashAd", [space_id])
 
@@ -296,6 +324,34 @@ func load_feed_ad(space_id: int, query: String = "") -> void:
 
 func show_feed_ad(gravity: int = GRAVITY_BOTTOM, height = -1) -> void:
 	_call_android_function("showFeedAd", [gravity, height])
+	
+func load_image_from_base64(base64_string: String) -> ImageTexture:
+	var image_data: PackedByteArray = Marshalls.base64_to_raw(base64_string)
+	if image_data.is_empty():
+		return null
+	
+	var image: Image = Image.new()
+	var error: Error
+	
+	error = image.load_png_from_buffer(image_data)
+	if error != OK:
+		error = image.load_jpg_from_buffer(image_data)
+	if error != OK:
+		error = image.load_webp_from_buffer(image_data)
+	
+	if error != OK:
+		push_error(str(error))
+		return null
+		
+	return ImageTexture.create_from_image(image)
+	
+func load_json_from_base64(base64_string: String) -> Dictionary:
+	var raw_data: PackedByteArray = Marshalls.base64_to_raw(base64_string)
+	if raw_data.is_empty():
+		push_error("Failed to decode Base64 string")
+		return {}
+	var json_string: String = raw_data.get_string_from_utf8()
+	return JSON.parse_string(json_string)
 	
 func _json_to_array(json_string: Variant) -> Array:
 	if json_string == null:
