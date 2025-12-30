@@ -11,7 +11,7 @@ Godot plugin for supporting TapTap Developer Services
 - OpenJDK 17.0.11
 - TapSDK Android 4.9.2
   - 最新版本的云存储相关依赖存在问题，因此使用 4.9.1 版本
-- TapADN Android SDK 3.16.3.45
+- Dirichlet Ad SDK 4.2.0.1
 - Godot 4.5.1
 
 # Feature
