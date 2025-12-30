@@ -2,20 +2,18 @@ package cc.zhtsu.godot_tds_plugin.tapadn
 
 import android.app.Activity
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
-import cc.zhtsu.godot_tds_plugin.core.GodotTdsPluginModule
-import cc.zhtsu.godot_tds_plugin.core.tapadn_interface.TapAdnBootstrapInterface
+import cc.zhtsu.godot_tds_plugin.GodotTdsPluginModule
 import com.tapsdk.tapad.TapAdConfig
 import com.tapsdk.tapad.TapAdManager
 import com.tapsdk.tapad.TapAdNative
 import com.tapsdk.tapad.TapAdSdk
 
 class TapAdnBootstrap(activity: Activity, godotTdsPlugin: GodotTdsPlugin) :
-    GodotTdsPluginModule(activity, godotTdsPlugin),
-    TapAdnBootstrapInterface
+    GodotTdsPluginModule(activity, godotTdsPlugin)
 {
     private var _tapAdNative: TapAdNative? = null
 
-    override fun initialize(
+    fun initialize(
         mediaId: Long,
         mediaName: String,
         mediaKey: String,
@@ -43,7 +41,7 @@ class TapAdnBootstrap(activity: Activity, godotTdsPlugin: GodotTdsPlugin) :
         TapAdSdk.init(_activity, config)
     }
 
-    override fun getTapAdNative(): TapAdNative?
+    fun getTapAdNative(): TapAdNative?
     {
         return _tapAdNative
     }

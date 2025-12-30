@@ -2,9 +2,8 @@ package cc.zhtsu.godot_tds_plugin.tapsdk
 
 import android.app.Activity
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
-import cc.zhtsu.godot_tds_plugin.core.StateCode
-import cc.zhtsu.godot_tds_plugin.core.GodotTdsPluginModule
-import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.GiftInterface
+import cc.zhtsu.godot_tds_plugin.StateCode
+import cc.zhtsu.godot_tds_plugin.GodotTdsPluginModule
 import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -19,10 +18,9 @@ import java.security.MessageDigest
 import java.security.SecureRandom
 
 class Gift(activity : Activity, godotTdsPlugin: GodotTdsPlugin):
-    GodotTdsPluginModule(activity, godotTdsPlugin),
-    GiftInterface
+    GodotTdsPluginModule(activity, godotTdsPlugin)
 {
-    override fun submitGiftCode(giftCode : String)
+    fun submitGiftCode(giftCode : String)
     {
         val okHttpClient = OkHttpClient()
         val jsonObject = JSONObject()

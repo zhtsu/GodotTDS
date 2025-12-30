@@ -2,8 +2,7 @@ package cc.zhtsu.godot_tds_plugin.tapsdk
 
 import android.app.Activity
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
-import cc.zhtsu.godot_tds_plugin.core.GodotTdsPluginModule
-import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.TapSdkBootstrapInterface
+import cc.zhtsu.godot_tds_plugin.GodotTdsPluginModule
 import com.taptap.sdk.achievement.options.TapTapAchievementOptions
 import com.taptap.sdk.compliance.option.TapTapComplianceOptions
 import com.taptap.sdk.core.TapTapLanguage
@@ -12,10 +11,9 @@ import com.taptap.sdk.core.TapTapSdkOptions
 import com.taptap.sdk.initializer.api.model.ScreenOrientation
 
 class TapSdkBootstrap(activity: Activity, godotTdsPlugin: GodotTdsPlugin):
-    GodotTdsPluginModule(activity, godotTdsPlugin),
-    TapSdkBootstrapInterface
+    GodotTdsPluginModule(activity, godotTdsPlugin)
 {
-    override fun initialize(
+    fun initialize(
         clientId: String,
         clientToken: String,
         region: Int,

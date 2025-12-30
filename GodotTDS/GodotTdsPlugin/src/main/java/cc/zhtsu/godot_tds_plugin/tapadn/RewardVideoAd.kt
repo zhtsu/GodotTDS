@@ -2,20 +2,18 @@ package cc.zhtsu.godot_tds_plugin.tapadn
 
 import android.app.Activity
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
-import cc.zhtsu.godot_tds_plugin.core.StateCode
-import cc.zhtsu.godot_tds_plugin.core.GodotTdsPluginModule
-import cc.zhtsu.godot_tds_plugin.core.tapadn_interface.RewardVideoAdInterface
+import cc.zhtsu.godot_tds_plugin.StateCode
+import cc.zhtsu.godot_tds_plugin.GodotTdsPluginModule
 import com.tapsdk.tapad.AdRequest
 import com.tapsdk.tapad.TapAdNative
 import com.tapsdk.tapad.TapRewardVideoAd
 
 class RewardVideoAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
-    GodotTdsPluginModule(activity, godotTdsPlugin),
-    RewardVideoAdInterface
+    GodotTdsPluginModule(activity, godotTdsPlugin)
 {
     private var _rewardVideoAd : TapRewardVideoAd? = null
 
-    override fun load(
+    fun load(
         spaceId: Int,
         rewardName: String,
         rewardAmount: Int,
@@ -34,7 +32,7 @@ class RewardVideoAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
         _godotTdsPlugin.getTapAdnBootstrap().getTapAdNative()?.loadRewardVideoAd(adRequest, _rewardVideoAdListener)
     }
 
-    override fun show()
+    fun show()
     {
         if (_rewardVideoAd != null)
         {

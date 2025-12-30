@@ -2,14 +2,12 @@ package cc.zhtsu.godot_tds_plugin.tapsdk
 
 import android.app.Activity
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
-import cc.zhtsu.godot_tds_plugin.core.GodotTdsPluginModule
-import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.ComplianceInterface
+import cc.zhtsu.godot_tds_plugin.GodotTdsPluginModule
 import com.taptap.sdk.compliance.TapTapCompliance
 import com.taptap.sdk.compliance.TapTapComplianceCallback
 
 class Compliance(activity : Activity, godotTdsPlugin: GodotTdsPlugin):
-    GodotTdsPluginModule(activity, godotTdsPlugin),
-    ComplianceInterface
+    GodotTdsPluginModule(activity, godotTdsPlugin)
 {
     private var _complianceCallback : TapTapComplianceCallback = object : TapTapComplianceCallback
     {
@@ -19,17 +17,17 @@ class Compliance(activity : Activity, godotTdsPlugin: GodotTdsPlugin):
         }
     }
 
-    override fun initialize()
+    fun initialize()
     {
         TapTapCompliance.registerComplianceCallback(_complianceCallback)
     }
 
-    override fun destroy()
+    fun destroy()
     {
         TapTapCompliance.unregisterComplianceCallback(_complianceCallback)
     }
 
-    override fun startup()
+    fun startup()
     {
         if (_godotTdsPlugin.isLoggedIn())
         {
@@ -38,17 +36,17 @@ class Compliance(activity : Activity, godotTdsPlugin: GodotTdsPlugin):
         }
     }
 
-    override fun exit()
+    fun exit()
     {
         TapTapCompliance.exit()
     }
 
-    override fun getAgeRange(): Int
+    fun getAgeRange(): Int
     {
         return TapTapCompliance.getAgeRange()
     }
 
-    override fun getRemainingTime() : Int
+    fun getRemainingTime() : Int
     {
         return TapTapCompliance.getRemainingTime()
     }

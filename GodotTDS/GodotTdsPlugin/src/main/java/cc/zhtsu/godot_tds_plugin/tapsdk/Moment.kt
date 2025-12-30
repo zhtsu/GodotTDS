@@ -2,20 +2,18 @@ package cc.zhtsu.godot_tds_plugin.tapsdk
 
 import android.app.Activity
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
-import cc.zhtsu.godot_tds_plugin.core.GodotTdsPluginModule
-import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.MomentInterface
+import cc.zhtsu.godot_tds_plugin.GodotTdsPluginModule
 import com.taptap.sdk.moment.TapTapMoment
 
 class Moment(activity : Activity, godotTdsPlugin: GodotTdsPlugin):
-    GodotTdsPluginModule(activity, godotTdsPlugin),
-    MomentInterface
+    GodotTdsPluginModule(activity, godotTdsPlugin)
 {
-    override fun initialize()
+    fun initialize()
     {
         TapTapMoment.setCallback(_tapMomentCallback)
     }
 
-    override fun openPage()
+    fun openPage()
     {
         TapTapMoment.open()
     }

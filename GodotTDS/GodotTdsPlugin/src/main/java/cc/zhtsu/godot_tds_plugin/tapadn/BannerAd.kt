@@ -8,21 +8,19 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
 import cc.zhtsu.godot_tds_plugin.R
-import cc.zhtsu.godot_tds_plugin.core.StateCode
-import cc.zhtsu.godot_tds_plugin.core.GodotTdsPluginModule
-import cc.zhtsu.godot_tds_plugin.core.tapadn_interface.BannerAdInterface
+import cc.zhtsu.godot_tds_plugin.StateCode
+import cc.zhtsu.godot_tds_plugin.GodotTdsPluginModule
 import com.tapsdk.tapad.AdRequest
 import com.tapsdk.tapad.TapAdNative
 import com.tapsdk.tapad.TapBannerAd
 
 @SuppressLint("InflateParams", "ResourceType")
 class BannerAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
-    GodotTdsPluginModule(activity, godotTdsPlugin),
-    BannerAdInterface
+    GodotTdsPluginModule(activity, godotTdsPlugin)
 {
     private var _bannerAd : TapBannerAd? = null
 
-    override fun initialize()
+    fun initialize()
     {
         _activity.runOnUiThread {
             val rootView = _activity.findViewById<ViewGroup>(android.R.id.content)
@@ -40,7 +38,7 @@ class BannerAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
         }
     }
 
-    override fun load(spaceId : Int)
+    fun load(spaceId : Int)
     {
         val adRequest = AdRequest.Builder()
             .withSpaceId(spaceId)
@@ -49,7 +47,7 @@ class BannerAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
         _godotTdsPlugin.getTapAdnBootstrap().getTapAdNative()?.loadBannerAd(adRequest, _bannerAdListener)
     }
 
-    override fun show(gravity : Int, height : Int)
+    fun show(gravity : Int, height : Int)
     {
         if (_bannerAd != null)
         {
@@ -85,7 +83,7 @@ class BannerAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
         }
     }
 
-    override fun dispose()
+    fun dispose()
     {
         if (_bannerAd != null)
         {

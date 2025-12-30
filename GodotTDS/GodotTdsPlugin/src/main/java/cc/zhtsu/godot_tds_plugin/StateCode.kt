@@ -1,4 +1,4 @@
-package cc.zhtsu.godot_tds_plugin.core
+package cc.zhtsu.godot_tds_plugin
 
 object StateCode
 {

@@ -2,20 +2,18 @@ package cc.zhtsu.godot_tds_plugin.tapadn
 
 import android.app.Activity
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
-import cc.zhtsu.godot_tds_plugin.core.StateCode
-import cc.zhtsu.godot_tds_plugin.core.GodotTdsPluginModule
-import cc.zhtsu.godot_tds_plugin.core.tapadn_interface.InterstitialAdInterface
+import cc.zhtsu.godot_tds_plugin.StateCode
+import cc.zhtsu.godot_tds_plugin.GodotTdsPluginModule
 import com.tapsdk.tapad.AdRequest
 import com.tapsdk.tapad.TapAdNative
 import com.tapsdk.tapad.TapInterstitialAd
 
 class InterstitialAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
-    GodotTdsPluginModule(activity, godotTdsPlugin),
-    InterstitialAdInterface
+    GodotTdsPluginModule(activity, godotTdsPlugin)
 {
     private var _interstitialAd : TapInterstitialAd? = null
 
-    override fun load(spaceId : Int)
+    fun load(spaceId : Int)
     {
         val adRequest = AdRequest.Builder()
             .withSpaceId(spaceId)
@@ -24,7 +22,7 @@ class InterstitialAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
         _godotTdsPlugin.getTapAdnBootstrap().getTapAdNative()?.loadInterstitialAd(adRequest, _interstitialAdListener)
     }
 
-    override fun show()
+    fun show()
     {
         if (_interstitialAd != null)
         {

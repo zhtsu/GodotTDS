@@ -2,20 +2,18 @@ package cc.zhtsu.godot_tds_plugin.tapadn
 
 import android.app.Activity
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
-import cc.zhtsu.godot_tds_plugin.core.StateCode
-import cc.zhtsu.godot_tds_plugin.core.GodotTdsPluginModule
-import cc.zhtsu.godot_tds_plugin.core.tapadn_interface.SplashAdInterface
+import cc.zhtsu.godot_tds_plugin.StateCode
+import cc.zhtsu.godot_tds_plugin.GodotTdsPluginModule
 import com.tapsdk.tapad.AdRequest
 import com.tapsdk.tapad.TapAdNative
 import com.tapsdk.tapad.TapSplashAd
 
 class SplashAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
-    GodotTdsPluginModule(activity, godotTdsPlugin),
-    SplashAdInterface
+    GodotTdsPluginModule(activity, godotTdsPlugin)
 {
     private var _splashAd : TapSplashAd? = null
 
-    override fun load(spaceId : Int)
+    fun load(spaceId : Int)
     {
         val adRequest = AdRequest.Builder()
             .withSpaceId(spaceId)
@@ -24,7 +22,7 @@ class SplashAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
         _godotTdsPlugin.getTapAdnBootstrap().getTapAdNative()?.loadSplashAd(adRequest, _loadListener)
     }
 
-    override fun show()
+    fun show()
     {
         if (_splashAd != null)
         {
@@ -40,7 +38,7 @@ class SplashAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
         }
     }
 
-    override fun dispose()
+    fun dispose()
     {
         if (_splashAd != null)
         {

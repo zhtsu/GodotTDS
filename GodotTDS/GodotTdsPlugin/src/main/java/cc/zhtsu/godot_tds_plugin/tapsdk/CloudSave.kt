@@ -4,9 +4,8 @@ import android.app.Activity
 import android.os.Build
 import androidx.annotation.RequiresApi
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
-import cc.zhtsu.godot_tds_plugin.core.GodotTdsPluginModule
-import cc.zhtsu.godot_tds_plugin.core.StateCode
-import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.CloudSaveInterface
+import cc.zhtsu.godot_tds_plugin.GodotTdsPluginModule
+import cc.zhtsu.godot_tds_plugin.StateCode
 import com.taptap.sdk.cloudsave.ArchiveData
 import com.taptap.sdk.cloudsave.ArchiveMetadata
 import com.taptap.sdk.cloudsave.TapTapCloudSave
@@ -15,20 +14,19 @@ import com.taptap.sdk.cloudsave.internal.TapCloudSaveRequestCallback
 import org.json.JSONObject
 
 class CloudSave(activity: Activity, godotTdsPlugin: GodotTdsPlugin):
-    GodotTdsPluginModule(activity, godotTdsPlugin),
-    CloudSaveInterface
+    GodotTdsPluginModule(activity, godotTdsPlugin)
 {
-    override fun initialize()
+    fun initialize()
     {
         TapTapCloudSave.registerCloudSaveCallback(_cloudSaveCallback)
     }
 
-    override fun destroy()
+    fun destroy()
     {
         TapTapCloudSave.unregisterCloudSaveCallback(_cloudSaveCallback)
     }
 
-    override fun createArchive(
+    fun createArchive(
         name: String,
         summary: String,
         extra: String,
@@ -47,17 +45,17 @@ class CloudSave(activity: Activity, godotTdsPlugin: GodotTdsPlugin):
         TapTapCloudSave.createArchive(metadata, archiveFilePath, archiveCoverPath, _createArchiveCallback)
     }
 
-    override fun getArchiveList()
+    fun getArchiveList()
     {
         TapTapCloudSave.getArchiveList(_getArchiveListCallback)
     }
 
-    override fun getArchiveData(archiveUuid: String, archiveFileId: String)
+    fun getArchiveData(archiveUuid: String, archiveFileId: String)
     {
         TapTapCloudSave.getArchiveData(archiveUuid, archiveFileId, _getArchiveDataCallback)
     }
 
-    override fun updateArchive(
+    fun updateArchive(
         archiveUuid: String,
         name: String,
         summary: String,
@@ -77,12 +75,12 @@ class CloudSave(activity: Activity, godotTdsPlugin: GodotTdsPlugin):
         TapTapCloudSave.updateArchive(archiveUuid, metadata, archiveFilePath, archiveCoverPath, _updateArchiveCallback)
     }
 
-    override fun deleteArchive(archiveUuid: String)
+    fun deleteArchive(archiveUuid: String)
     {
         TapTapCloudSave.deleteArchive(archiveUuid, _deleteArchiveCallback)
     }
 
-    override fun getArchiveCover(archiveUuid: String, archiveFileId: String)
+    fun getArchiveCover(archiveUuid: String, archiveFileId: String)
     {
         TapTapCloudSave.getArchiveCover(archiveUuid, archiveFileId, _getArchiveCoverCallback)
     }

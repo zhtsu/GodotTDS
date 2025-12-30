@@ -8,9 +8,8 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
 import cc.zhtsu.godot_tds_plugin.R
-import cc.zhtsu.godot_tds_plugin.core.StateCode
-import cc.zhtsu.godot_tds_plugin.core.GodotTdsPluginModule
-import cc.zhtsu.godot_tds_plugin.core.tapadn_interface.FeedAdInterface
+import cc.zhtsu.godot_tds_plugin.StateCode
+import cc.zhtsu.godot_tds_plugin.GodotTdsPluginModule
 import com.tapsdk.tapad.AdRequest
 import com.tapsdk.tapad.TapAdNative
 import com.tapsdk.tapad.TapFeedAd
@@ -22,8 +21,7 @@ import com.tapsdk.tapad.feed.VideoOption
 
 @SuppressLint("ResourceType", "InflateParams")
 class FeedAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
-    GodotTdsPluginModule(activity, godotTdsPlugin),
-    FeedAdInterface
+    GodotTdsPluginModule(activity, godotTdsPlugin)
 {
     private val _feedOption = FeedOption.Builder()
         .expressWidth(ViewGroup.LayoutParams.MATCH_PARENT)
@@ -35,7 +33,7 @@ class FeedAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
     private var _gravity : Int = 0
     private var _height : Int = -1
 
-    override fun initialize()
+    fun initialize()
     {
         _activity.runOnUiThread {
             val rootView = _activity.findViewById<ViewGroup>(android.R.id.content)
@@ -53,7 +51,7 @@ class FeedAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
         }
     }
 
-    override fun load(spaceId : Int, query : String)
+    fun load(spaceId : Int, query : String)
     {
         val adRequest = AdRequest.Builder()
             .withQuery(query)
@@ -64,7 +62,7 @@ class FeedAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
     }
 
     @SuppressLint("ResourceType")
-    override fun show(gravity : Int, height : Int)
+    fun show(gravity : Int, height : Int)
     {
         if (_feedAd != null)
         {

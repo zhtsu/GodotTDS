@@ -4,9 +4,8 @@ import android.app.Activity
 import android.os.Build
 import androidx.annotation.RequiresApi
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
-import cc.zhtsu.godot_tds_plugin.core.StateCode
-import cc.zhtsu.godot_tds_plugin.core.GodotTdsPluginModule
-import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.LeaderboardInterface
+import cc.zhtsu.godot_tds_plugin.StateCode
+import cc.zhtsu.godot_tds_plugin.GodotTdsPluginModule
 import com.taptap.sdk.leaderboard.androidx.TapTapLeaderboard
 import com.taptap.sdk.leaderboard.callback.TapTapLeaderboardCallback
 import com.taptap.sdk.leaderboard.callback.TapTapLeaderboardResponseCallback
@@ -19,38 +18,37 @@ import com.taptap.sdk.leaderboard.data.response.common.Score
 import org.json.JSONObject
 
 class Leaderboard(activity : Activity, godotTdsPlugin: GodotTdsPlugin):
-    GodotTdsPluginModule(activity, godotTdsPlugin),
-    LeaderboardInterface
+    GodotTdsPluginModule(activity, godotTdsPlugin)
 {
-    override fun initialize()
+    fun initialize()
     {
         TapTapLeaderboard.registerLeaderboardCallback(_leaderboardCallback)
     }
 
-    override fun destroy()
+    fun destroy()
     {
         TapTapLeaderboard.unregisterLeaderboardCallback(_leaderboardCallback)
     }
 
-    override fun openLeaderboard(leaderboardId: String, leaderboardCollection: Int)
+    fun openLeaderboard(leaderboardId: String, leaderboardCollection: Int)
     {
         val collection: String = if (leaderboardCollection == 0) "public" else "friends"
 
         TapTapLeaderboard.openLeaderboard(_activity, leaderboardId, collection)
     }
 
-    override fun showTapUserProfile(openId: String)
+    fun showTapUserProfile(openId: String)
     {
         TapTapLeaderboard.showTapUserProfile(_activity, openId)
     }
 
-    override fun submitScore(leaderboardId: String, score: Long)
+    fun submitScore(leaderboardId: String, score: Long)
     {
         val scores = listOf(SubmitScoresRequest.ScoreItem(leaderboardId, score))
         TapTapLeaderboard.submitScores(scores, _leaderboardSubmitCallback)
     }
 
-    override fun loadLeaderboardScores(leaderboardId: String, leaderboardCollection: Int, nextPage: String)
+    fun loadLeaderboardScores(leaderboardId: String, leaderboardCollection: Int, nextPage: String)
     {
         val collection = if (leaderboardCollection == 0) LeaderboardCollection.PUBLIC else LeaderboardCollection.FRIENDS
         val nextPageParam: String? = if (nextPage == "") null else nextPage
@@ -63,7 +61,7 @@ class Leaderboard(activity : Activity, godotTdsPlugin: GodotTdsPlugin):
         )
     }
 
-    override fun loadCurrentPlayerLeaderboardScore(leaderboardId: String, leaderboardCollection: Int)
+    fun loadCurrentPlayerLeaderboardScore(leaderboardId: String, leaderboardCollection: Int)
     {
         val collection = if (leaderboardCollection == 0) LeaderboardCollection.PUBLIC else LeaderboardCollection.FRIENDS
 
@@ -75,7 +73,7 @@ class Leaderboard(activity : Activity, godotTdsPlugin: GodotTdsPlugin):
         )
     }
 
-    override fun loadPlayerCenteredScores(leaderboardId: String, leaderboardCollection: Int, periodToken: String, maxCount: Int)
+    fun loadPlayerCenteredScores(leaderboardId: String, leaderboardCollection: Int, periodToken: String, maxCount: Int)
     {
         val collection = if (leaderboardCollection == 0) LeaderboardCollection.PUBLIC else LeaderboardCollection.FRIENDS
 

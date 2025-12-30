@@ -1,7 +1,6 @@
-package cc.zhtsu.godot_tds_plugin.core
+package cc.zhtsu.godot_tds_plugin
 
 import android.app.Activity
-import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
 
 open class GodotTdsPluginModule(activity: Activity, godotTdsPlugin: GodotTdsPlugin)
 {

@@ -2,43 +2,41 @@ package cc.zhtsu.godot_tds_plugin.tapsdk
 
 import android.app.Activity
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
-import cc.zhtsu.godot_tds_plugin.core.GodotTdsPluginModule
-import cc.zhtsu.godot_tds_plugin.core.StateCode
-import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.AchievementInterface
+import cc.zhtsu.godot_tds_plugin.GodotTdsPluginModule
+import cc.zhtsu.godot_tds_plugin.StateCode
 import com.taptap.sdk.achievement.TapAchievementCallback
 import com.taptap.sdk.achievement.TapTapAchievement
 import com.taptap.sdk.achievement.TapTapAchievementResult
 
 class Achievement(activity : Activity, godotTdsPlugin: GodotTdsPlugin):
-    GodotTdsPluginModule(activity, godotTdsPlugin),
-    AchievementInterface
+    GodotTdsPluginModule(activity, godotTdsPlugin)
 {
-    override fun initialize()
+    fun initialize()
     {
         TapTapAchievement.registerCallback(_achievementCallback)
     }
 
-    override fun destroy()
+    fun destroy()
     {
         TapTapAchievement.unregisterCallback(_achievementCallback)
     }
 
-    override fun showAchievements()
+    fun showAchievements()
     {
         TapTapAchievement.showAchievements()
     }
 
-    override fun unlock(achievementId : String)
+    fun unlock(achievementId : String)
     {
         TapTapAchievement.unlock(achievementId)
     }
 
-    override fun increment(achievementId : String, steps : Int)
+    fun increment(achievementId : String, steps : Int)
     {
         TapTapAchievement.increment(achievementId, steps)
     }
 
-    override fun setToastEnable(enable : Boolean)
+    fun setToastEnable(enable : Boolean)
     {
         TapTapAchievement.setToastEnable(enable)
     }

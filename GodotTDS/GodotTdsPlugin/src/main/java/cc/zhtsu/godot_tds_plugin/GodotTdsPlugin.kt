@@ -2,20 +2,6 @@ package cc.zhtsu.godot_tds_plugin
 
 import android.util.Log
 import android.widget.Toast
-import cc.zhtsu.godot_tds_plugin.core.tapadn_interface.BannerAdInterface
-import cc.zhtsu.godot_tds_plugin.core.tapadn_interface.FeedAdInterface
-import cc.zhtsu.godot_tds_plugin.core.tapadn_interface.InterstitialAdInterface
-import cc.zhtsu.godot_tds_plugin.core.tapadn_interface.RewardVideoAdInterface
-import cc.zhtsu.godot_tds_plugin.core.tapadn_interface.SplashAdInterface
-import cc.zhtsu.godot_tds_plugin.core.tapadn_interface.TapAdnBootstrapInterface
-import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.AccountInterface
-import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.AchievementInterface
-import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.CloudSaveInterface
-import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.ComplianceInterface
-import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.GiftInterface
-import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.LeaderboardInterface
-import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.MomentInterface
-import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.TapSdkBootstrapInterface
 import cc.zhtsu.godot_tds_plugin.tapadn.BannerAd
 import cc.zhtsu.godot_tds_plugin.tapadn.FeedAd
 import cc.zhtsu.godot_tds_plugin.tapadn.InterstitialAd
@@ -65,21 +51,21 @@ class GodotTdsPlugin(godot: Godot): GodotPlugin(godot)
     private var _isTapSDKConfigValid: Boolean = true
     private var _isTapADNConfigValid: Boolean = true
 
-    private val _tapSdkBootstrap: TapSdkBootstrapInterface = TapSdkBootstrap(activity!!, this)
-    private val _tapAccount: AccountInterface = Account(activity!!, this)
-    private val _tapCompliance: ComplianceInterface = Compliance(activity!!, this)
-    private val _tapMoment: MomentInterface = Moment(activity!!, this)
-    private val _tapAchievement: AchievementInterface = Achievement(activity!!, this)
-    private val _tapGift: GiftInterface = Gift(activity!!, this)
-    private val _tapLeaderboard: LeaderboardInterface = Leaderboard(activity!!, this)
-    private val _tapCloudSave: CloudSaveInterface = CloudSave(activity!!, this)
+    private val _tapSdkBootstrap: TapSdkBootstrap = TapSdkBootstrap(activity!!, this)
+    private val _tapAccount: Account = Account(activity!!, this)
+    private val _tapCompliance: Compliance = Compliance(activity!!, this)
+    private val _tapMoment: Moment = Moment(activity!!, this)
+    private val _tapAchievement: Achievement = Achievement(activity!!, this)
+    private val _tapGift: Gift = Gift(activity!!, this)
+    private val _tapLeaderboard: Leaderboard = Leaderboard(activity!!, this)
+    private val _tapCloudSave: CloudSave = CloudSave(activity!!, this)
 
-    private val _tapAdnBootstrap: TapAdnBootstrapInterface = TapAdnBootstrap(activity!!, this)
-    private val _bannerAd: BannerAdInterface = BannerAd(activity!!, this)
-    private val _feedAd: FeedAdInterface = FeedAd(activity!!, this)
-    private val _interstitialAd: InterstitialAdInterface = InterstitialAd(activity!!, this)
-    private val _rewardVideoAd: RewardVideoAdInterface = RewardVideoAd(activity!!, this)
-    private val _splashAd: SplashAdInterface = SplashAd(activity!!, this)
+    private val _tapAdnBootstrap: TapAdnBootstrap = TapAdnBootstrap(activity!!, this)
+    private val _bannerAd: BannerAd = BannerAd(activity!!, this)
+    private val _feedAd: FeedAd = FeedAd(activity!!, this)
+    private val _interstitialAd: InterstitialAd = InterstitialAd(activity!!, this)
+    private val _rewardVideoAd: RewardVideoAd = RewardVideoAd(activity!!, this)
+    private val _splashAd: SplashAd = SplashAd(activity!!, this)
 
     @UsedByGodot
     fun initTapSdk(
@@ -494,7 +480,7 @@ class GodotTdsPlugin(godot: Godot): GodotPlugin(godot)
         return _tapAccount.getAccountOpenId()
     }
 
-    fun getTapAdnBootstrap(): TapAdnBootstrapInterface
+    fun getTapAdnBootstrap(): TapAdnBootstrap
     {
         return _tapAdnBootstrap
     }

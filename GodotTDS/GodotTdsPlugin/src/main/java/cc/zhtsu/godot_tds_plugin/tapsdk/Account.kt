@@ -2,9 +2,8 @@ package cc.zhtsu.godot_tds_plugin.tapsdk
 
 import android.app.Activity
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
-import cc.zhtsu.godot_tds_plugin.core.StateCode
-import cc.zhtsu.godot_tds_plugin.core.tapsdk_interface.AccountInterface
-import cc.zhtsu.godot_tds_plugin.core.GodotTdsPluginModule
+import cc.zhtsu.godot_tds_plugin.StateCode
+import cc.zhtsu.godot_tds_plugin.GodotTdsPluginModule
 import com.taptap.sdk.kit.internal.callback.TapTapCallback
 import com.taptap.sdk.kit.internal.exception.TapTapException
 import com.taptap.sdk.kit.internal.extensions.toJson
@@ -16,10 +15,9 @@ import com.taptap.sdk.login.TapTapLogin
 import com.taptap.sdk.login.TapTapLogin.loginWithScopes
 
 class Account(activity : Activity, godotTdsPlugin: GodotTdsPlugin):
-    GodotTdsPluginModule(activity, godotTdsPlugin),
-    AccountInterface
+    GodotTdsPluginModule(activity, godotTdsPlugin)
 {
-    override fun login(
+    fun login(
         publicProfileEnabled : Boolean,
         userFriendsEnabled : Boolean
     )
@@ -34,23 +32,23 @@ class Account(activity : Activity, godotTdsPlugin: GodotTdsPlugin):
         loginWithScopes(_activity, scopes.toTypedArray(), _loginCallback);
     }
 
-    override fun logout()
+    fun logout()
     {
         TapTapLogin.logout()
         _godotTdsPlugin.exitCompliance()
     }
 
-    override fun isLoggedIn() : Boolean
+    fun isLoggedIn() : Boolean
     {
         return TapTapLogin.getCurrentTapAccount() != null;
     }
 
-    override fun getCurrentAccountAsString() : String
+    fun getCurrentAccountAsString() : String
     {
         return TapTapLogin.getCurrentTapAccount().toJson()
     }
 
-    override fun getAccountOpenId(): String
+    fun getAccountOpenId(): String
     {
         val tapAccount = TapTapLogin.getCurrentTapAccount()
 
