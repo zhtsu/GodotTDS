@@ -9,9 +9,10 @@ Godot plugin for supporting TapTap Developer Services
 # Environment
 
 - OpenJDK 17.0.11
-- TapSDK Android 4.9.1
+- TapSDK Android 4.9.2
+  - 最新版本的云存储相关依赖存在问题，因此使用 4.9.1 版本
 - TapADN Android SDK 3.16.3.45
-- Godot 5.2.1
+- Godot 4.5.1
 
 # Feature
 
@@ -23,22 +24,24 @@ Godot plugin for supporting TapTap Developer Services
 - [x] 成就系统（已完成）
 - [x] 礼包系统（已完成）
 - [x] 排行榜（已完成）
-- 获取玩家周围排名数据的接口目前存在问题，无法使用
+  - 获取玩家周围排名数据的接口目前存在问题，无法使用
 - [x] 云存档（已完成）
-- 目前在测试应用中获取云存档封面时存在明显卡顿
-- [ ] ~~深度链接（目前不在开发计划中）~~
+  - 目前在测试应用中获取云存档封面时存在明显卡顿
+- [ ] 深度链接（开发中）
 
-### TapAD
+### TapADN
 
-**注意事项：TapADN 即将全面迁移到新的 Dirichlet 平台，需要认证公司资质才能使用对应服务**
+> 提示：
+> 
+> TapADN 即将全面迁移到新的 Dirichlet 平台：[https://www.dirichlet.cn/](https://www.dirichlet.cn/)
+> 
+> 如果想以个人资质使用 TapADN 服务，需要在创建账户时选择从 TapTap 导入主体信息
 
-新平台地址：[https://www.dirichlet.cn/](https://www.dirichlet.cn/)
-
-- [ ] ~~开屏广告（目前不在开发计划中）~~
-- [ ] ~~激励广告（目前不在开发计划中）~~
-- [ ] ~~横幅广告（目前不在开发计划中）~~
-- [ ] ~~信息流广告（目前不在开发计划中）~~
-- [ ] ~~插屏广告（目前不在开发计划中）~~
+- [ ] 开屏广告（开发中）
+- [ ] 激励视频广告（开发中）
+- [ ] Banner广告（开发中）
+- [ ] 插屏广告（开发中）
+- [ ] 信息流广告（开发中）
 
 # How to use
 
