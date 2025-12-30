@@ -25,7 +25,7 @@ class TapAdnBootstrap(activity: Activity, godotTdsPlugin: GodotTdsPlugin) :
 
         // https://github.com/zhtsu/GodotTDS/issues/4
         if (requestPermissionIfNecessaryEnabled)
-            TapAdManager.get().requestPermissionIfNecessary(_activity)
+            TapAdManager.get().requestPermissionIfNecessary(_activity, true)
 
         val config = TapAdConfig.Builder()
             .withMediaId(mediaId)

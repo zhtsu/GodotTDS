@@ -26,20 +26,19 @@ class AndroidExportPlugin extends EditorExportPlugin:
 		return false
 	
 	const tap_sdk_version: String = "4.9.2"
-	const old_tap_sdk_version: String = "4.9.1"
-	const tap_adn_version: String = "3.16.3.45"
-	var tap_adn_libs: PackedStringArray = [
-		"GodotTDS/bin/TapAD_{0}.aar".format([tap_adn_version])
+	const dirichlet_ad_version: String = "4.2.0.1"
+	var extra_libs: PackedStringArray = [
+		"GodotTDS/bin/dirichlet_ad_{0}.aar".format([dirichlet_ad_version])
 	]
 
 	func _get_android_libraries(platform, debug):
 		var android_libs: PackedStringArray = []
 		if debug:
 			android_libs.append("GodotTDS/bin/GodotTdsPlugin-debug.aar")
-			android_libs.append_array(tap_adn_libs)
+			android_libs.append_array(extra_libs)
 		else:
 			android_libs.append("GodotTDS/bin/GodotTdsPlugin-release.aar")
-			android_libs.append_array(tap_adn_libs)
+			android_libs.append_array(extra_libs)
 		return android_libs
 		
 	func _get_android_dependencies(platform: EditorExportPlatform, debug: bool) -> PackedStringArray:
@@ -49,8 +48,6 @@ class AndroidExportPlugin extends EditorExportPlugin:
 			"androidx.core:core-ktx:1.13.1",
 			"androidx.appcompat:appcompat:1.7.0",
 			"com.squareup.okhttp3:okhttp:4.9.2",
-			"io.reactivex.rxjava2:rxandroid:2.1.1",
-			"io.reactivex.rxjava2:rxjava:2.2.19",
 			"com.android.support:appcompat-v7:28.0.0",
 			"com.android.support:support-annotations:28.0.0",
 			"com.android.support:support-v4:28.0.0",
@@ -63,7 +60,7 @@ class AndroidExportPlugin extends EditorExportPlugin:
 			"com.taptap.sdk:tap-moment:{0}".format([tap_sdk_version]),
 			"com.taptap.sdk:tap-achievement:{0}".format([tap_sdk_version]),
 			"com.taptap.sdk:tap-leaderboard-androidx:{0}".format([tap_sdk_version]),
-			"com.taptap.sdk:tap-cloudsave:{0}".format([old_tap_sdk_version]),
+			"com.taptap.sdk:tap-cloudsave:{0}".format([tap_sdk_version]),
 			"org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1"
 		])
 		
@@ -83,7 +80,6 @@ class AndroidExportPlugin extends EditorExportPlugin:
 		<uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
 		<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
 		<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
-		<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
 		<uses-permission android:name="android.permission.POST_NOTIFICATIONS"></uses-permission>
 		"""
 		

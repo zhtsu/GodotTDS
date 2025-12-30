@@ -6,7 +6,7 @@ plugins {
 val pluginName = "GodotTdsPlugin"
 val pluginPackageName = "cc.zhtsu.godot_tds_plugin"
 
-val tapAdVersion = "3.16.3.45"
+val dirichletAdVersion = "4.2.0.1"
 
 android {
     namespace = pluginPackageName
@@ -43,15 +43,13 @@ dependencies {
     implementation(libs.lc.storage.android)
     implementation(libs.lc.realtime.android)
     implementation(libs.okhttp)
-    implementation(libs.rxandroid)
-    implementation(libs.rxjava)
     implementation(libs.appcompat.v7)
     implementation(libs.support.annotations)
     implementation(libs.support.v4)
     implementation(libs.glide)
     implementation(libs.recyclerview.v7)
 
-    compileOnly(files("libs/TapAD_${tapAdVersion}.aar"))
+    compileOnly(files("libs/dirichlet_ad_${dirichletAdVersion}.aar"))
 
     implementation(libs.tap.core)
     implementation(libs.tap.compliance)
