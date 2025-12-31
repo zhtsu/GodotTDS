@@ -1,6 +1,5 @@
 extends Node
 
-const Config = preload("res://addons/GodotTDS/config.gd")
 const StateCode = preload("res://addons/GodotTDS/state_code.gd")
 
 # 登录相关操作的信号
@@ -34,19 +33,6 @@ enum
 	GRAVITY_BOTTOM = 0,
 	GRAVITY_TOP = 1
 }
-
-class GameSaveData:
-	var save_name: String
-	var summary: String
-	# played_time 的单位为毫秒
-	var played_time: int
-	var progress_value: int
-	# 存档封面图片的路径
-	var cover_path: String
-	# 存档文件的路径
-	var game_file_path: String
-	# modified_at 的值应该设置为对应 Date 的时间戳
-	var modified_at: int
 	
 class RewardVideoAdData:
 	var space_id: int
@@ -61,22 +47,6 @@ var _plugin_singleton: Variant = null
 func _ready() -> void:
 	if Engine.has_singleton(_plugin_name):
 		_plugin_singleton = Engine.get_singleton(_plugin_name)
-		_plugin_singleton.initTapSdk(
-			Config.client_id,
-			Config.client_token,
-			Config.log_enabled,
-			Config.show_switch_account_enabled,
-			Config.use_age_range_enabled,
-			Config.achievement_toast_enabled,
-			Config.screen_orientation
-		)
-		_plugin_singleton.initTapAdn(
-			Config.media_id,
-			Config.media_name,
-			Config.media_key,
-			Config.client_id,
-			Config.request_permission_if_necessary_enabled
-		)
 			
 		_plugin_singleton.connect("onLoginReturn",
 			func(code: int, msg: String):

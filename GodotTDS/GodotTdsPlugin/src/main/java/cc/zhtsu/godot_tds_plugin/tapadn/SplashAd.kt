@@ -1,12 +1,16 @@
 package cc.zhtsu.godot_tds_plugin.tapadn
 
 import android.app.Activity
+import android.util.DisplayMetrics
+import android.util.Log
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
-import cc.zhtsu.godot_tds_plugin.StateCode
 import cc.zhtsu.godot_tds_plugin.GodotTdsPluginModule
+import cc.zhtsu.godot_tds_plugin.StateCode
 import com.tapsdk.tapad.AdRequest
+import com.tapsdk.tapad.TapAdManager
 import com.tapsdk.tapad.TapAdNative
 import com.tapsdk.tapad.TapSplashAd
+
 
 class SplashAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
     GodotTdsPluginModule(activity, godotTdsPlugin)
@@ -15,8 +19,13 @@ class SplashAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
 
     fun load(spaceId : Int)
     {
+        val displayMetrics: DisplayMetrics = _activity.resources.displayMetrics
+        val screenWidth = displayMetrics.widthPixels
+        val screenHeight = displayMetrics.heightPixels
+
         val adRequest = AdRequest.Builder()
-            .withSpaceId(spaceId)
+            .withSpaceId(spaceId.toLong())
+            .withExpressViewAcceptedSize(screenWidth, screenHeight)
             .build()
 
         _godotTdsPlugin.getTapAdnBootstrap().getTapAdNative()?.loadSplashAd(adRequest, _loadListener)

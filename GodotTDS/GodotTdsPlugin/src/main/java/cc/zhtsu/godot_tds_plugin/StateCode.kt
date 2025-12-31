@@ -56,7 +56,7 @@ object StateCode
     const val AD_BANNER_SHOWN = 1038
     const val AD_BANNER_CLOSED = 1039
     const val AD_BANNER_CLICKED = 1040
-    const val AD_BANNER_DOWNLOAD_CLICKED = 1041
+    const val AD_BANNER_VALID_SHOW = 1041
 
     const val AD_INTERSTITIAL_LOAD_SUCCESS = 1042
     const val AD_INTERSTITIAL_LOAD_FAIL = 1043

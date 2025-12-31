@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import cc.zhtsu.godot_tds_plugin.GodotTdsPlugin
@@ -15,7 +16,6 @@ import com.tapsdk.tapad.TapAdNative
 import com.tapsdk.tapad.TapFeedAd
 import com.tapsdk.tapad.TapFeedAd.ExpressRenderListener
 import com.tapsdk.tapad.feed.FeedOption
-import com.tapsdk.tapad.feed.TapFeedAdView
 import com.tapsdk.tapad.feed.VideoOption
 
 
@@ -35,27 +35,25 @@ class FeedAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
 
     fun initialize()
     {
-        _activity.runOnUiThread {
-            val rootView = _activity.findViewById<ViewGroup>(android.R.id.content)
+        val rootView = _activity.findViewById<ViewGroup>(android.R.id.content)
 
-            val inflater = LayoutInflater.from(_activity)
-            val bannerLayout = inflater.inflate(R.layout.feed_container, null) as FrameLayout
+        val inflater = LayoutInflater.from(_activity)
+        val bannerLayout = inflater.inflate(R.layout.feed_container, null) as FrameLayout
 
-            bannerLayout.id = R.layout.feed_container
-            val params = FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT
-            )
+        bannerLayout.id = R.layout.feed_container
+        val params = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT
+        )
 
-            rootView.addView(bannerLayout, params)
-        }
+        rootView.addView(bannerLayout, params)
     }
 
     fun load(spaceId : Int, query : String)
     {
         val adRequest = AdRequest.Builder()
             .withQuery(query)
-            .withSpaceId(spaceId)
+            .withSpaceId(spaceId.toLong())
             .build()
 
         _godotTdsPlugin.getTapAdnBootstrap().getTapAdNative()?.loadFeedAd(adRequest, _feedAdListener)
@@ -105,7 +103,7 @@ class FeedAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
     private var _renderListener : ExpressRenderListener = object : ExpressRenderListener
     {
         @SuppressLint("ResourceType")
-        override fun onRenderSuccess(tapFeedAdView : TapFeedAdView)
+        override fun onRenderSuccess(tapFeedAdView : View)
         {
             val frameLayout = _activity.findViewById<FrameLayout>(R.layout.feed_container)
 
@@ -134,27 +132,27 @@ class FeedAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
             _godotTdsPlugin.emitPluginSignal("onFeedAdReturn", StateCode.AD_FEED_RENDER_SUCCESS, tapFeedAdView.toString())
         }
 
-        override fun onRenderFail(tapFeedAdView : TapFeedAdView, tapFeedAd : TapFeedAd, code : Int, msg : String)
+        override fun onRenderFail(tapFeedAdView : View, tapFeedAd : TapFeedAd, code : Int, msg : String)
         {
             _godotTdsPlugin.emitPluginSignal("onFeedAdReturn", code, "FeedAD render fail: $msg")
         }
 
-        override fun onAdShow(tapFeedAdView : TapFeedAdView)
+        override fun onAdShow(tapFeedAdView : View)
         {
             _godotTdsPlugin.emitPluginSignal("onFeedAdReturn", StateCode.AD_FEED_SHOWN, tapFeedAdView.toString())
         }
 
-        override fun onAdClicked(tapFeedAdView : TapFeedAdView)
+        override fun onAdClicked(tapFeedAdView : View)
         {
             _godotTdsPlugin.emitPluginSignal("onFeedAdReturn", StateCode.AD_FEED_CLICKED, tapFeedAdView.toString())
         }
 
-        override fun onAdClosed(tapFeedAdView : TapFeedAdView)
+        override fun onAdClosed(tapFeedAdView : View)
         {
             _godotTdsPlugin.emitPluginSignal("onFeedAdReturn", StateCode.AD_FEED_CLOSED, tapFeedAdView.toString())
         }
 
-        override fun onAdValidShow(tapFeedAdView : TapFeedAdView)
+        override fun onAdValidShow(tapFeedAdView : View)
         {
             TODO("Not yet implemented")
         }

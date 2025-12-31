@@ -16,7 +16,7 @@ class InterstitialAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
     fun load(spaceId : Int)
     {
         val adRequest = AdRequest.Builder()
-            .withSpaceId(spaceId)
+            .withSpaceId(spaceId.toLong())
             .build()
 
         _godotTdsPlugin.getTapAdnBootstrap().getTapAdNative()?.loadInterstitialAd(adRequest, _interstitialAdListener)
@@ -70,6 +70,11 @@ class InterstitialAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
         }
 
         override fun onAdValidShow()
+        {
+            TODO("Not yet implemented")
+        }
+
+        override fun onAdClick()
         {
             TODO("Not yet implemented")
         }

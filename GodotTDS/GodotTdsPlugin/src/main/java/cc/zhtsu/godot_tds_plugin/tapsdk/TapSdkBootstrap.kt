@@ -45,15 +45,13 @@ class TapSdkBootstrap(activity: Activity, godotTdsPlugin: GodotTdsPlugin):
             enableToast = achievementToastEnabled
         )
 
-        _activity.runOnUiThread {
-            TapTapSdk.init(
-                context = _activity,
-                sdkOptions = sdkOptions,
-                options = arrayOf(
-                    complianceOptions,
-                    achievementOptionsOptions
-                )
+        TapTapSdk.init(
+            context = _activity,
+            sdkOptions = sdkOptions,
+            options = arrayOf(
+                complianceOptions,
+                achievementOptionsOptions
             )
-        }
+        )
     }
 }

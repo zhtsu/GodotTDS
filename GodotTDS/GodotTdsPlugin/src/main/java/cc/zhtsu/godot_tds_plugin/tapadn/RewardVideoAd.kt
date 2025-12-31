@@ -22,7 +22,7 @@ class RewardVideoAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
     )
     {
         val adRequest = AdRequest.Builder()
-            .withSpaceId(spaceId)
+            .withSpaceId(spaceId.toLong())
             .withRewardName(rewardName)
             .withRewardAmount(rewardAmount)
             .withExtra1(extraInfo)
@@ -70,42 +70,42 @@ class RewardVideoAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
 
     private var _rewardVideoAdInteractionListener : TapRewardVideoAd.RewardAdInteractionListener = object : TapRewardVideoAd.RewardAdInteractionListener
     {
-        override fun onAdShow()
+        override fun onAdShow(p0: TapRewardVideoAd?)
         {
             _godotTdsPlugin.emitPluginSignal("onRewardVideoAdReturn", StateCode.AD_REWARD_VIDEO_SHOWN, "")
         }
 
-        override fun onAdClose()
+        override fun onAdClose(p0: TapRewardVideoAd?)
         {
             _godotTdsPlugin.emitPluginSignal("onRewardVideoAdReturn", StateCode.AD_REWARD_VIDEO_CLOSED, "")
         }
 
-        override fun onVideoComplete()
+        override fun onVideoComplete(p0: TapRewardVideoAd?)
         {
             _godotTdsPlugin.emitPluginSignal("onRewardVideoAdReturn", StateCode.AD_REWARD_VIDEO_COMPLETED, "")
         }
 
-        override fun onVideoError()
+        override fun onVideoError(p0: TapRewardVideoAd?)
         {
             _godotTdsPlugin.emitPluginSignal("onRewardVideoAdReturn", StateCode.AD_REWARD_VIDEO_ERROR, "")
         }
 
-        override fun onRewardVerify(rewardVerify : Boolean, rewardAmount : Int, rewardName : String, code : Int, msg: String)
+        override fun onRewardVerify(p0: TapRewardVideoAd?, rewardVerify : Boolean, rewardAmount : Int, rewardName : String, code : Int, msg: String)
         {
             _godotTdsPlugin.emitPluginSignal("onRewardVideoAdReturn", StateCode.AD_REWARD_VIDEO_VERIFIED, "")
         }
 
-        override fun onSkippedVideo()
+        override fun onSkippedVideo(p0: TapRewardVideoAd?)
         {
             _godotTdsPlugin.emitPluginSignal("onRewardVideoAdReturn", StateCode.AD_REWARD_VIDEO_SKIPPED, "")
         }
 
-        override fun onAdClick()
+        override fun onAdClick(p0: TapRewardVideoAd?)
         {
             _godotTdsPlugin.emitPluginSignal("onRewardVideoAdReturn", StateCode.AD_REWARD_VIDEO_CLICKED, "")
         }
 
-        override fun onAdValidShow()
+        override fun onAdValidShow(p0: TapRewardVideoAd?)
         {
             TODO("Not yet implemented")
         }

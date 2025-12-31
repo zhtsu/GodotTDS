@@ -22,26 +22,24 @@ class BannerAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
 
     fun initialize()
     {
-        _activity.runOnUiThread {
-            val rootView = _activity.findViewById<ViewGroup>(android.R.id.content)
+        val rootView = _activity.findViewById<ViewGroup>(android.R.id.content)
 
-            val inflater = LayoutInflater.from(_activity)
-            val bannerLayout = inflater.inflate(R.layout.banner_container, null) as FrameLayout
+        val inflater = LayoutInflater.from(_activity)
+        val bannerLayout = inflater.inflate(R.layout.banner_container, null) as FrameLayout
 
-            bannerLayout.id = R.layout.banner_container
-            val params = FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT
-            )
+        bannerLayout.id = R.layout.banner_container
+        val params = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT
+        )
 
-            rootView.addView(bannerLayout, params)
-        }
+        rootView.addView(bannerLayout, params)
     }
 
     fun load(spaceId : Int)
     {
         val adRequest = AdRequest.Builder()
-            .withSpaceId(spaceId)
+            .withSpaceId(spaceId.toLong())
             .build()
 
         _godotTdsPlugin.getTapAdnBootstrap().getTapAdNative()?.loadBannerAd(adRequest, _bannerAdListener)
@@ -124,14 +122,9 @@ class BannerAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
             _godotTdsPlugin.emitPluginSignal("onBannerAdReturn", StateCode.AD_BANNER_CLICKED, "")
         }
 
-        override fun onDownloadClick()
-        {
-            _godotTdsPlugin.emitPluginSignal("onBannerAdReturn", StateCode.AD_BANNER_DOWNLOAD_CLICKED, "")
-        }
-
         override fun onAdValidShow()
         {
-            TODO("Not yet implemented")
+            _godotTdsPlugin.emitPluginSignal("onBannerAdReturn", StateCode.AD_BANNER_VALID_SHOW, "")
         }
     }
 }

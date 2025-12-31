@@ -1,6 +1,7 @@
 @tool
 extends EditorPlugin
 
+const Config = preload("res://addons/GodotTDS/config.gd")
 
 var export_plugin: AndroidExportPlugin
 
@@ -91,6 +92,33 @@ class AndroidExportPlugin extends EditorExportPlugin:
 			<category android:name="android.intent.category.BROWSABLE" />
 		</intent-filter>
 		"""
+		
+	func _get_android_manifest_application_element_contents(platform: EditorExportPlatform, debug: bool) -> String:
+		return """
+		<meta-data android:name="taptap_client_id" android:value="%s"/>
+		<meta-data android:name="taptap_client_token" android:value="%s"/>
+		<meta-data android:name="taptap_log_enabled" android:value="%s"/>
+		<meta-data android:name="taptap_show_switch_account_enabled" android:value="%s"/>
+		<meta-data android:name="taptap_use_age_range_enabled" android:value="%s"/>
+		<meta-data android:name="taptap_achievement_toast_enabled" android:value="%s"/>
+		<meta-data android:name="taptap_screen_orientation" android:value="%d"/>
+		<meta-data android:name="tapad_media_id" android:value="%d"/>
+		<meta-data android:name="tapad_media_name" android:value="%s"/>
+		<meta-data android:name="tapad_media_key" android:value="%s"/>
+		<meta-data android:name="tapad_equest_permission_if_necessary_enabled" android:value="%s"/>
+		""" % [
+			Config.client_id,
+			Config.client_token,
+			str(Config.log_enabled).to_lower(),
+			str(Config.show_switch_account_enabled).to_lower(),
+			str(Config.use_age_range_enabled).to_lower(),
+			str(Config.achievement_toast_enabled).to_lower(),
+			Config.screen_orientation,
+			Config.media_id,
+			Config.media_name,
+			Config.media_key,
+			str(Config.request_permission_if_necessary_enabled).to_lower()
+		]
 
 	func _get_name():
 		return _plugin_name
