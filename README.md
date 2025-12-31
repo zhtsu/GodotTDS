@@ -26,7 +26,6 @@ Godot plugin for supporting TapTap Developer Services
   - 获取玩家周围排名数据的接口目前存在问题，无法使用
 - [x] 云存档（已完成）
   - 目前在测试应用中获取云存档封面时存在明显卡顿
-- [ ] 深度链接（开发中）
 
 ### TapADN
 
