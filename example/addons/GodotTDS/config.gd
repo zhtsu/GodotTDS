@@ -5,7 +5,7 @@ const client_id : String = ""
 const client_token : String = ""
 const server_url : String = ""
 # TapTapADN配置
-const media_id : int = -1
+const media_id : int = 0
 const media_name : String = ""
 const media_key : String = ""
 # 是否开启SDK日志

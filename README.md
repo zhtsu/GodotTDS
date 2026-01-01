@@ -35,11 +35,11 @@ Godot plugin for supporting TapTap Developer Services
 > 
 > 如果想以个人资质使用 TapADN 服务，需要在创建账户时选择从 TapTap 导入主体信息
 
-- [ ] 开屏广告（开发中）
-- [ ] 激励视频广告（开发中）
-- [ ] Banner广告（开发中）
-- [ ] 插屏广告（开发中）
-- [ ] 信息流广告（开发中）
+- [x] 开屏广告（已完成）
+- [x] 激励视频广告（已完成）
+- [x] Banner广告（已完成）
+- [x] 插屏广告（已完成）
+- [x] 信息流广告（已完成）
 
 # How to use
 

@@ -154,7 +154,6 @@ class FeedAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
 
         override fun onAdValidShow(tapFeedAdView : View)
         {
-            TODO("Not yet implemented")
         }
     }
 }

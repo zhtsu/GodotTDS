@@ -65,7 +65,7 @@ func _on_submit_gift_code_button_down() -> void:
 
 
 func _on_load_splash_ad_button_down() -> void:
-	GodotTDS.load_splash_ad(1038037)
+	GodotTDS.load_splash_ad(1051705)
 
 
 func _on_show_splash_ad_button_down() -> void:
@@ -78,7 +78,7 @@ func _on_dispose_splash_ad_button_down() -> void:
 
 func _on_load_reward_video_ad_button_down() -> void:
 	var data : GodotTDS.RewardVideoAdData = GodotTDS.RewardVideoAdData.new()
-	data.space_id = 1037811
+	data.space_id = 1051720
 	GodotTDS.load_reward_video_ad(data)
 
 
@@ -87,15 +87,15 @@ func _on_show_reward_video_ad_button_down() -> void:
 
 
 func _on_load_banner_ad_button_down() -> void:
-	GodotTDS.load_banner_ad(1038038)
+	GodotTDS.load_banner_ad(1051721)
 
 
 func _on_show_banner_ad_button_down() -> void:
-	GodotTDS.show_banner_ad(GodotTDS.GRAVITY_BOTTOM)
+	GodotTDS.show_banner_ad(GodotTDS.GRAVITY_TOP)
 
 
 func _on_load_feed_ad_button_down() -> void:
-	GodotTDS.load_feed_ad(1038039, "原神")
+	GodotTDS.load_feed_ad(1051724, "原神")
 
 
 func _on_show_feed_ad_button_down() -> void:
@@ -103,7 +103,7 @@ func _on_show_feed_ad_button_down() -> void:
 
 
 func _on_load_interstitial_ad_button_down() -> void:
-	GodotTDS.load_interstitial_ad(1038040)
+	GodotTDS.load_interstitial_ad(1051722)
 
 
 func _on_show_interstitial_ad_button_down() -> void:
@@ -115,23 +115,23 @@ func _on_open_user_page_button_down() -> void:
 
 
 func _on_open_leaderboard_button_down() -> void:
-	GodotTDS.open_leaderboard("8xfbsrryalccz0qpgr", 0)
+	GodotTDS.open_leaderboard("", 0)
 
 
 func _on_submit_leaderboard_score_button_down() -> void:
-	GodotTDS.submit_leaderboard_score("8xfbsrryalccz0qpgr", 100)
+	GodotTDS.submit_leaderboard_score("", 100)
 
 
 func _on_load_leaderboard_scores_button_down() -> void:
-	GodotTDS.load_leaderboard_scores("8xfbsrryalccz0qpgr", 0)
+	GodotTDS.load_leaderboard_scores("", 0)
 
 
 func _on_load_current_player_leaderboard_score_button_down() -> void:
-	GodotTDS.load_current_player_leaderboard_score("8xfbsrryalccz0qpgr", 0)
+	GodotTDS.load_current_player_leaderboard_score("", 0)
 
 
 func _on_load_player_centered_leaderboard_scores_button_down() -> void:
-	GodotTDS.load_player_centered_leaderboard_scores("8xfbsrryalccz0qpgr", 0, "weekly", 100)
+	GodotTDS.load_player_centered_leaderboard_scores("", 0, "weekly", 100)
 
 
 func _on_create_archive_button_down() -> void:
@@ -141,8 +141,8 @@ func _on_create_archive_button_down() -> void:
 func _on_get_archive_list_button_down() -> void:
 	GodotTDS.get_cloud_save_archive_list()
 
-const archive_uuid: String = "a64fcea91f68482c95f6bed6a30fe7b4"
-const file_id: String = "a64fcea91f68482c95f6bed6a30fe7b4"
+const archive_uuid: String = ""
+const file_id: String = ""
 
 func _on_get_archive_data_button_down() -> void:
 	GodotTDS.get_cloud_save_archive_data(archive_uuid, file_id)

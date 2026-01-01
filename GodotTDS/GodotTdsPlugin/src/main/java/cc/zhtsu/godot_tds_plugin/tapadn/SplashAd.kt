@@ -82,12 +82,10 @@ class SplashAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
 
         override fun onAdShow()
         {
-            TODO("Not yet implemented")
         }
 
         override fun onAdValidShow()
         {
-            TODO("Not yet implemented")
         }
 
         override fun onAdSkip()

@@ -508,13 +508,14 @@ class GodotTdsPlugin(godot: Godot): GodotPlugin(godot)
         val mediaId = metaData.getInt("tapad_media_id", 0).toLong()
         val mediaName = metaData.getString("tapad_media_name", "")
         val mediaKey = metaData.getString("tapad_media_key", "")
-        val requestPermission = metaData.getBoolean("tapad_equest_permission_if_necessary_enabled", false)
+        val requestPermission = metaData.getBoolean("tapad_request_permission_if_necessary_enabled", false)
 
         _initTapAdn(
             mediaId,
             mediaName,
             mediaKey,
             clientId,
+            logEnabled,
             requestPermission
         )
 
@@ -547,25 +548,23 @@ class GodotTdsPlugin(godot: Godot): GodotPlugin(godot)
         _clientId = clientId
 
         _checkTapSdkConfig {
-            activity!!.runOnUiThread {
-                _tapSdkBootstrap.initialize(
-                    clientId = clientId,
-                    clientToken = clientToken,
-                    region = TapTapRegion.CN,
-                    preferredLanguage = TapTapLanguage.ZH_HANS,
-                    enableLog = logEnabled,
-                    showSwitchAccountEnabled = showSwitchAccountEnabled,
-                    useAgeRangeEnabled = useAgeRangeEnabled,
-                    achievementToastEnabled = achievementToastEnabled,
-                    screenOrientation = screenOrientation
-                )
+            _tapSdkBootstrap.initialize(
+                clientId = clientId,
+                clientToken = clientToken,
+                region = TapTapRegion.CN,
+                preferredLanguage = TapTapLanguage.ZH_HANS,
+                enableLog = logEnabled,
+                showSwitchAccountEnabled = showSwitchAccountEnabled,
+                useAgeRangeEnabled = useAgeRangeEnabled,
+                achievementToastEnabled = achievementToastEnabled,
+                screenOrientation = screenOrientation
+            )
 
-                _tapAchievement.initialize()
-                _tapCompliance.initialize()
-                _tapLeaderboard.initialize()
-                _tapMoment.initialize()
-                _tapCloudSave.initialize()
-            }
+            _tapAchievement.initialize()
+            _tapCompliance.initialize()
+            _tapLeaderboard.initialize()
+            _tapMoment.initialize()
+            _tapCloudSave.initialize()
         }
     }
 
@@ -574,20 +573,22 @@ class GodotTdsPlugin(godot: Godot): GodotPlugin(godot)
         mediaName: String,
         mediaKey: String,
         clientId: String,
+        logEnabled: Boolean,
         requestPermissionIfNecessaryEnabled: Boolean
     )
     {
-        if (mediaId == -1L || mediaName == "" || mediaKey == "" || clientId == "")
+        if (mediaId == 0L || mediaName == "" || mediaKey == "" || clientId == "")
         {
             _isTapADNConfigValid = false
         }
 
-        _checkTapSdkConfig {
+        _checkTapAdnConfig {
             _tapAdnBootstrap.initialize(
                 mediaId,
                 mediaName,
                 mediaKey,
                 clientId,
+                logEnabled,
                 requestPermissionIfNecessaryEnabled
             )
 

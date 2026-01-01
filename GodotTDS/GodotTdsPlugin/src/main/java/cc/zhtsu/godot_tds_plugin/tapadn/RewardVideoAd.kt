@@ -107,7 +107,6 @@ class RewardVideoAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
 
         override fun onAdValidShow(p0: TapRewardVideoAd?)
         {
-            TODO("Not yet implemented")
         }
     }
 }

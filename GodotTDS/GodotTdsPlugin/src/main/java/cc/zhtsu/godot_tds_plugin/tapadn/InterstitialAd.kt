@@ -71,12 +71,10 @@ class InterstitialAd(activity : Activity, godotTdsPlugin : GodotTdsPlugin) :
 
         override fun onAdValidShow()
         {
-            TODO("Not yet implemented")
         }
 
         override fun onAdClick()
         {
-            TODO("Not yet implemented")
         }
     }
 }

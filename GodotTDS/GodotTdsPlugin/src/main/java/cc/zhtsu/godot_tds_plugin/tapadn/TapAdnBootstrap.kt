@@ -18,15 +18,10 @@ class TapAdnBootstrap(activity: Activity, godotTdsPlugin: GodotTdsPlugin) :
         mediaName: String,
         mediaKey: String,
         clientId: String,
+        logEnabled: Boolean,
         requestPermissionIfNecessaryEnabled: Boolean
     )
     {
-        _tapAdNative = TapAdManager.get().createAdNative(_activity)
-
-        // https://github.com/zhtsu/GodotTDS/issues/4
-        if (requestPermissionIfNecessaryEnabled)
-            TapAdManager.get().requestPermissionIfNecessary(_activity, true)
-
         val config = TapAdConfig.Builder()
             .withMediaId(mediaId)
             .withMediaName(mediaName)
@@ -35,10 +30,16 @@ class TapAdnBootstrap(activity: Activity, godotTdsPlugin: GodotTdsPlugin) :
             .withGameChannel("taptap2")
             .withTapClientId(clientId)
             .shakeEnabled(false)
-            .enableDebug(true)
+            .enableDebug(logEnabled)
             .build()
 
         TapAdSdk.init(_activity, config)
+
+        // https://github.com/zhtsu/GodotTDS/issues/4
+        if (requestPermissionIfNecessaryEnabled)
+            TapAdManager.get().requestPermissionIfNecessary(_activity, true)
+
+        _tapAdNative = TapAdManager.get().createAdNative(_activity)
     }
 
     fun getTapAdNative(): TapAdNative?

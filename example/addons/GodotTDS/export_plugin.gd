@@ -105,7 +105,7 @@ class AndroidExportPlugin extends EditorExportPlugin:
 		<meta-data android:name="tapad_media_id" android:value="%d"/>
 		<meta-data android:name="tapad_media_name" android:value="%s"/>
 		<meta-data android:name="tapad_media_key" android:value="%s"/>
-		<meta-data android:name="tapad_equest_permission_if_necessary_enabled" android:value="%s"/>
+		<meta-data android:name="tapad_request_permission_if_necessary_enabled" android:value="%s"/>
 		""" % [
 			Config.client_id,
 			Config.client_token,
