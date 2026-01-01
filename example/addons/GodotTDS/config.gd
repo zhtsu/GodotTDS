@@ -8,8 +8,9 @@ const server_url : String = ""
 const media_id : int = 0
 const media_name : String = ""
 const media_key : String = ""
-# 是否开启SDK日志
-const log_enabled : bool = true
+# 是否开启TapSDK和广告SDK的调试日志输出
+# 正式版发布时记得关闭掉调试日志输出
+const log_enabled : bool = false
 # 是否显示切换账号按钮
 const show_switch_account_enabled : bool = true
 # 是否使用年龄段授权
