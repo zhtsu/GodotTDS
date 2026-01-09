@@ -87,24 +87,26 @@ class GodotTdsPlugin(godot: Godot): GodotPlugin(godot)
 
         _clientId = clientId
 
-        _checkTapSdkConfig {
-            _tapSdkBootstrap.initialize(
-                clientId = clientId,
-                clientToken = clientToken,
-                region = TapTapRegion.CN,
-                preferredLanguage = TapTapLanguage.ZH_HANS,
-                enableLog = logEnabled,
-                showSwitchAccountEnabled = showSwitchAccountEnabled,
-                useAgeRangeEnabled = useAgeRangeEnabled,
-                achievementToastEnabled = achievementToastEnabled,
-                screenOrientation = screenOrientation
-            )
+        activity!!.runOnUiThread {
+            _checkTapSdkConfig {
+                _tapSdkBootstrap.initialize(
+                    clientId = clientId,
+                    clientToken = clientToken,
+                    region = TapTapRegion.CN,
+                    preferredLanguage = TapTapLanguage.ZH_HANS,
+                    enableLog = logEnabled,
+                    showSwitchAccountEnabled = showSwitchAccountEnabled,
+                    useAgeRangeEnabled = useAgeRangeEnabled,
+                    achievementToastEnabled = achievementToastEnabled,
+                    screenOrientation = screenOrientation
+                )
 
-            _tapAchievement.initialize()
-            _tapCompliance.initialize()
-            _tapLeaderboard.initialize()
-            _tapMoment.initialize()
-            _tapCloudSave.initialize()
+                _tapAchievement.initialize()
+                _tapCompliance.initialize()
+                _tapLeaderboard.initialize()
+                _tapMoment.initialize()
+                _tapCloudSave.initialize()
+            }
         }
     }
 
@@ -123,18 +125,20 @@ class GodotTdsPlugin(godot: Godot): GodotPlugin(godot)
             _isTapADNConfigValid = false
         }
 
-        _checkTapAdnConfig {
-            _tapAdnBootstrap.initialize(
-                mediaId,
-                mediaName,
-                mediaKey,
-                clientId,
-                logEnabled,
-                requestPermissionIfNecessaryEnabled
-            )
+        activity!!.runOnUiThread {
+            _checkTapAdnConfig {
+                _tapAdnBootstrap.initialize(
+                    mediaId,
+                    mediaName,
+                    mediaKey,
+                    clientId,
+                    logEnabled,
+                    requestPermissionIfNecessaryEnabled
+                )
 
-            _bannerAd.initialize()
-            _feedAd.initialize()
+                _bannerAd.initialize()
+                _feedAd.initialize()
+            }
         }
     }
 
