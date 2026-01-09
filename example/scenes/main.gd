@@ -3,7 +3,7 @@ extends CanvasLayer
 
 func _ready() -> void:
 	GodotTDS.on_login_return.connect(_on_test_return)
-	GodotTDS.on_compliance_return.connect(_on_test_return)
+	GodotTDS.on_compliance_return.connect(_on_compliance_return)
 	GodotTDS.on_tap_moment_return.connect(_on_test_return)
 	GodotTDS.on_achievement_return.connect(_on_test_return)
 	GodotTDS.on_gift_return.connect(_on_test_return)
@@ -15,6 +15,9 @@ func _ready() -> void:
 	GodotTDS.on_interstitial_ad_return.connect(_on_test_return)
 	GodotTDS.on_feed_ad_return.connect(_on_test_return)
 	
+	
+func _on_compliance_return(code : int, msg : String) -> void:
+	print_debug("防沉迷返回：" + "code: " + str(code) + " msg: " + msg)
 	
 func _on_test_return(code : int, msg : String) -> void:
 	$Code.text = str(code)

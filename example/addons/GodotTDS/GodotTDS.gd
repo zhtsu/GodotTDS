@@ -1,5 +1,6 @@
 extends Node
 
+const Config = preload("res://addons/GodotTDS/config.gd")
 const StateCode = preload("res://addons/GodotTDS/state_code.gd")
 
 # 登录相关操作的信号
@@ -47,6 +48,24 @@ var _plugin_singleton: Variant = null
 func _ready() -> void:
 	if Engine.has_singleton(_plugin_name):
 		_plugin_singleton = Engine.get_singleton(_plugin_name)
+			
+		_plugin_singleton.call("initTapSdk",
+			Config.client_id,
+			Config.client_token,
+			Config.log_enabled,
+			Config.show_switch_account_enabled,
+			Config.use_age_range_enabled,
+			Config.achievement_toast_enabled,
+			Config.screen_orientation
+		)
+		_plugin_singleton.call("initTapAdn",
+			Config.media_id,
+			Config.media_name,
+			Config.media_key,
+			Config.client_id,
+			Config.log_enabled,
+			Config.request_permission_if_necessary_enabled
+		)
 			
 		_plugin_singleton.connect("onLoginReturn",
 			func(code: int, msg: String):

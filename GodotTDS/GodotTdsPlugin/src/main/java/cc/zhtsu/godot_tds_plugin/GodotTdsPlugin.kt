@@ -53,21 +53,90 @@ class GodotTdsPlugin(godot: Godot): GodotPlugin(godot)
     private var _isTapSDKConfigValid: Boolean = true
     private var _isTapADNConfigValid: Boolean = true
 
-    private lateinit var _tapSdkBootstrap: TapSdkBootstrap
-    private lateinit var _tapAccount: Account
-    private lateinit var _tapCompliance: Compliance
-    private lateinit var _tapMoment: Moment
-    private lateinit var _tapAchievement: Achievement
-    private lateinit var _tapGift: Gift
-    private lateinit var _tapLeaderboard: Leaderboard
-    private lateinit var _tapCloudSave: CloudSave
+    private var _tapSdkBootstrap = TapSdkBootstrap(activity!!, this)
+    private var _tapAccount = Account(activity!!, this)
+    private var _tapCompliance = Compliance(activity!!, this)
+    private var _tapMoment = Moment(activity!!, this)
+    private var _tapAchievement = Achievement(activity!!, this)
+    private var _tapGift = Gift(activity!!, this)
+    private var _tapLeaderboard = Leaderboard(activity!!, this)
+    private var _tapCloudSave = CloudSave(activity!!, this)
 
-    private lateinit var _tapAdnBootstrap: TapAdnBootstrap
-    private lateinit var _bannerAd: BannerAd
-    private lateinit var _feedAd: FeedAd
-    private lateinit var _interstitialAd: InterstitialAd
-    private lateinit var _rewardVideoAd: RewardVideoAd
-    private lateinit var _splashAd: SplashAd
+    private var _tapAdnBootstrap = TapAdnBootstrap(activity!!, this)
+    private var _bannerAd = BannerAd(activity!!, this)
+    private var _feedAd = FeedAd(activity!!, this)
+    private var _interstitialAd = InterstitialAd(activity!!, this)
+    private var _rewardVideoAd = RewardVideoAd(activity!!, this)
+    private var _splashAd = SplashAd(activity!!, this)
+
+    @UsedByGodot
+    private fun initTapSdk(
+        clientId: String,
+        clientToken: String,
+        logEnabled: Boolean,
+        showSwitchAccountEnabled: Boolean,
+        useAgeRangeEnabled: Boolean,
+        achievementToastEnabled: Boolean,
+        screenOrientation: Int
+    )
+    {
+        if (clientId == "" || clientToken == "")
+        {
+            _isTapSDKConfigValid = false
+        }
+
+        _clientId = clientId
+
+        _checkTapSdkConfig {
+            _tapSdkBootstrap.initialize(
+                clientId = clientId,
+                clientToken = clientToken,
+                region = TapTapRegion.CN,
+                preferredLanguage = TapTapLanguage.ZH_HANS,
+                enableLog = logEnabled,
+                showSwitchAccountEnabled = showSwitchAccountEnabled,
+                useAgeRangeEnabled = useAgeRangeEnabled,
+                achievementToastEnabled = achievementToastEnabled,
+                screenOrientation = screenOrientation
+            )
+
+            _tapAchievement.initialize()
+            _tapCompliance.initialize()
+            _tapLeaderboard.initialize()
+            _tapMoment.initialize()
+            _tapCloudSave.initialize()
+        }
+    }
+
+    @UsedByGodot
+    private fun initTapAdn(
+        mediaId: Long,
+        mediaName: String,
+        mediaKey: String,
+        clientId: String,
+        logEnabled: Boolean,
+        requestPermissionIfNecessaryEnabled: Boolean
+    )
+    {
+        if (mediaId == 0L || mediaName == "" || mediaKey == "" || clientId == "")
+        {
+            _isTapADNConfigValid = false
+        }
+
+        _checkTapAdnConfig {
+            _tapAdnBootstrap.initialize(
+                mediaId,
+                mediaName,
+                mediaKey,
+                clientId,
+                logEnabled,
+                requestPermissionIfNecessaryEnabled
+            )
+
+            _bannerAd.initialize()
+            _feedAd.initialize()
+        }
+    }
 
     @UsedByGodot
     fun login(publicProfileEnabled: Boolean, userFriendsEnabled: Boolean)
@@ -463,137 +532,11 @@ class GodotTdsPlugin(godot: Godot): GodotPlugin(godot)
         }
     }
 
-    override fun onMainCreate(activity: Activity?): View?
-    {
-        _tapSdkBootstrap = TapSdkBootstrap(activity!!, this)
-        _tapAccount = Account(activity, this)
-        _tapCompliance = Compliance(activity, this)
-        _tapMoment = Moment(activity, this)
-        _tapAchievement = Achievement(activity, this)
-        _tapGift = Gift(activity, this)
-        _tapLeaderboard = Leaderboard(activity, this)
-        _tapCloudSave = CloudSave(activity, this)
-
-        val appInfo = activity.packageManager.getApplicationInfo(
-            activity.packageName,
-            android.content.pm.PackageManager.GET_META_DATA
-        )
-        val metaData = appInfo.metaData
-
-        val clientId = metaData.getString("taptap_client_id", "")
-        val clientToken = metaData.getString("taptap_client_token", "")
-        val logEnabled = metaData.getBoolean("taptap_log_enabled", false)
-        val showSwitchAccountEnabled = metaData.getBoolean("taptap_show_switch_account_enabled", true)
-        val useAgeRangeEnabled = metaData.getBoolean("taptap_use_age_range_enabled", false)
-        val achievementToastEnabled = metaData.getBoolean("taptap_achievement_toast_enabled", true)
-        val screenOrientation = metaData.getInt("taptap_screen_orientation", 0)
-
-        _initTapSdk(
-            clientId,
-            clientToken,
-            logEnabled,
-            showSwitchAccountEnabled,
-            useAgeRangeEnabled,
-            achievementToastEnabled,
-            screenOrientation
-        )
-
-        _tapAdnBootstrap = TapAdnBootstrap(activity, this)
-        _bannerAd = BannerAd(activity, this)
-        _feedAd = FeedAd(activity, this)
-        _interstitialAd = InterstitialAd(activity, this)
-        _rewardVideoAd = RewardVideoAd(activity, this)
-        _splashAd = SplashAd(activity, this)
-
-        val mediaId = metaData.getInt("tapad_media_id", 0).toLong()
-        val mediaName = metaData.getString("tapad_media_name", "")
-        val mediaKey = metaData.getString("tapad_media_key", "")
-        val requestPermission = metaData.getBoolean("tapad_request_permission_if_necessary_enabled", false)
-
-        _initTapAdn(
-            mediaId,
-            mediaName,
-            mediaKey,
-            clientId,
-            logEnabled,
-            requestPermission
-        )
-
-        return super.onMainCreate(activity)
-    }
-
     override fun onMainDestroy()
     {
         _tapAchievement.destroy()
         _tapCompliance.destroy()
         _tapLeaderboard.destroy()
         _tapCloudSave.destroy()
-    }
-
-    private fun _initTapSdk(
-        clientId: String,
-        clientToken: String,
-        logEnabled: Boolean,
-        showSwitchAccountEnabled: Boolean,
-        useAgeRangeEnabled: Boolean,
-        achievementToastEnabled: Boolean,
-        screenOrientation: Int
-    )
-    {
-        if (clientId == "" || clientToken == "")
-        {
-            _isTapSDKConfigValid = false
-        }
-
-        _clientId = clientId
-
-        _checkTapSdkConfig {
-            _tapSdkBootstrap.initialize(
-                clientId = clientId,
-                clientToken = clientToken,
-                region = TapTapRegion.CN,
-                preferredLanguage = TapTapLanguage.ZH_HANS,
-                enableLog = logEnabled,
-                showSwitchAccountEnabled = showSwitchAccountEnabled,
-                useAgeRangeEnabled = useAgeRangeEnabled,
-                achievementToastEnabled = achievementToastEnabled,
-                screenOrientation = screenOrientation
-            )
-
-            _tapAchievement.initialize()
-            _tapCompliance.initialize()
-            _tapLeaderboard.initialize()
-            _tapMoment.initialize()
-            _tapCloudSave.initialize()
-        }
-    }
-
-    private fun _initTapAdn(
-        mediaId: Long,
-        mediaName: String,
-        mediaKey: String,
-        clientId: String,
-        logEnabled: Boolean,
-        requestPermissionIfNecessaryEnabled: Boolean
-    )
-    {
-        if (mediaId == 0L || mediaName == "" || mediaKey == "" || clientId == "")
-        {
-            _isTapADNConfigValid = false
-        }
-
-        _checkTapAdnConfig {
-            _tapAdnBootstrap.initialize(
-                mediaId,
-                mediaName,
-                mediaKey,
-                clientId,
-                logEnabled,
-                requestPermissionIfNecessaryEnabled
-            )
-
-            _bannerAd.initialize()
-            _feedAd.initialize()
-        }
     }
 }
