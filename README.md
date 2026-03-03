@@ -43,8 +43,6 @@ Godot plugin for supporting TapTap Developer Services
 
 # How to use
 
-[B站视频讲解]()
-
 example 目录下存放的是用于展示插件功能的 Godot 项目
 
 GodotTDS 目录下存放的是用于生成***安卓插件***的安卓项目
