@@ -1,5 +1,7 @@
 <img src="example/icon.svg" width="128" height="128">
 
+[中文](https://github.com/zhtsu/GodotTDS) | [English](https://github.com/zhtsu/GodotTDS/blob/4.5.1/README.en-US.md)
+
 # Godot TDS
 
 Godot plugin for supporting TapTap Developer Services
@@ -55,4 +57,4 @@ GodotTDS 目录下存放的是用于生成***安卓插件***的安卓项目
 
 [PukkyCoopie:](https://github.com/PukkyCoopie) [#3](https://github.com/zhtsu/GodotTDS/pull/3)
 
-[WebBrain](https://github.com/webbrain-one) [#6](https://github.com/zhtsu/GodotTDS/pull/6)
+[WebBrain:](https://github.com/webbrain-one) [#6](https://github.com/zhtsu/GodotTDS/pull/6)
