@@ -2,6 +2,8 @@
 
 <img src="example/icon.svg" width="128" height="128">
 
+[中文](https://github.com/zhtsu/GodotTDS) | English
+
 # Godot TDS
 
 Godot plugin for supporting TapTap Developer Services
