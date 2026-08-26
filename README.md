@@ -1,6 +1,6 @@
 <img src="example/icon.svg" width="128" height="128">
 
-[中文](https://github.com/zhtsu/GodotTDS) | [English](https://github.com/zhtsu/GodotTDS/blob/4.5.1/README.en-US.md)
+中文 | [English](https://github.com/zhtsu/GodotTDS/blob/4.5.1/README.en-US.md)
 
 # Godot TDS
 
